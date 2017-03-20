@@ -11,7 +11,6 @@
 #include <sstream>
 
 #include <X11/extensions/Xrandr.h>
-#include <X11/Xlib.h>
 
 using namespace std;
 
@@ -19,7 +18,7 @@ using namespace std;
 
 class Mode {
 public:
-    Mode(const int& width, const int& height, const int& refresh) :
+    Mode(const unsigned int& width, const unsigned int& height, const unsigned int& refresh) :
             width(width), height(height), refresh(refresh) {
     }
     Mode(const Mode& mode) :
@@ -140,7 +139,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
         rate = 0;
 
     // round up, as xrandr uses the greatest rate less than passed
-    return rate + 0.5;
+    return (unsigned int)(rate + 0.5);
 }
 
 // build a list of Displ based on the current and possible state of the world
