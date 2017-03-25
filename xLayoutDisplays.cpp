@@ -43,11 +43,15 @@ public:
     const unsigned int height;
     const unsigned int refresh;
 };
+typedef shared_ptr<Mode> ModeP;
 
 class Pos {
 public:
     Pos(const int& x, const int& y) :
             x(x), y(y) {
+    }
+    Pos(const Pos& pos) {
+       FAIL("copy constructing Pos");
     }
     ~Pos() {
     }
@@ -55,6 +59,7 @@ public:
     const int x = 0;
     const int y = 0;
 };
+typedef shared_ptr<Pos> PosP;
 
 class Displ {
 public:
@@ -62,8 +67,8 @@ public:
         active, connected, disconnected
     };
 
-    Displ(const char *name, const State& state, const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &currentMode, const shared_ptr<Mode> preferredMode,
-          const shared_ptr<Mode> desiredMode, const shared_ptr<Pos> currentPos) :
+    Displ(const char *name, const State& state, const list<ModeP> &modes, const ModeP &currentMode, const ModeP preferredMode,
+          const ModeP desiredMode, const PosP currentPos) :
             name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode), desiredMode(desiredMode), currentPos(currentPos) {
         switch (state) {
             case active:
@@ -93,13 +98,14 @@ public:
 
     const char *name;
     const State state;
-    const list<shared_ptr<Mode>> modes;
-    const shared_ptr<Mode> currentMode;
-    const shared_ptr<Mode> preferredMode;
+    const list<ModeP> modes;
+    const ModeP currentMode;
+    const ModeP preferredMode;
     // todo: make this changeable
-    const shared_ptr<Mode> desiredMode;
-    const shared_ptr<Pos> currentPos;
+    const ModeP desiredMode;
+    const PosP currentPos;
 };
+typedef shared_ptr<Displ> DisplP;
 
 // sorting function for shared pointers... this must be in STL somewhere...
 template<typename T> bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
@@ -134,7 +140,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
     }
 
     if (modeInfo->hTotal && vTotal)
-        rate = ((double) modeInfo->dotClock / ((double) modeInfo->hTotal * (double) vTotal));
+        rate = ((double) modeInfo->dotClock / (modeInfo->hTotal * vTotal));
     else
         rate = 0;
 
@@ -143,8 +149,8 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list<shared_ptr<Displ>> discoverDispls() {
-    list<shared_ptr<Displ>> displs;
+const list<DisplP> discoverDispls() {
+    list<DisplP> displs;
 
     // open up X information
     Display *dpy = XOpenDisplay(NULL);
@@ -160,9 +166,9 @@ const list<shared_ptr<Displ>> discoverDispls() {
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         char *name = NULL;
         Displ::State state;
-        list<shared_ptr<Mode>> modes;
-        shared_ptr<Mode> currentMode, preferredMode, desiredMode;
-        shared_ptr<Pos> currentPos;
+        list<ModeP> modes;
+        ModeP currentMode, preferredMode, desiredMode;
+        PosP currentPos;
 
         // basic info
         XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
@@ -223,7 +229,7 @@ const list<shared_ptr<Displ>> discoverDispls() {
 }
 
 // print info about all displs
-void printDispls(const list<shared_ptr<Displ>> &displs) {
+void printDispls(const list<DisplP> &displs) {
     for (auto displ : displs) {
         printf("%s ", displ->name);
         switch (displ->state) {
@@ -249,7 +255,7 @@ void printDispls(const list<shared_ptr<Displ>> &displs) {
 }
 
 // layout displays from left to right
-void leftToRight(const list<shared_ptr<Displ>> &displs) {
+void leftToRight(const list<DisplP> &displs) {
     int xpos = 0;
     for (auto displ : displs) {
         switch (displ->state) {
@@ -265,7 +271,7 @@ void leftToRight(const list<shared_ptr<Displ>> &displs) {
 }
 
 // print xrandr cmd
-void printXrandr(const list<shared_ptr<Displ>> &displs) {
+void printXrandr(const list<DisplP> &displs) {
     stringstream ss;
     ss << "\nxrandr";
     for (auto displ : displs) {
@@ -292,7 +298,7 @@ void printXrandr(const list<shared_ptr<Displ>> &displs) {
 }
 
 int main() {
-    const list<shared_ptr<Displ>> displs = discoverDispls();
+    const list<DisplP> displs = discoverDispls();
     printDispls(displs);
 
     leftToRight(displs);
