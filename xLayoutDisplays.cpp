@@ -18,18 +18,20 @@ using namespace std;
 
 class Mode {
 public:
-    Mode(const unsigned int& width, const unsigned int& height, const unsigned int& refresh) :
+    Mode(const unsigned int &width, const unsigned int &height, const unsigned int &refresh) :
             width(width), height(height), refresh(refresh) {
     }
-    Mode(const Mode& mode) :
+
+    Mode(const Mode &mode) :
             width(0), height(0), refresh(0) {
         FAIL("copy constructing Mode");
     }
+
     ~Mode() {
     }
 
     // order by width, refresh, height in descending order
-    bool operator <(const Mode& o) {
+    bool operator<(const Mode &o) {
         if (width == o.width)
             if (refresh == o.refresh)
                 return height > o.height;
@@ -43,22 +45,26 @@ public:
     const unsigned int height;
     const unsigned int refresh;
 };
+
 typedef shared_ptr<Mode> ModeP;
 
 class Pos {
 public:
-    Pos(const int& x, const int& y) :
+    Pos(const int &x, const int &y) :
             x(x), y(y) {
     }
-    Pos(const Pos& pos) {
-       FAIL("copy constructing Pos");
+
+    Pos(const Pos &pos) {
+        FAIL("copy constructing Pos");
     }
+
     ~Pos() {
     }
 
     const int x = 0;
     const int y = 0;
 };
+
 typedef shared_ptr<Pos> PosP;
 
 class Displ {
@@ -67,53 +73,54 @@ public:
         active, connected, disconnected
     };
 
-    Displ(const char *name, const State& state, const list<ModeP> &modes, const ModeP &currentMode, const ModeP preferredMode,
+    Displ(const char *name, const State &state, const list <ModeP> &modes, const ModeP &currentMode,
+          const ModeP preferredMode,
           const ModeP desiredMode, const PosP currentPos) :
-            name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode), desiredMode(desiredMode), currentPos(currentPos) {
+            name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode),
+            desiredMode(desiredMode), currentPos(currentPos) {
         switch (state) {
             case active:
-                if (!currentMode)
-                FAIL("active Displ has no currentMode")
-                if (!currentPos)
-                FAIL("active Displ has no currentPos")
-                if (!preferredMode)
-                FAIL("active Displ has no preferredMode")
-                if (!desiredMode)
-                FAIL("active Displ has no desiredMode")
+                if (!currentMode) FAIL("active Displ has no currentMode")
+                if (!currentPos) FAIL("active Displ has no currentPos")
+                if (!preferredMode) FAIL("active Displ has no preferredMode")
+                if (!desiredMode) FAIL("active Displ has no desiredMode")
                 break;
             case connected:
-                if (!desiredMode)
-                FAIL("connected Displ has no desiredMode")
+                if (!desiredMode) FAIL("connected Displ has no desiredMode")
                 break;
             default:
                 break;
         }
     }
-    Displ(const Displ& displ) :
+
+    Displ(const Displ &displ) :
             name(NULL), state(disconnected) {
         FAIL("copy constructing Displ");
     }
+
     ~Displ() {
     }
 
     const char *name;
     const State state;
-    const list<ModeP> modes;
+    const list <ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
     // todo: make this changeable
     const ModeP desiredMode;
     const PosP currentPos;
 };
+
 typedef shared_ptr<Displ> DisplP;
 
 // sorting function for shared pointers... this must be in STL somewhere...
-template<typename T> bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
+template<typename T>
+bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
     return *l < *r;
 }
 
 // find the mode info for the id passed, in resources
-const XRRModeInfo* modeInfoFromId(const RRMode id, const XRRScreenResources *resources) {
+const XRRModeInfo *modeInfoFromId(const RRMode id, const XRRScreenResources *resources) {
     for (int i = 0; i < resources->nmode; i++) {
         if (id == resources->modes[i].id) {
             return &(resources->modes[i]);
@@ -145,20 +152,18 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
         rate = 0;
 
     // round up, as xrandr uses the greatest rate less than passed
-    return (unsigned int)(rate + 0.5);
+    return (unsigned int) (rate + 0.5);
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list<DisplP> discoverDispls() {
-    list<DisplP> displs;
+const list <DisplP> discoverDispls() {
+    list <DisplP> displs;
 
     // open up X information
     Display *dpy = XOpenDisplay(NULL);
-    if (dpy == NULL)
-    FAIL("Failed to open display defined by DISPLAY environment variable");
+    if (dpy == NULL) FAIL("Failed to open display defined by DISPLAY environment variable");
     int screen = DefaultScreen(dpy);
-    if (screen >= ScreenCount(dpy))
-    FAIL("Invalid screen number %d (display has %d)\n", screen, ScreenCount(dpy));
+    if (screen >= ScreenCount(dpy)) FAIL("Invalid screen number %d (display has %d)\n", screen, ScreenCount(dpy));
     Window rootWindow = RootWindow(dpy, screen);
     XRRScreenResources *screenResources = XRRGetScreenResources(dpy, rootWindow);
 
@@ -166,7 +171,7 @@ const list<DisplP> discoverDispls() {
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         char *name = NULL;
         Displ::State state;
-        list<ModeP> modes;
+        list <ModeP> modes;
         ModeP currentMode, preferredMode, desiredMode;
         PosP currentPos;
 
@@ -229,12 +234,13 @@ const list<DisplP> discoverDispls() {
 }
 
 // print info about all displs
-void printDispls(const list<DisplP> &displs) {
+void printDispls(const list <DisplP> &displs) {
     for (auto displ : displs) {
         printf("%s ", displ->name);
         switch (displ->state) {
             case Displ::active:
-                printf("active %ux%u%+d%+d %uHz\n", displ->currentMode->width, displ->currentMode->height, displ->currentPos->x, displ->currentPos->y,
+                printf("active %ux%u%+d%+d %uHz\n", displ->currentMode->width, displ->currentMode->height,
+                       displ->currentPos->x, displ->currentPos->y,
                        displ->currentMode->refresh);
                 break;
             case Displ::connected:
@@ -255,7 +261,7 @@ void printDispls(const list<DisplP> &displs) {
 }
 
 // layout displays from left to right
-void leftToRight(const list<DisplP> &displs) {
+void leftToRight(const list <DisplP> &displs) {
     int xpos = 0;
     for (auto displ : displs) {
         switch (displ->state) {
@@ -271,7 +277,7 @@ void leftToRight(const list<DisplP> &displs) {
 }
 
 // print xrandr cmd
-void printXrandr(const list<DisplP> &displs) {
+void printXrandr(const list <DisplP> &displs) {
     stringstream ss;
     ss << "\nxrandr";
     for (auto displ : displs) {
@@ -298,7 +304,7 @@ void printXrandr(const list<DisplP> &displs) {
 }
 
 int main() {
-    const list<DisplP> displs = discoverDispls();
+    const list <DisplP> displs = discoverDispls();
     printDispls(displs);
 
     leftToRight(displs);
