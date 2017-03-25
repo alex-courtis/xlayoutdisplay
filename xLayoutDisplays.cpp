@@ -128,11 +128,9 @@ bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
 
 // find the mode info for the id passed, in resources
 const XRRModeInfo *modeInfoFromId(const RRMode id, const XRRScreenResources *resources) {
-    for (int i = 0; i < resources->nmode; i++) {
-        if (id == resources->modes[i].id) {
+    for (int i = 0; i < resources->nmode; i++)
+        if (id == resources->modes[i].id)
             return &(resources->modes[i]);
-        }
-    }
     FAIL("Can't find mode %lu from screen resources", id);
     return NULL;
 }
@@ -142,16 +140,14 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
     double rate;
     double vTotal = modeInfo->vTotal;
 
-    if (modeInfo->modeFlags & RR_DoubleScan) {
-        /* doublescan doubles the number of lines */
+    /* doublescan doubles the number of lines */
+    if (modeInfo->modeFlags & RR_DoubleScan)
         vTotal *= 2;
-    }
 
-    if (modeInfo->modeFlags & RR_Interlace) {
-        /* interlace splits the frame into two fields */
-        /* the field rate is what is typically reported by monitors */
+    /* interlace splits the frame into two fields */
+    /* the field rate is what is typically reported by monitors */
+    if (modeInfo->modeFlags & RR_Interlace)
         vTotal /= 2;
-    }
 
     if (modeInfo->hTotal && vTotal)
         rate = ((double) modeInfo->dotClock / (modeInfo->hTotal * vTotal));
@@ -182,29 +178,26 @@ const list <DisplP> discoverDispls() {
 
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
-        char *name = NULL;
         Displ::State state;
         list <ModeP> modes;
         ModeP currentMode, preferredMode, optimalMode;
         PosP currentPos;
 
         // basic info
-        XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
-        name = outputInfo->name;
-        if (outputInfo->crtc != 0) {
-            if (outputInfo->nmode != 0) {
+        const XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
+        const char *name = outputInfo->name;
+        if (outputInfo->crtc != 0)
+            if (outputInfo->nmode != 0)
                 // currently active displays have CRTC info and available modes
                 state = Displ::active;
-            } else {
+            else
                 // previously active displays have CRTC info but no available modes
                 state = Displ::removed;
-            }
-        } else if (outputInfo->nmode != 0) {
+        else if (outputInfo->nmode != 0)
             // inactive connected displays have modes available
             state = Displ::connected;
-        } else {
+        else
             state = Displ::disconnected;
-        }
 
         // current position and mode for active and removed inputs
         RRMode rrMode = 0;
@@ -223,20 +216,20 @@ const list <DisplP> discoverDispls() {
 
         // iterate available modes
         for (int j = 0; j < outputInfo->nmode; j++) {
+            if (state == Displ::removed || state == Displ::disconnected) FAIL(
+                    "apparently removed or disconnected display has modes available");
 
             // add to modes
             auto mode = modeFromId(outputInfo->modes[j], screenResources);
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1
-            if (outputInfo->npreferred == j + 1) {
+            if (outputInfo->npreferred == j + 1)
                 preferredMode = mode;
-            }
 
             // is this mode being used?
-            if (mode->rrMode == rrMode) {
+            if (mode->rrMode == rrMode)
                 currentMode = mode;
-            }
         }
 
         // hightest res/refresh is optimal mode
@@ -253,6 +246,7 @@ const list <DisplP> discoverDispls() {
 
 // print info about all displs
 void printDispls(const list <DisplP> &displs) {
+    char current, preferred, optimal;
     for (auto displ : displs) {
         printf("%s ", displ->name);
         switch (displ->state) {
@@ -274,9 +268,9 @@ void printDispls(const list <DisplP> &displs) {
                 break;
         }
         for (auto mode : displ->modes) {
-            char current = mode == displ->currentMode ? '*' : ' ';
-            char preferred = mode == displ->preferredMode ? '+' : ' ';
-            char optimal = mode == displ->optimalMode ? '!' : ' ';
+            current = mode == displ->currentMode ? '*' : ' ';
+            preferred = mode == displ->preferredMode ? '+' : ' ';
+            optimal = mode == displ->optimalMode ? '!' : ' ';
             printf("%c%c%c%ux%u %uHz\n", current, preferred, optimal, mode->width, mode->height, mode->refresh);
         }
     }
@@ -332,6 +326,7 @@ void printXrandr(const list <DisplP> &displs) {
 
 int main() {
     const list <DisplP> displs = discoverDispls();
+
     printDispls(displs);
 
     arrangeDispls(displs);
