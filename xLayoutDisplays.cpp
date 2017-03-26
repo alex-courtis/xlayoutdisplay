@@ -13,12 +13,17 @@
 #include <fstream>
 
 #include <dirent.h>
+#include <getopt.h>
 
 #include <X11/extensions/Xrandr.h>
 
 using namespace std;
 
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
+
+bool OPT_VERBOSE = false;
+bool OPT_DRY_RUN = false;
+char *OPT_PRIMARY = NULL;
 
 class Mode {
 public:
@@ -119,6 +124,8 @@ public:
 
     const PosP currentPos;
     PosP desiredPos;
+
+    bool desiredPrimary = false;
 };
 
 typedef shared_ptr<Displ> DisplP;
@@ -277,6 +284,7 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
 
     int xpos = 0;
     int ypos = 0;
+    bool primarySet = false;
     for (auto displ : displs) {
 
         if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name, strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
@@ -284,7 +292,21 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
             continue;
         }
 
-        if (displ->state == Displ::active || displ->state== Displ::connected) {
+        if (displ->state == Displ::active || displ->state == Displ::connected) {
+
+            if (!primarySet) {
+                if (OPT_PRIMARY) {
+                    if (strcasecmp(displ->name, OPT_PRIMARY) == 0) {
+                        // user selected primary
+                        displ->desiredPrimary = true;
+                        primarySet = true;
+                    }
+                } else {
+                    // default first to primary
+                    displ->desiredPrimary = true;
+                    primarySet = true;
+                }
+            }
 
             // set the desired mode to optimal
             displ->desiredMode = displ->optimalMode;
@@ -296,10 +318,14 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
             xpos += displ->desiredMode->width;
         }
     }
+
+    if (!primarySet && OPT_PRIMARY) {
+        FAIL("Invalid primary monitor %s", OPT_PRIMARY);
+    }
 }
 
 // print xrandr cmd for any displays with desired mode and position
-string renderXrandr(const list <DisplP> &displs) {
+const string renderXrandr(const list <DisplP> &displs) {
     stringstream ss;
     ss << "xrandr";
     for (auto displ : displs) {
@@ -310,6 +336,9 @@ string renderXrandr(const list <DisplP> &displs) {
             ss << " --rate " << displ->desiredMode->refresh;
             ss << " --pos ";
             ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
+            if (displ->desiredPrimary) {
+                ss << " --primary";
+            }
         } else {
             ss << " --off";
         }
@@ -354,20 +383,46 @@ bool isLidClosed() {
     return lidClosed;
 }
 
-int main() {
-    // discover and print current state
+int main(int argc, char **argv) {
+    int opt;
+    while ((opt = getopt(argc, argv, "np:v")) != -1) {
+        switch (opt) {
+            case 'n':
+                OPT_DRY_RUN = true;
+                break;
+            case 'p':
+                OPT_PRIMARY = optarg;
+                break;
+            case 'v':
+                OPT_VERBOSE = true;
+                break;
+            default:
+                fprintf(stderr, "Usage: %s [-n] [-p primary] [-v]\n", argv[0]);
+                exit(EXIT_FAILURE);
+        }
+    }
+
+    // discover current state
     const list <DisplP> displs = discoverDispls();
-    printDispls(displs);
     const bool lidClosed = isLidClosed();
-    printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
+    if (OPT_VERBOSE) {
+        printDispls(displs);
+        printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
+    }
 
     // determine desired state
     arrangeDispls(displs, lidClosed);
 
     // render desired state for xrandr
-    string xrandr = renderXrandr(displs);
-    printf("\n%s\n", xrandr.c_str());
+    const string xrandr = renderXrandr(displs);
+    if (OPT_VERBOSE) {
+        printf("\n%s\n", xrandr.c_str());
+    }
 
     // invoke xrandr
-    return system(xrandr.c_str());
+    if (OPT_DRY_RUN) {
+        return EXIT_SUCCESS;
+    } else {
+        return system(xrandr.c_str());
+    }
 }
