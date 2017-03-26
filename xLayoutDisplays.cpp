@@ -21,9 +21,10 @@ using namespace std;
 
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
-bool OPT_VERBOSE = false;
 bool OPT_DRY_RUN = false;
+list<string> OPT_ORDER;
 char *OPT_PRIMARY = NULL;
+bool OPT_VERBOSE = true;
 
 class Mode {
 public:
@@ -320,7 +321,7 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
     }
 
     if (!primarySet && OPT_PRIMARY) {
-        FAIL("Invalid primary monitor %s", OPT_PRIMARY);
+        FAIL("Invalid primary monitor \"%s\"", OPT_PRIMARY);
     }
 }
 
@@ -383,24 +384,34 @@ bool isLidClosed() {
     return lidClosed;
 }
 
+void usage(char *prog) {
+    fprintf(stderr, "Usage: %s [-n] [-o comma delimited display order] [-p primary] [-q]\n", prog);
+    exit(EXIT_FAILURE);
+}
+
 int main(int argc, char **argv) {
     int opt;
-    while ((opt = getopt(argc, argv, "np:v")) != -1) {
+    while ((opt = getopt(argc, argv, "no:p:q")) != -1) {
         switch (opt) {
             case 'n':
                 OPT_DRY_RUN = true;
                 break;
+            case 'o':
+                for (char *token = strtok(optarg, ","); token != NULL; token = strtok(NULL, ",")) {
+                    OPT_ORDER.push_back(string(token));
+                }
+                break;
             case 'p':
                 OPT_PRIMARY = optarg;
                 break;
-            case 'v':
-                OPT_VERBOSE = true;
+            case 'q':
+                OPT_VERBOSE = false;
                 break;
             default:
-                fprintf(stderr, "Usage: %s [-n] [-p primary] [-v]\n", argv[0]);
-                exit(EXIT_FAILURE);
+                usage(argv[0]);
         }
     }
+    if (argc > optind) usage(argv[0]);
 
     // discover current state
     const list <DisplP> displs = discoverDispls();
@@ -419,10 +430,14 @@ int main(int argc, char **argv) {
         printf("\n%s\n", xrandr.c_str());
     }
 
-    // invoke xrandr
     if (OPT_DRY_RUN) {
+        if (!OPT_VERBOSE) {
+            // print xrandr command for quiet dry run
+            printf("%s\n", xrandr.c_str());
+        }
         return EXIT_SUCCESS;
-    } else {
-        return system(xrandr.c_str());
     }
+
+    // invoke xrandr
+    return system(xrandr.c_str());
 }
