@@ -71,7 +71,7 @@ typedef shared_ptr<Pos> PosP;
 class Displ {
 public:
     enum State {
-        active, removed, connected, disconnected
+        active, connected, disconnected
     };
 
     Displ(const char *name, const State &state, const list <ModeP> &modes, const ModeP &currentMode,
@@ -84,13 +84,11 @@ public:
                 if (!currentMode) FAIL("active Displ has no currentMode")
                 if (!currentPos) FAIL("active Displ has no currentPos")
                 if (!optimalMode) FAIL("active Displ has no optimalMode")
-                break;
-            case removed:
-                if (!currentMode) FAIL("removed Displ has no currentMode")
-                if (!currentPos) FAIL("removed Displ has no currentPos")
+                if (modes.empty()) FAIL("active Displ has no modes")
                 break;
             case connected:
                 if (!optimalMode) FAIL("connected Displ has no optimalMode")
+                if (modes.empty()) FAIL("connected Displ has no modes")
                 break;
             default:
                 break;
@@ -183,41 +181,34 @@ const list <DisplP> discoverDispls() {
         ModeP currentMode, preferredMode, optimalMode;
         PosP currentPos;
 
-        // basic info
+        // current state
         const XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
         const char *name = outputInfo->name;
-        if (outputInfo->crtc != 0)
-            if (outputInfo->nmode != 0)
-                // currently active displays have CRTC info and available modes
-                state = Displ::active;
-            else
-                // previously active displays have CRTC info but no available modes
-                state = Displ::removed;
-        else if (outputInfo->nmode != 0)
-            // inactive connected displays have modes available
-            state = Displ::connected;
-        else
-            state = Displ::disconnected;
-
-        // current position and mode for active and removed inputs
         RRMode rrMode = 0;
-        if (state == Displ::active || state == Displ::removed) {
+        if (outputInfo->crtc != 0) {
+            // active displays have CRTC info
+            state = Displ::active;
+
+            // current position and mode
             XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
+            rrMode = crtcInfo->mode;
+            currentMode = modeFromId(rrMode, screenResources);
 
-            // note mode for active inputs
-            if (state == Displ::active)
-                rrMode = crtcInfo->mode;
-
-            // add mode for removed inputs
-            if (state == Displ::removed)
-                currentMode = modeFromId(crtcInfo->mode, screenResources);
+            if (outputInfo->nmode == 0) {
+                // display is active but has been disconnected
+                state = Displ::disconnected;
+            }
+        } else if (outputInfo->nmode != 0) {
+            // inactive connected displays have modes available
+            state = Displ::connected;
+        } else {
+            state = Displ::disconnected;
         }
 
-        // iterate available modes
+        // add available modes
         for (int j = 0; j < outputInfo->nmode; j++) {
-            if (state == Displ::removed || state == Displ::disconnected) FAIL(
-                    "apparently removed or disconnected display has modes available");
+            if (state == Displ::disconnected) FAIL("apparently disconnected display has modes available");
 
             // add to modes
             auto mode = modeFromId(outputInfo->modes[j], screenResources);
@@ -227,12 +218,12 @@ const list <DisplP> discoverDispls() {
             if (outputInfo->npreferred == j + 1)
                 preferredMode = mode;
 
-            // is this mode being used?
+            // replace currentMode with the one from the list
             if (mode->rrMode == rrMode)
                 currentMode = mode;
         }
 
-        // hightest res/refresh is optimal mode
+        // highest res/refresh is optimal mode
         if (!modes.empty()) {
             modes.sort(sortSharedPtr<Mode>);
             optimalMode = *modes.begin();
@@ -251,22 +242,20 @@ void printDispls(const list <DisplP> &displs) {
         printf("%s ", displ->name);
         switch (displ->state) {
             case Displ::active:
-                printf("active %ux%u%+d%+d %uHz\n", displ->currentMode->width, displ->currentMode->height,
-                       displ->currentPos->x, displ->currentPos->y,
-                       displ->currentMode->refresh);
-                break;
-            case Displ::removed:
-                printf("removed %ux%u%+d%+d %uHz\n", displ->currentMode->width, displ->currentMode->height,
-                       displ->currentPos->x, displ->currentPos->y,
-                       displ->currentMode->refresh);
+                printf("active");
                 break;
             case Displ::connected:
-                printf("connected\n");
+                printf("connected");
                 break;
             case Displ::disconnected:
-                printf("disconnected\n");
+                printf("disconnected");
                 break;
         }
+        if (displ->currentMode && displ->currentPos) {
+            printf(" %ux%u%+d%+d %uHz", displ->currentMode->width, displ->currentMode->height, displ->currentPos->x,
+                   displ->currentPos->y, displ->currentMode->refresh);
+        }
+        printf("\n");
         for (auto mode : displ->modes) {
             current = mode == displ->currentMode ? '*' : ' ';
             preferred = mode == displ->preferredMode ? '+' : ' ';
