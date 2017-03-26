@@ -299,10 +299,11 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
 }
 
 // print xrandr cmd for any displays with desired mode and position
-void printXrandr(const list <DisplP> &displs) {
+string renderXrandr(const list <DisplP> &displs) {
     stringstream ss;
-    ss << "\nxrandr";
+    ss << "xrandr";
     for (auto displ : displs) {
+        ss << " \\\n";
         ss << " --output " << displ->name;
         if (displ->desiredMode && displ->desiredPos) {
             ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
@@ -313,7 +314,7 @@ void printXrandr(const list <DisplP> &displs) {
             ss << " --off";
         }
     }
-    printf("%s\n", ss.str().c_str());
+    return ss.str();
 }
 
 // return true if we have a "closed" status in the file like /proc/acpi/button/lid/LID0/state
@@ -354,14 +355,19 @@ bool isLidClosed() {
 }
 
 int main() {
+    // discover and print current state
     const list <DisplP> displs = discoverDispls();
-    const bool lidClosed = isLidClosed();
-
     printDispls(displs);
+    const bool lidClosed = isLidClosed();
     printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
 
+    // determine desired state
     arrangeDispls(displs, lidClosed);
-    printXrandr(displs);
 
-    return EXIT_SUCCESS;
+    // render desired state for xrandr
+    string xrandr = renderXrandr(displs);
+    printf("\n%s\n", xrandr.c_str());
+
+    // invoke xrandr
+    return system(xrandr.c_str());
 }
