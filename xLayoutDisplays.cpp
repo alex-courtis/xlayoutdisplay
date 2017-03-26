@@ -83,16 +83,17 @@ public:
           const ModeP optimalMode, const PosP currentPos) :
             name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode),
             optimalMode(optimalMode), currentPos(currentPos) {
+        if (name == NULL) FAIL("Displ has no name")
         switch (state) {
             case active:
-                if (!currentMode) FAIL("active Displ has no currentMode")
-                if (!currentPos) FAIL("active Displ has no currentPos")
-                if (!optimalMode) FAIL("active Displ has no optimalMode")
-                if (modes.empty()) FAIL("active Displ has no modes")
+                if (!currentMode) FAIL("active Displ %s has no currentMode", name)
+                if (!currentPos) FAIL("active Displ %s has no currentPos", name)
+                if (!optimalMode) FAIL("active Displ %s has no optimalMode", name)
+                if (modes.empty()) FAIL("active Displ %s has no modes", name)
                 break;
             case connected:
-                if (!optimalMode) FAIL("connected Displ has no optimalMode")
-                if (modes.empty()) FAIL("connected Displ has no modes")
+                if (!optimalMode) FAIL("connected Displ %s has no optimalMode", name)
+                if (modes.empty()) FAIL("connected Displ %s has no modes", name)
                 break;
             default:
                 break;
@@ -271,58 +272,55 @@ void printDispls(const list <DisplP> &displs) {
 }
 
 // arrange the displays
-void arrangeDispls(const list <DisplP> &displs) {
+void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
+    static const char *EMBEDDED_DISPLAY_PREFIX = "edp";
+
     int xpos = 0;
     int ypos = 0;
     for (auto displ : displs) {
-        // set the desired mode
-        displ->desiredMode = displ->optimalMode;
 
-        // position the screen
-        displ->desiredPos = make_shared<Pos>(xpos, ypos);
+        if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name, strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
+            // don't use any embedded displays if the lid is closed
+            continue;
+        }
 
-        // next position
-        switch (displ->state) {
-            case Displ::active:
-            case Displ::connected:
-                xpos += displ->desiredMode->width;
-                break;
-            default:
-                break;
+        if (displ->state == Displ::active || displ->state== Displ::connected) {
+
+            // set the desired mode to optimal
+            displ->desiredMode = displ->optimalMode;
+
+            // position the screen
+            displ->desiredPos = make_shared<Pos>(xpos, ypos);
+
+            // next position
+            xpos += displ->desiredMode->width;
         }
     }
 }
 
-// print xrandr cmd
+// print xrandr cmd for any displays with desired mode and position
 void printXrandr(const list <DisplP> &displs) {
     stringstream ss;
     ss << "\nxrandr";
     for (auto displ : displs) {
         ss << " --output " << displ->name;
-        switch (displ->state) {
-            case Displ::active:
-            case Displ::connected:
-                if (!displ->desiredMode) FAIL("desiredMode not set for active or connected display")
-                if (!displ->desiredPos) FAIL("desiredPos not set for active or connected display")
-                ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
-                ss << " --rate " << displ->desiredMode->refresh;
-                ss << " --pos ";
-                ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
-                break;
-            default:
-                ss << " --off";
-                break;
+        if (displ->desiredMode && displ->desiredPos) {
+            ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
+            ss << " --rate " << displ->desiredMode->refresh;
+            ss << " --pos ";
+            ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
+        } else {
+            ss << " --off";
         }
     }
     printf("%s\n", ss.str().c_str());
 }
 
 // return true if we have a "closed" status in the file like /proc/acpi/button/lid/LID0/state
-bool lidClosed() {
-    static const char *LID_DIR = "/proc/acpi/button/lid";
-
+bool isLidClosed() {
     bool lidClosed = false;
 
+    static const char *LID_DIR = "/proc/acpi/button/lid";
 
     // find the lid state directory
     DIR *dir = opendir(LID_DIR);
@@ -352,19 +350,17 @@ bool lidClosed() {
         }
         closedir(dir);
     }
-
     return lidClosed;
 }
 
 int main() {
     const list <DisplP> displs = discoverDispls();
+    const bool lidClosed = isLidClosed();
 
     printDispls(displs);
+    printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
 
-    printf("\nlid %s\n", lidClosed() ? "closed" : "open or not present");
-
-    arrangeDispls(displs);
-
+    arrangeDispls(displs, lidClosed);
     printXrandr(displs);
 
     return EXIT_SUCCESS;
