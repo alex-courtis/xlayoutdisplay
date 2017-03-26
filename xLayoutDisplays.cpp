@@ -9,6 +9,10 @@
 #include <memory>
 #include <list>
 #include <sstream>
+#include <cstring>
+#include <fstream>
+
+#include <dirent.h>
 
 #include <X11/extensions/Xrandr.h>
 
@@ -263,7 +267,7 @@ void printDispls(const list <DisplP> &displs) {
             printf("%c%c%c%ux%u %uHz\n", current, preferred, optimal, mode->width, mode->height, mode->refresh);
         }
     }
-    printf("\n*current +preferred !optimal\n");
+    printf("*current +preferred !optimal\n");
 }
 
 // arrange the displays
@@ -313,10 +317,51 @@ void printXrandr(const list <DisplP> &displs) {
     printf("%s\n", ss.str().c_str());
 }
 
+// return true if we have a "closed" status in the file like /proc/acpi/button/lid/LID0/state
+bool lidClosed() {
+    static const char *LID_DIR = "/proc/acpi/button/lid";
+
+    bool lidClosed = false;
+
+
+    // find the lid state directory
+    DIR *dir = opendir(LID_DIR);
+    if (dir) {
+        struct dirent *dirent;
+        while ((dirent = readdir(dir)) != NULL) {
+            if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
+
+                // read the lid state file
+                stringstream lidFileName;
+                lidFileName << LID_DIR << "/" << dirent->d_name << "/" << "state";
+                ifstream lidFile;
+                lidFile.open(lidFileName.str().c_str(), ios::in);
+                if (lidFile.is_open()) {
+                    string line;
+                    if (getline(lidFile, line)) {
+                        if (line.find("closed") != string::npos) {
+                            lidClosed = true;
+                        }
+                    }
+                    lidFile.close();
+                }
+
+                // drivers/acpi/button.c acpi_button_add_fs seems to indicate there will be only one
+                break;
+            }
+        }
+        closedir(dir);
+    }
+
+    return lidClosed;
+}
+
 int main() {
     const list <DisplP> displs = discoverDispls();
 
     printDispls(displs);
+
+    printf("\nlid %s\n", lidClosed() ? "closed" : "open or not present");
 
     arrangeDispls(displs);
 
