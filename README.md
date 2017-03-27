@@ -28,14 +28,18 @@ e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
 
 ## Sample Output
 
+DP-0 was the only active (primary) display. HDMI-0 is plugged in.
+
 `xLayoutDisplays -o "DP-0 HDMI-0" -p HDMI-0`
+
+After invocation, HDMI-0 is enabled, to the right of DP-0, and HDMI-0 is the new primary.
 
 ```
 DVI-D-0 disconnected
-HDMI-0 active 1920x1080+2560+0 60Hz
+HDMI-0 connected
   !1920x1080 60Hz
    1920x1080 60Hz
-*  1920x1080 60Hz
+   1920x1080 60Hz
    1920x1080 50Hz
    1920x1080 50Hz
    1920x1080 30Hz
@@ -76,4 +80,5 @@ xrandr \
  --output DP-2 --off \
  --output DP-3 --off \
  --output DP-4 --off
+
 ```
