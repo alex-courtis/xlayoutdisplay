@@ -418,9 +418,8 @@ int main(int argc, char **argv) {
                 OPT_DRY_RUN = true;
                 break;
             case 'o':
-                for (char *token = strtok(optarg, ","); token != NULL; token = strtok(NULL, ",")) {
+                for (char *token = strtok(optarg, " ,"); token != NULL; token = strtok(NULL, " ,"))
                     OPT_ORDER.push_back(string(token));
-                }
                 break;
             case 'p':
                 OPT_PRIMARY = optarg;
