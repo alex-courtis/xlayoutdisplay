@@ -279,7 +279,7 @@ void printDispls(const list <DisplP> &displs) {
     printf("*current +preferred !optimal\n");
 }
 
-// reorder displs by name, according to OPT_ORDER
+// reorder displs putting those whose names match OPT_ORDER at the front
 void orderDispls(list <DisplP> &displs) {
 
     // stack all the preferred, available displays
@@ -304,7 +304,7 @@ void orderDispls(list <DisplP> &displs) {
     }
 }
 
-// arrange the displays; may reorder displs
+// arrange the displays; may reorder displs and will mutate contents
 void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
     static const char *EMBEDDED_DISPLAY_PREFIX = "edp";
 
@@ -312,7 +312,7 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
 
     int xpos = 0;
     int ypos = 0;
-    bool primarySet = false;
+    DisplP displPrimary;
     for (const auto displ : displs) {
 
         if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name, strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
@@ -322,19 +322,13 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
 
         if (displ->state == Displ::active || displ->state == Displ::connected) {
 
-            if (!primarySet) {
-                if (OPT_PRIMARY) {
-                    if (strcasecmp(displ->name, OPT_PRIMARY) == 0) {
-                        // user selected primary
-                        displ->desiredPrimary = true;
-                        primarySet = true;
-                    }
-                } else {
-                    // default first to primary
-                    displ->desiredPrimary = true;
-                    primarySet = true;
-                }
-            }
+            // default first to primary
+            if (!displPrimary)
+                displPrimary = displ;
+
+            // user selected primary
+            if (OPT_PRIMARY && strcasecmp(OPT_PRIMARY, displ->name) == 0)
+                displPrimary = displ;
 
             // set the desired mode to optimal
             displ->desiredMode = displ->optimalMode;
@@ -347,9 +341,9 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
         }
     }
 
-    if (!primarySet && OPT_PRIMARY) {
-        FAIL("Invalid primary monitor \"%s\"", OPT_PRIMARY);
-    }
+    // set the one and only one primary
+    if (displPrimary)
+        displPrimary->desiredPrimary = true;
 }
 
 // print xrandr cmd for any displays with desired mode and position
