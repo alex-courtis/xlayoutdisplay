@@ -82,3 +82,19 @@ xrandr \
  --output DP-4 --off
 
 ```
+
+## Building
+
+Clone and cmake
+
+## TODO
+
+Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
+
+-m mirror
+
+maybe -v or other arrangement options
+
+-a after e.g. `xmonad --restart`
+
+xrdb Xft.dpi suggestion or setting
