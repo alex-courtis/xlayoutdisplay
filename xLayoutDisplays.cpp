@@ -22,7 +22,7 @@ using namespace std;
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
 bool OPT_DRY_RUN = false;
-list<string> OPT_ORDER;
+list <string> OPT_ORDER;
 char *OPT_PRIMARY = NULL;
 bool OPT_VERBOSE = true;
 
@@ -224,7 +224,7 @@ const list <DisplP> discoverDispls() {
             if (state == Displ::disconnected) FAIL("apparently disconnected display has modes available");
 
             // add to modes
-            auto mode = modeFromId(outputInfo->modes[j], screenResources);
+            const auto mode = modeFromId(outputInfo->modes[j], screenResources);
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1
@@ -251,7 +251,7 @@ const list <DisplP> discoverDispls() {
 // print info about all displs
 void printDispls(const list <DisplP> &displs) {
     char current, preferred, optimal;
-    for (auto displ : displs) {
+    for (const auto displ : displs) {
         printf("%s ", displ->name);
         switch (displ->state) {
             case Displ::active:
@@ -269,7 +269,7 @@ void printDispls(const list <DisplP> &displs) {
                    displ->currentPos->y, displ->currentMode->refresh);
         }
         printf("\n");
-        for (auto mode : displ->modes) {
+        for (const auto mode : displ->modes) {
             current = mode == displ->currentMode ? '*' : ' ';
             preferred = mode == displ->preferredMode ? '+' : ' ';
             optimal = mode == displ->optimalMode ? '!' : ' ';
@@ -279,14 +279,41 @@ void printDispls(const list <DisplP> &displs) {
     printf("*current +preferred !optimal\n");
 }
 
-// arrange the displays
-void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
+// reorder displs by name, according to OPT_ORDER
+void orderDispls(list <DisplP> &displs) {
+
+    // stack all the preferred, available displays
+    list <DisplP> preferredDispls;
+    for (const auto name : OPT_ORDER) {
+        for (const auto displ : displs) {
+            if (name == displ->name) {
+                preferredDispls.push_front(displ);
+            }
+        }
+    }
+
+    // move preferred to the front
+    for (const auto preferredDispl : preferredDispls) {
+        for (const auto displ : displs) {
+            if (strcasecmp(displ->name, preferredDispl->name) == 0) {
+                displs.remove(displ);
+                displs.push_front(displ);
+                break;
+            }
+        }
+    }
+}
+
+// arrange the displays; may reorder displs
+void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
     static const char *EMBEDDED_DISPLAY_PREFIX = "edp";
+
+    orderDispls(displs);
 
     int xpos = 0;
     int ypos = 0;
     bool primarySet = false;
-    for (auto displ : displs) {
+    for (const auto displ : displs) {
 
         if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name, strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
             // don't use any embedded displays if the lid is closed
@@ -329,7 +356,7 @@ void arrangeDispls(const list <DisplP> &displs, const bool &lidClosed) {
 const string renderXrandr(const list <DisplP> &displs) {
     stringstream ss;
     ss << "xrandr";
-    for (auto displ : displs) {
+    for (const auto displ : displs) {
         ss << " \\\n";
         ss << " --output " << displ->name;
         if (displ->desiredMode && displ->desiredPos) {
@@ -414,7 +441,7 @@ int main(int argc, char **argv) {
     if (argc > optind) usage(argv[0]);
 
     // discover current state
-    const list <DisplP> displs = discoverDispls();
+    list <DisplP> displs = discoverDispls();
     const bool lidClosed = isLidClosed();
     if (OPT_VERBOSE) {
         printDispls(displs);
