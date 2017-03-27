@@ -27,7 +27,7 @@ e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
 ```
 ## Sample Output
 
-`./xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0`
+`xLayoutDisplays -o "DP-0 HDMI-0" -p HDMI-0`
 
 ```
 DVI-D-0 disconnected
