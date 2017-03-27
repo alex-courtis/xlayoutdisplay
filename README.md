@@ -98,3 +98,5 @@ maybe -v or other arrangement options
 -a after e.g. `xmonad --restart`
 
 xrdb Xft.dpi suggestion or setting
+
+User settings... surely C++14 has YAML...
