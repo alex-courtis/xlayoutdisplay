@@ -1,6 +1,6 @@
 # xLayoutDisplays
 
-Detects and arranges displays.
+Detects and arranges linux displays, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr)(for now...) for arrangement.
 
 ## Usage
 
@@ -24,4 +24,55 @@ Usage: xLayoutDisplays [-h] [-i] [-n] [-o order] [-p primary] [-q]
 
 e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
   arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary
+```
+## Sample Output
+
+`./xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0`
+
+```
+DVI-D-0 disconnected
+HDMI-0 active 1920x1080+2560+0 60Hz
+  !1920x1080 60Hz
+   1920x1080 60Hz
+*  1920x1080 60Hz
+   1920x1080 50Hz
+   1920x1080 50Hz
+   1920x1080 30Hz
+   1920x1080 25Hz
+   1920x1080 24Hz
+ + 1280x720 60Hz
+   1280x720 60Hz
+   1280x720 50Hz
+   1024x768 60Hz
+   800x600 60Hz
+   720x480 60Hz
+   720x480 60Hz
+   720x576 50Hz
+DP-0 active 2560x1440+0+0 165Hz
+* !2560x1440 165Hz
+   2560x1440 144Hz
+   2560x1440 120Hz
+   2560x1440 100Hz
+   2560x1440 85Hz
+ + 2560x1440 60Hz
+   2560x1440 24Hz
+   1024x768 60Hz
+   800x600 60Hz
+   640x480 60Hz
+DP-1 disconnected
+DP-2 disconnected
+DP-3 disconnected
+DP-4 disconnected
+*current +preferred !optimal
+
+lid open or not present
+
+xrandr \
+ --output DP-0 --mode 2560x1440 --rate 165 --pos 0x0 \
+ --output HDMI-0 --mode 1920x1080 --rate 60 --pos 2560x0 --primary \
+ --output DVI-D-0 --off \
+ --output DP-1 --off \
+ --output DP-2 --off \
+ --output DP-3 --off \
+ --output DP-4 --off
 ```
