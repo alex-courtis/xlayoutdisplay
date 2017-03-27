@@ -21,6 +21,7 @@ using namespace std;
 
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
+bool OPT_INFO = false;
 bool OPT_DRY_RUN = false;
 list <string> OPT_ORDER;
 char *OPT_PRIMARY = NULL;
@@ -406,14 +407,19 @@ bool isLidClosed() {
 }
 
 void usage(char *prog) {
-    fprintf(stderr, "Usage: %s [-n] [-o comma delimited display order] [-p primary] [-q]\n", prog);
+    fprintf(stderr,
+            "Usage: %s [-i] [-n] [-o comma delimited display order] [-p primary] [-q]\nTry '%s --help' for more information.\n",
+            prog, prog);
     exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv) {
     int opt;
-    while ((opt = getopt(argc, argv, "no:p:q")) != -1) {
+    while ((opt = getopt(argc, argv, "ino:p:q")) != -1) {
         switch (opt) {
+            case 'i':
+                OPT_INFO = true;
+                break;
             case 'n':
                 OPT_DRY_RUN = true;
                 break;
@@ -436,10 +442,14 @@ int main(int argc, char **argv) {
     // discover current state
     list <DisplP> displs = discoverDispls();
     const bool lidClosed = isLidClosed();
-    if (OPT_VERBOSE) {
+    if (OPT_VERBOSE || OPT_INFO) {
         printDispls(displs);
         printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
     }
+
+    // current info is all output, we're done
+    if (OPT_INFO)
+        return EXIT_SUCCESS;
 
     // determine desired state
     arrangeDispls(displs, lidClosed);
