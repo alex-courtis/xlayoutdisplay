@@ -412,10 +412,11 @@ bool isLidClosed() {
 // display help and exit with success
 void help(char *progname) {
     printf(""
-                   "Detects and arranges displays in a left to right manner, according to Xrandr ordering.\n"
+                   "Detects and arranges displays in a left to right manner.\n"
                    "Invokes xrandr to perform arrangement.\n"
                    "Highest resolution and refresh are used for each display.\n"
                    "Displays starting with \"%s\" are disabled if the laptop lid is closed as per %s/.*/%s\n"
+                   "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
                    "\n", EMBEDDED_DISPLAY_PREFIX, LID_ROOT_DIR, LID_STATE_DIR
     );
@@ -424,7 +425,7 @@ void help(char *progname) {
                    "  -h  display this help text and exit\n"
                    "  -i  display information about current displays and exit\n"
                    "  -m  *mirror displays using the lowest common resolution (not ready yet, havering about panning)\n"
-                   "  -n  perform a trial run and exit, outputting xrandr invocation even if -q\n"
+                   "  -n  perform a trial run and exit\n"
                    "  -o  order of displays, space/comma delimited\n"
                    "  -p  primary display\n"
                    "  -q  suppress output\n"

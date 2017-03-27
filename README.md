@@ -1,6 +1,6 @@
 # xLayoutDisplays
 
-Detects and arranges linux displays, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr)(for now...) for arrangement.
+Detects and arranges linux displays, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) (for now...) for arrangement.
 
 ## Usage
 
@@ -25,6 +25,7 @@ Usage: xLayoutDisplays [-h] [-i] [-n] [-o order] [-p primary] [-q]
 e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
   arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary
 ```
+
 ## Sample Output
 
 `xLayoutDisplays -o "DP-0 HDMI-0" -p HDMI-0`
