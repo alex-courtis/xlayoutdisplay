@@ -19,8 +19,15 @@
 
 using namespace std;
 
+#define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
+
+#define EMBEDDED_DISPLAY_PREFIX "eDP"
+#define LID_ROOT_DIR "/proc/acpi/button/lid"
+#define LID_STATE_DIR "state"
+
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
+bool OPT_HELP = false;
 bool OPT_INFO = false;
 bool OPT_DRY_RUN = false;
 list <string> OPT_ORDER;
@@ -307,8 +314,6 @@ void orderDispls(list <DisplP> &displs) {
 
 // arrange the displays; may reorder displs and will mutate contents
 void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
-    static const char *EMBEDDED_DISPLAY_PREFIX = "edp";
-
     orderDispls(displs);
 
     int xpos = 0;
@@ -373,10 +378,8 @@ const string renderXrandr(const list <DisplP> &displs) {
 bool isLidClosed() {
     bool lidClosed = false;
 
-    static const char *LID_DIR = "/proc/acpi/button/lid";
-
     // find the lid state directory
-    DIR *dir = opendir(LID_DIR);
+    DIR *dir = opendir(LID_ROOT_DIR);
     if (dir) {
         struct dirent *dirent;
         while ((dirent = readdir(dir)) != NULL) {
@@ -384,7 +387,7 @@ bool isLidClosed() {
 
                 // read the lid state file
                 stringstream lidFileName;
-                lidFileName << LID_DIR << "/" << dirent->d_name << "/" << "state";
+                lidFileName << LID_ROOT_DIR << "/" << dirent->d_name << "/" << LID_STATE_DIR;
                 ifstream lidFile;
                 lidFile.open(lidFileName.str().c_str(), ios::in);
                 if (lidFile.is_open()) {
@@ -406,17 +409,49 @@ bool isLidClosed() {
     return lidClosed;
 }
 
-void usage(char *prog) {
-    fprintf(stderr,
-            "Usage: %s [-i] [-n] [-o comma delimited display order] [-p primary] [-q]\nTry '%s --help' for more information.\n",
-            prog, prog);
+// display help and exit with success
+void help(char *progname) {
+    printf(""
+                   "Detects and arranges displays in a left to right manner, according to Xrandr ordering.\n"
+                   "Invokes xrandr to perform arrangement.\n"
+                   "Highest resolution and refresh are used for each display.\n"
+                   "Displays starting with \"%s\" are disabled if the laptop lid is closed as per %s/.*/%s\n"
+                   "The first display will be primary unless -p specified.\n"
+                   "\n", EMBEDDED_DISPLAY_PREFIX, LID_ROOT_DIR, LID_STATE_DIR
+    );
+    printf(USAGE, progname);
+    printf(""
+                   "  -h  display this help text and exit\n"
+                   "  -i  display information about current displays and exit\n"
+                   "  -m  *mirror displays using the lowest common resolution (not ready yet, havering about panning)\n"
+                   "  -n  perform a trial run and exit, outputting xrandr invocation even if -q\n"
+                   "  -o  order of displays, space/comma delimited\n"
+                   "  -p  primary display\n"
+                   "  -q  suppress output\n"
+                   "  -v  *arrange displays in a top to bottom manner (is this needed?)\n"
+    );
+    printf("\n"
+                   "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"
+                   "  arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary\n"
+                   "", progname
+    );
+    exit(EXIT_SUCCESS);
+}
+
+// display usage and help hint then exit with failure
+void usage(char *progname) {
+    fprintf(stderr, USAGE, progname);
+    fprintf(stderr, "Try '%s -h' for more information.\n", progname);
     exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv) {
     int opt;
-    while ((opt = getopt(argc, argv, "ino:p:q")) != -1) {
+    while ((opt = getopt(argc, argv, "hino:p:q")) != -1) {
         switch (opt) {
+            case 'h':
+                OPT_HELP = true;
+                break;
             case 'i':
                 OPT_INFO = true;
                 break;
@@ -437,7 +472,10 @@ int main(int argc, char **argv) {
                 usage(argv[0]);
         }
     }
-    if (argc > optind) usage(argv[0]);
+    if (argc > optind)
+        usage(argv[0]);
+    if (OPT_HELP)
+        help(argv[0]);
 
     // discover current state
     list <DisplP> displs = discoverDispls();
