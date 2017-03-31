@@ -467,13 +467,13 @@ int main(int argc, char **argv) {
                 OPT_VERBOSE = false;
                 break;
             default:
-                usage(argv[0]);
+                usage(basename(argv[0]));
         }
     }
     if (argc > optind)
-        usage(argv[0]);
+        usage(basename(argv[0]));
     if (OPT_HELP)
-        help(argv[0]);
+        help(basename(argv[0]));
 
     // discover current state
     list <DisplP> displs = discoverDispls();
