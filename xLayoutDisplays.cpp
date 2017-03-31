@@ -10,7 +10,6 @@
 #include <list>
 #include <sstream>
 #include <cstring>
-#include <fstream>
 
 #include <dirent.h>
 #include <getopt.h>
@@ -378,6 +377,9 @@ const string renderXrandr(const list <DisplP> &displs) {
 bool isLidClosed() {
     bool lidClosed = false;
 
+    static char lidFileName[PATH_MAX];
+    static char line[512];
+
     // find the lid state directory
     DIR *dir = opendir(LID_ROOT_DIR);
     if (dir) {
@@ -386,21 +388,16 @@ bool isLidClosed() {
             if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
 
                 // read the lid state file
-                stringstream lidFileName;
-                lidFileName << LID_ROOT_DIR << "/" << dirent->d_name << "/" << LID_STATE_DIR;
-                ifstream lidFile;
-                lidFile.open(lidFileName.str().c_str(), ios::in);
-                if (lidFile.is_open()) {
-                    string line;
-                    if (getline(lidFile, line)) {
-                        if (line.find("closed") != string::npos) {
+                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", LID_ROOT_DIR, dirent->d_name, LID_STATE_DIR);
+                FILE *lidFile = fopen(lidFileName, "r");
+                if (lidFile != NULL) {
+                    if (fgets(line, 512, lidFile))
+                        if (strcasestr(line, "closed"))
                             lidClosed = true;
-                        }
-                    }
-                    lidFile.close();
+                    fclose(lidFile);
                 }
 
-                // drivers/acpi/button.c acpi_button_add_fs seems to indicate there will be only one
+                // drivers/acpi/button.c acpi_button_add_fs seems to indicate there will be only one file
                 break;
             }
         }
