@@ -11,11 +11,16 @@ link_libraries(${X11_Xrandr_LIB})
 link_libraries(gtest)
 
 set(SOURCE_FILES
-        src/xLayoutDisplays.cpp
-        src/xLayoutDisplays.h
+        src/Displ.h
+        src/Displ.cpp
+        src/Mode.h
+        src/Pos.h
         src/laptop.cpp
         src/laptop.h
-        src/macros.h)
+        src/macros.h
+        src/xLayoutDisplays.cpp
+        src/xLayoutDisplays.h
+        )
 
 set(TEST_FILES
         test/main.cpp

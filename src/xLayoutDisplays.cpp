@@ -2,15 +2,12 @@
 
 #include "macros.h"
 #include "laptop.h"
+#include "Displ.h"
 
-#include <memory>
-#include <list>
 #include <sstream>
 #include <cstring>
 
 #include <getopt.h>
-
-#include <X11/extensions/Xrandr.h>
 
 using namespace std;
 
@@ -24,111 +21,6 @@ bool OPT_DRY_RUN = false;
 list <string> OPT_ORDER;
 char *OPT_PRIMARY = NULL;
 bool OPT_VERBOSE = true;
-
-class Mode {
-public:
-    Mode(const RRMode &rrMode, const unsigned int &width, const unsigned int &height, const unsigned int &refresh) :
-            rrMode(rrMode), width(width), height(height), refresh(refresh) {
-    }
-
-    Mode(const Mode &mode) :
-            rrMode(0), width(0), height(0), refresh(0) {
-        FAIL("copy constructing Mode");
-    }
-
-    ~Mode() {
-    }
-
-    // order by width, refresh, height in descending order
-    bool operator<(const Mode &o) {
-        if (width == o.width)
-            if (refresh == o.refresh)
-                return height > o.height;
-            else
-                return refresh > o.refresh;
-        else
-            return width > o.width;
-    }
-
-    const RRMode rrMode;
-    const unsigned int width;
-    const unsigned int height;
-    const unsigned int refresh;
-};
-
-typedef shared_ptr<Mode> ModeP;
-
-class Pos {
-public:
-    Pos(const int &x, const int &y) :
-            x(x), y(y) {
-    }
-
-    Pos(const Pos &pos) {
-        FAIL("copy constructing Pos");
-    }
-
-    ~Pos() {
-    }
-
-    const int x = 0;
-    const int y = 0;
-};
-
-typedef shared_ptr<Pos> PosP;
-
-class Displ {
-public:
-    enum State {
-        active, connected, disconnected
-    };
-
-    Displ(const char *name, const State &state, const list <ModeP> &modes, const ModeP &currentMode,
-          const ModeP preferredMode,
-          const ModeP optimalMode, const PosP currentPos) :
-            name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode),
-            optimalMode(optimalMode), currentPos(currentPos) {
-        if (name == NULL) FAIL("Displ has no name")
-        switch (state) {
-            case active:
-                if (!currentMode) FAIL("active Displ %s has no currentMode", name)
-                if (!currentPos) FAIL("active Displ %s has no currentPos", name)
-                if (!optimalMode) FAIL("active Displ %s has no optimalMode", name)
-                if (modes.empty()) FAIL("active Displ %s has no modes", name)
-                break;
-            case connected:
-                if (!optimalMode) FAIL("connected Displ %s has no optimalMode", name)
-                if (modes.empty()) FAIL("connected Displ %s has no modes", name)
-                break;
-            default:
-                break;
-        }
-    }
-
-    Displ(const Displ &displ) :
-            name(NULL), state(disconnected) {
-        FAIL("copy constructing Displ");
-    }
-
-    ~Displ() {
-    }
-
-    const char *name;
-    const State state;
-
-    const list <ModeP> modes;
-    const ModeP currentMode;
-    const ModeP preferredMode;
-    const ModeP optimalMode;
-    ModeP desiredMode;
-
-    const PosP currentPos;
-    PosP desiredPos;
-
-    bool desiredPrimary = false;
-};
-
-typedef shared_ptr<Displ> DisplP;
 
 // sorting function for shared pointers... this must be in STL somewhere...
 template<typename T>
