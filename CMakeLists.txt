@@ -11,8 +11,8 @@ link_libraries(${X11_Xrandr_LIB})
 link_libraries(gtest)
 
 set(SOURCE_FILES
-        src/Displ.h
         src/Displ.cpp
+        src/Displ.h
         src/Mode.h
         src/Pos.h
         src/laptop.cpp
@@ -20,12 +20,13 @@ set(SOURCE_FILES
         src/macros.h
         src/xLayoutDisplays.cpp
         src/xLayoutDisplays.h
-        )
+        src/xrandrrutil.c
+        src/xrandrrutil.h)
 
 set(TEST_FILES
         test/main.cpp
         test/test-laptop.cpp
-        )
+        test/test-xrandrutil.cpp)
 
 add_executable(gtests ${SOURCE_FILES} ${TEST_FILES})
 
