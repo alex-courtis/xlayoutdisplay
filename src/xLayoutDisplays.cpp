@@ -1,17 +1,12 @@
-//============================================================================
-// Name        : xLayoutDisplays.cpp
-// Author      : Alexander Courtis
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+#include "xLayoutDisplays.h"
+
+#include "laptop.h"
 
 #include <memory>
 #include <list>
 #include <sstream>
 #include <cstring>
 
-#include <dirent.h>
 #include <getopt.h>
 
 #include <X11/extensions/Xrandr.h>
@@ -22,7 +17,7 @@ using namespace std;
 
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
 #define LID_ROOT_DIR "/proc/acpi/button/lid"
-#define LID_STATE_DIR "state"
+#define LID_STATE_FILE_NAME "state"
 
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
@@ -373,39 +368,6 @@ const string renderXrandr(const list <DisplP> &displs) {
     return ss.str();
 }
 
-// return true if we have a "closed" status in the file like /proc/acpi/button/lid/LID0/state
-bool isLidClosed() {
-    bool lidClosed = false;
-
-    static char lidFileName[PATH_MAX];
-    static char line[512];
-
-    // find the lid state directory
-    DIR *dir = opendir(LID_ROOT_DIR);
-    if (dir) {
-        struct dirent *dirent;
-        while ((dirent = readdir(dir)) != NULL) {
-            if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
-
-                // read the lid state file
-                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", LID_ROOT_DIR, dirent->d_name, LID_STATE_DIR);
-                FILE *lidFile = fopen(lidFileName, "r");
-                if (lidFile != NULL) {
-                    if (fgets(line, 512, lidFile))
-                        if (strcasestr(line, "closed"))
-                            lidClosed = true;
-                    fclose(lidFile);
-                }
-
-                // drivers/acpi/button.c acpi_button_add_fs seems to indicate there will be only one file
-                break;
-            }
-        }
-        closedir(dir);
-    }
-    return lidClosed;
-}
-
 // display help and exit with success
 void help(char *progname) {
     printf(""
@@ -415,7 +377,7 @@ void help(char *progname) {
                    "Displays starting with \"%s\" are disabled if the laptop lid is closed as per %s/.*/%s\n"
                    "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
-                   "\n", EMBEDDED_DISPLAY_PREFIX, LID_ROOT_DIR, LID_STATE_DIR
+                   "\n", EMBEDDED_DISPLAY_PREFIX, LID_ROOT_DIR, LID_STATE_FILE_NAME
     );
     printf(USAGE, progname);
     printf(""
@@ -443,7 +405,7 @@ void usage(char *progname) {
     exit(EXIT_FAILURE);
 }
 
-int main(int argc, char **argv) {
+int run(int argc, char **argv) {
     int opt;
     while ((opt = getopt(argc, argv, "hino:p:q")) != -1) {
         switch (opt) {
