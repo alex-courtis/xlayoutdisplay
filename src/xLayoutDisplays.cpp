@@ -1,5 +1,6 @@
 #include "xLayoutDisplays.h"
 
+#include "macros.h"
 #include "laptop.h"
 
 #include <memory>
@@ -16,10 +17,6 @@ using namespace std;
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
-#define LID_ROOT_DIR "/proc/acpi/button/lid"
-#define LID_STATE_FILE_NAME "state"
-
-#define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
 bool OPT_HELP = false;
 bool OPT_INFO = false;
@@ -374,10 +371,10 @@ void help(char *progname) {
                    "Detects and arranges displays in a left to right manner.\n"
                    "Invokes xrandr to perform arrangement.\n"
                    "Highest resolution and refresh are used for each display.\n"
-                   "Displays starting with \"%s\" are disabled if the laptop lid is closed as per %s/.*/%s\n"
+                   "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
                    "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
-                   "\n", EMBEDDED_DISPLAY_PREFIX, LID_ROOT_DIR, LID_STATE_FILE_NAME
+                   "\n", EMBEDDED_DISPLAY_PREFIX
     );
     printf(USAGE, progname);
     printf(""

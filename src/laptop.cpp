@@ -4,8 +4,6 @@
 #include <string.h>
 #include <dirent.h>
 
-#define LID_STATE_FILE_NAME "state"
-
 bool isLidClosed(const char *lidRootPath) {
     bool lidClosed = false;
 
@@ -20,7 +18,7 @@ bool isLidClosed(const char *lidRootPath) {
             if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
 
                 // read the lid state file
-                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", lidRootPath, dirent->d_name, LID_STATE_FILE_NAME);
+                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", lidRootPath, dirent->d_name, "state");
                 FILE *lidFile = fopen(lidFileName, "r");
                 if (lidFile != NULL) {
                     if (fgets(line, 512, lidFile))

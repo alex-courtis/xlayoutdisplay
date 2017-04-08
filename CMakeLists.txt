@@ -15,7 +15,7 @@ set(SOURCE_FILES
         src/xLayoutDisplays.h
         src/laptop.cpp
         src/laptop.h
-        )
+        src/macros.h)
 
 set(TEST_FILES
         test/main.cpp
@@ -24,4 +24,4 @@ set(TEST_FILES
 
 add_executable(gtests ${SOURCE_FILES} ${TEST_FILES})
 
-add_executable(executable src/main.cpp ${SOURCE_FILES})
+add_executable(xLayoutDisplays src/main.cpp ${SOURCE_FILES})
