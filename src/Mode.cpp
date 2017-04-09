@@ -4,8 +4,7 @@
 
 using namespace std;
 
-Mode::Mode(const RRMode id, const XRRScreenResources *resources) {
-
+Mode *Mode::fromXRR(const RRMode id, const XRRScreenResources *resources) {
     if (resources == NULL)
         throw invalid_argument("cannot construct Mode: NULL XRRScreenResources");
 
@@ -20,10 +19,7 @@ Mode::Mode(const RRMode id, const XRRScreenResources *resources) {
     if (modeInfo == NULL)
         throw invalid_argument("cannot construct Mode: cannot retrieve RRMode '" + to_string(id) + "'");
 
-    rrMode = id;
-    width = modeInfo->width;
-    height = modeInfo->height;
-    refresh = refreshFromModeInfo(modeInfo);
+    return new Mode(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(modeInfo));
 }
 
 bool Mode::operator<(const Mode &o) {

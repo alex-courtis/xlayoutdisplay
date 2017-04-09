@@ -61,7 +61,7 @@ const list <DisplP> discoverDispls() {
             XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
             rrMode = crtcInfo->mode;
-            currentMode = make_shared<Mode>(rrMode, screenResources);
+            currentMode = shared_ptr<Mode>(Mode::fromXRR(rrMode, screenResources));
 
             if (outputInfo->nmode == 0) {
                 // display is active but has been disconnected
@@ -79,7 +79,7 @@ const list <DisplP> discoverDispls() {
             if (state == Displ::disconnected) FAIL("apparently disconnected display has modes available");
 
             // add to modes
-            const auto mode = make_shared<Mode>(outputInfo->modes[j], screenResources);
+            const auto mode = shared_ptr<Mode>(Mode::fromXRR(outputInfo->modes[j], screenResources));
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1

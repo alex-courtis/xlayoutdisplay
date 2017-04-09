@@ -11,18 +11,18 @@ public:
             rrMode(rrMode), width(width), height(height), refresh(refresh) {
     }
 
-    Mode(const RRMode id, const XRRScreenResources *resources);
-
     virtual ~Mode() {
     }
+
+    static Mode *fromXRR(const RRMode id, const XRRScreenResources *resources);
 
     // order by width, refresh, height in descending order
     bool operator<(const Mode &o);
 
-    RRMode rrMode;
-    unsigned int width;
-    unsigned int height;
-    unsigned int refresh;
+    const RRMode rrMode;
+    const unsigned int width;
+    const unsigned int height;
+    const unsigned int refresh;
 };
 
 typedef std::shared_ptr<Mode> ModeP;
