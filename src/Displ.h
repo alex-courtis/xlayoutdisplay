@@ -32,6 +32,7 @@ public:
     const PosP currentPos;
     PosP desiredPos;
 
+    // todo: static desired primary
     bool desiredPrimary = false;
 };
 

@@ -2,7 +2,7 @@
 
 #include "../src/xrandrrutil.h"
 
-TEST(RefreshFromModeId, Null) {
+TEST(RefreshFromModeId, NullOK) {
     EXPECT_EQ(0, refreshFromModeInfo(NULL));
 }
 

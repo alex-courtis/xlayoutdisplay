@@ -94,6 +94,7 @@ const list <DisplP> discoverDispls() {
         // highest res/refresh is optimal mode
         if (!modes.empty()) {
             modes.sort(sortSharedPtr<Mode>);
+            modes.reverse();
             optimalMode = *modes.begin();
         }
 

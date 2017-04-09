@@ -17,7 +17,7 @@ public:
     // pseudo-constructor that validates prior to invoking constructor
     static Mode *fromXRR(const RRMode id, const XRRScreenResources *resources);
 
-    // order by width, refresh, height in descending order
+    // order by width, height, refresh
     bool operator<(const Mode &o);
 
     const RRMode rrMode;
