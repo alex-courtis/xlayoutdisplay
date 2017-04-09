@@ -12,18 +12,18 @@ TEST(OrderDispls, Reposition) {
     PosP currentPos;
 
     list <DisplP> displs;
-    DisplP displ1 = make_shared<Displ>("1", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
+    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
     displs.push_back(displ1);
-    DisplP displ2 = make_shared<Displ>("2", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
+    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
     displs.push_back(displ2);
-    DisplP displ3 = make_shared<Displ>("3", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
+    DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
     displs.push_back(displ3);
-    DisplP displ4 = make_shared<Displ>("4", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
+    DisplP displ4 = make_shared<Displ>("Four", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
     displs.push_back(displ4);
-    DisplP displ5 = make_shared<Displ>("5", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
+    DisplP displ5 = make_shared<Displ>("Five", Displ::disconnected, modes, currentMode, preferredMode, optimalMode, currentPos);
     displs.push_back(displ5);
 
-    orderDispls(displs, { "4", "3", "2" });
+    orderDispls(displs, { "FOUR", "THREE", "TWO" });
 
     ASSERT_EQ(displ4, displs.front());
     displs.pop_front();

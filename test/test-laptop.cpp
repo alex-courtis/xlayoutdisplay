@@ -19,11 +19,11 @@ void removeStateFile() {
     rmdir("./lid");
 }
 
-TEST(Laptop, LidNotClosedMissingFile) {
+TEST(LidClosed, NotClosedMissingFile) {
     EXPECT_FALSE(isLidClosed("./nonexistent"));
 }
 
-TEST(Laptop, LidOpen) {
+TEST(LidClosed, Open) {
     createStateFile("something OpEn something something\n");
 
     EXPECT_FALSE(isLidClosed("./lid"));
@@ -31,7 +31,7 @@ TEST(Laptop, LidOpen) {
     removeStateFile();
 }
 
-TEST(Laptop, LidClosed) {
+TEST(LidClosed, Closed) {
     createStateFile("something ClOsEd something something\n");
 
     EXPECT_TRUE(isLidClosed("./lid"));

@@ -3,7 +3,7 @@
 
 #include "Displ.h"
 
-// reorder displs putting those whose names match order at the front
+// reorder displs putting those whose names match order at the front, case insensitive
 void orderDispls(std::list <DisplP> &displs, const std::list <std::string> &order);
 
 #endif //XLAYOUTDISPLAYS_LAYOUT_H

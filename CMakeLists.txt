@@ -19,7 +19,6 @@ set(SOURCE_FILES
         src/laptop.h
         src/layout.cpp
         src/layout.h
-        src/macros.h
         src/xLayoutDisplays.cpp
         src/xLayoutDisplays.h
         src/xrandrrutil.c
@@ -28,6 +27,7 @@ set(SOURCE_FILES
 
 set(TEST_FILES
         test/main.cpp
+        test/test-Displ.cpp
         test/test-laptop.cpp
         test/test-layout.cpp
         test/test-xrandrutil.cpp

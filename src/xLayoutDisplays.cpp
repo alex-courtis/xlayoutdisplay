@@ -1,6 +1,5 @@
 #include "xLayoutDisplays.h"
 
-#include "macros.h"
 #include "xrandrrutil.h"
 #include "laptop.h"
 #include "layout.h"
@@ -11,6 +10,9 @@
 #include <getopt.h>
 
 using namespace std;
+
+// TODO: refactor this as a throw from cpp, with c functions returning zeros instead of FAIL
+#define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
@@ -150,7 +152,7 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
     DisplP displPrimary;
     for (const auto displ : displs) {
 
-        if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name, strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
+        if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
             // don't use any embedded displays if the lid is closed
             continue;
         }
@@ -162,7 +164,7 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
                 displPrimary = displ;
 
             // user selected primary
-            if (OPT_PRIMARY && strcasecmp(OPT_PRIMARY, displ->name) == 0)
+            if (OPT_PRIMARY && strcasecmp(OPT_PRIMARY, displ->name.c_str()) == 0)
                 displPrimary = displ;
 
             // set the desired mode to optimal

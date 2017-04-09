@@ -14,13 +14,13 @@ public:
         active, connected, disconnected
     };
 
-    Displ(const char *name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
+    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
           const ModeP &preferredMode, const ModeP &optimalMode, const PosP &currentPos);
 
     virtual ~Displ() {
     }
 
-    const char *name;
+    const std::string name;
     const State state;
 
     const std::list<ModeP> modes;
