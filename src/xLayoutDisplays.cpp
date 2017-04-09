@@ -15,6 +15,8 @@ using namespace std;
 
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
+#define EMBEDDED_DISPLAY_PREFIX "eDP"
+
 bool OPT_HELP = false;
 bool OPT_INFO = false;
 bool OPT_DRY_RUN = false;
@@ -164,8 +166,7 @@ void help(char *progname) {
                    "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
                    "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
-                    // todo: parameterise eDP0
-                   "\n", "eDP0"
+                   "\n", EMBEDDED_DISPLAY_PREFIX
     );
     printf(USAGE, progname);
     printf(""
@@ -239,7 +240,9 @@ int run(int argc, char **argv) {
 
     // determine desired state
     orderDispls(displs, OPT_ORDER);
-    activateDispls(displs, lidClosed, OPT_PRIMARY);
+    activateDispls(displs, lidClosed, OPT_PRIMARY, EMBEDDED_DISPLAY_PREFIX);
+
+    // arrange left to right
     ltrDispls(displs);
 
     // render desired state for xrandr

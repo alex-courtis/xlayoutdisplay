@@ -4,43 +4,49 @@
 
 using namespace std;
 
-ModeP mode = make_shared<Mode>(0, 0, 0, 0);
-PosP pos = make_shared<Pos>(0, 0);
-list<ModeP> emptyModes;
-list<ModeP> nonEmptyModes = { shared_ptr<Mode>(mode) };
+class DisplConstruction : public ::testing::Test {
+protected:
+    virtual void SetUp() {
+    }
 
-TEST(DisplConstruction, ConstructValidActive) {
-    EXPECT_NO_THROW(Displ("va", Displ::active, nonEmptyModes, mode, NULL, mode, pos));
+    ModeP mode = make_shared<Mode>(0, 0, 0, 0);
+    PosP pos = make_shared<Pos>(0, 0);
+    list<ModeP> modes = { shared_ptr<Mode>(mode) };
+};
+
+
+TEST_F(DisplConstruction, ConstructValidActive) {
+    EXPECT_NO_THROW(Displ("va", Displ::active, modes, mode, NULL, mode, pos));
 }
 
-TEST(DisplConstruction, ConstructValidConnected) {
-    EXPECT_NO_THROW(Displ("vc", Displ::connected, nonEmptyModes, NULL, NULL, mode, NULL));
+TEST_F(DisplConstruction, ConstructValidConnected) {
+    EXPECT_NO_THROW(Displ("vc", Displ::connected, modes, NULL, NULL, mode, NULL));
 }
 
-TEST(DisplConstruction, ValidDisconnected) {
-    EXPECT_NO_THROW(Displ("vd", Displ::disconnected, emptyModes, NULL, NULL, NULL, NULL));
+TEST_F(DisplConstruction, ValidDisconnected) {
+    EXPECT_NO_THROW(Displ("vd", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, NULL));
 }
 
-TEST(DisplConstruction, ActiveMissingCurrentMode) {
-    EXPECT_THROW(Displ("ia", Displ::active, nonEmptyModes, NULL, NULL, mode, pos), invalid_argument);
+TEST_F(DisplConstruction, ActiveMissingCurrentMode) {
+    EXPECT_THROW(Displ("ia", Displ::active, modes, NULL, NULL, mode, pos), invalid_argument);
 }
 
-TEST(DisplConstruction, ActiveMissingCurrentPos) {
-    EXPECT_THROW(Displ("ia", Displ::active, nonEmptyModes, mode, NULL, mode, NULL), invalid_argument);
+TEST_F(DisplConstruction, ActiveMissingCurrentPos) {
+    EXPECT_THROW(Displ("ia", Displ::active, modes, mode, NULL, mode, NULL), invalid_argument);
 }
 
-TEST(DisplConstruction, ActiveMissingOptimalMode) {
-    EXPECT_THROW(Displ("ia", Displ::active, nonEmptyModes, mode, NULL, NULL, pos), invalid_argument);
+TEST_F(DisplConstruction, ActiveMissingOptimalMode) {
+    EXPECT_THROW(Displ("ia", Displ::active, modes, mode, NULL, NULL, pos), invalid_argument);
 }
 
-TEST(DisplConstruction, ActiveEmptyModes) {
-    EXPECT_THROW(Displ("ia", Displ::active, emptyModes, mode, NULL, mode, pos), invalid_argument);
+TEST_F(DisplConstruction, ActiveEmptyModes) {
+    EXPECT_THROW(Displ("ia", Displ::active, list<ModeP>(), mode, NULL, mode, pos), invalid_argument);
 }
 
-TEST(DisplConstruction, ConnectedMissingOptimalMode) {
-    EXPECT_THROW(Displ("ic", Displ::connected, nonEmptyModes, NULL, NULL, NULL, NULL), invalid_argument);
+TEST_F(DisplConstruction, ConnectedMissingOptimalMode) {
+    EXPECT_THROW(Displ("ic", Displ::connected, modes, NULL, NULL, NULL, NULL), invalid_argument);
 }
 
-TEST(DisplConstruction, ConnectedEmptyModes) {
-    EXPECT_THROW(Displ("ic", Displ::connected, emptyModes, NULL, NULL, mode, NULL), invalid_argument);
+TEST_F(DisplConstruction, ConnectedEmptyModes) {
+    EXPECT_THROW(Displ("ic", Displ::connected, list<ModeP>(), NULL, NULL, mode, NULL), invalid_argument);
 }

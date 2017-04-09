@@ -5,4 +5,3 @@
 TEST(RefreshFromModeId, NullOK) {
     EXPECT_EQ(0, refreshFromModeInfo(NULL));
 }
-

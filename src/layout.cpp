@@ -2,8 +2,6 @@
 
 #include <string.h>
 
-#define EMBEDDED_DISPLAY_PREFIX "eDP"
-
 using namespace std;
 
 void orderDispls(list <DisplP> &displs, const list <string> &order) {
@@ -25,28 +23,27 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
     }
 }
 
-void activateDispls(std::list<DisplP> &displs, const bool &lidClosed, const string &primary) {
+void activateDispls(std::list<DisplP> &displs, const bool &lidClosed, const string &primary, const string &laptopPrefix) {
     for (const auto displ : displs) {
 
-        if (lidClosed &&
-            strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
-            // don't use any embedded displays if the lid is closed
+        // don't use any laptop displays if the lid is closed
+        if (lidClosed && strncasecmp(laptopPrefix.c_str(), displ->name.c_str(), laptopPrefix.length()) == 0)
             continue;
-        }
 
-        if (displ->state == Displ::active || displ->state == Displ::connected) {
+        // only activate currently active or connected displays
+        if (displ->state != Displ::active && displ->state != Displ::connected)
+            continue;
 
-            // we want to use this display
-            displ->desiredActive = true;
+        // mark active
+        displ->desiredActive = true;
 
-            // default first to primary
-            if (!Displ::desiredPrimary)
-                Displ::desiredPrimary = displ;
+        // default first to primary
+        if (!Displ::desiredPrimary)
+            Displ::desiredPrimary = displ;
 
-            // user selected primary
-            if (!primary.empty() && strcasecmp(primary.c_str(), displ->name.c_str()) == 0)
-                Displ::desiredPrimary = displ;
-        }
+        // user selected primary
+        if (!primary.empty() && strcasecmp(primary.c_str(), displ->name.c_str()) == 0)
+            Displ::desiredPrimary = displ;
     }
 }
 
