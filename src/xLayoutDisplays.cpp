@@ -1,6 +1,5 @@
 #include "xLayoutDisplays.h"
 
-#include "xrandrrutil.h"
 #include "laptop.h"
 #include "layout.h"
 
@@ -29,14 +28,6 @@ bool OPT_VERBOSE = true;
 template<typename T>
 bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
     return *l < *r;
-}
-
-// TODO: move this to a constructor of Mode
-// create a ModeP from an RRMode
-const ModeP modeFromId(const RRMode id, const XRRScreenResources *resources) {
-    // TODO: throw on NULL mode
-    const XRRModeInfo *modeInfo = modeInfoFromId(id, resources);
-    return make_shared<Mode>(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(modeInfo));
 }
 
 // build a list of Displ based on the current and possible state of the world
@@ -70,7 +61,7 @@ const list <DisplP> discoverDispls() {
             XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
             rrMode = crtcInfo->mode;
-            currentMode = modeFromId(rrMode, screenResources);
+            currentMode = make_shared<Mode>(rrMode, screenResources);
 
             if (outputInfo->nmode == 0) {
                 // display is active but has been disconnected
@@ -88,7 +79,7 @@ const list <DisplP> discoverDispls() {
             if (state == Displ::disconnected) FAIL("apparently disconnected display has modes available");
 
             // add to modes
-            const auto mode = modeFromId(outputInfo->modes[j], screenResources);
+            const auto mode = make_shared<Mode>(outputInfo->modes[j], screenResources);
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1
@@ -116,7 +107,7 @@ const list <DisplP> discoverDispls() {
 void printDispls(const list <DisplP> &displs) {
     char current, preferred, optimal;
     for (const auto displ : displs) {
-        printf("%s ", displ->name);
+        printf("%s ", displ->name.c_str());
         switch (displ->state) {
             case Displ::active:
                 printf("active");

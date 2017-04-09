@@ -13,6 +13,7 @@ link_libraries(gtest)
 set(SOURCE_FILES
         src/Displ.cpp
         src/Displ.h
+        src/Mode.cpp
         src/Mode.h
         src/Pos.h
         src/laptop.cpp
@@ -30,6 +31,7 @@ set(TEST_FILES
         test/test-Displ.cpp
         test/test-laptop.cpp
         test/test-layout.cpp
+        test/test-Mode.cpp
         test/test-xrandrutil.cpp
         )
 

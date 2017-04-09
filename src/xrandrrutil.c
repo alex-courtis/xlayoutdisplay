@@ -1,13 +1,5 @@
 #include "xrandrrutil.h"
 
-const XRRModeInfo *modeInfoFromId(const RRMode id, const XRRScreenResources *resources) {
-    if (resources)
-        for (int i = 0; i < resources->nmode; i++)
-            if (id == resources->modes[i].id)
-                return &(resources->modes[i]);
-    return NULL;
-}
-
 // stolen from xrandr.c; assuming this mostly works
 const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
     if (!modeInfo) return 0;

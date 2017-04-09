@@ -10,9 +10,6 @@ extern "C" {
 // v refresh frequency in even Hz, zero if modeInfo is NULL
 const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo);
 
-// find the mode info for the id passed, in resources, NULL if not found
-const XRRModeInfo *modeInfoFromId(const RRMode id, const XRRScreenResources *resources);
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus
