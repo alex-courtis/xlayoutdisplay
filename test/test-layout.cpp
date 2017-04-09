@@ -18,7 +18,7 @@ TEST(OrderDispls, Reposition) {
     DisplP displ5 = make_shared<Displ>("Five", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP());
     displs.push_back(displ5);
 
-    orderDispls(displs, { "FOUR", "THREE", "TWO" });
+    orderDispls(displs, {"FOUR", "THREE", "TWO"});
 
     EXPECT_EQ(displ4, displs.front());
     displs.pop_front();
@@ -29,6 +29,60 @@ TEST(OrderDispls, Reposition) {
     EXPECT_EQ(displ1, displs.front());
     displs.pop_front();
     EXPECT_EQ(displ5, displs.front());
+}
+
+
+class ActivateDispls : public ::testing::Test {
+
+protected:
+    virtual void SetUp() {
+        Displ::desiredPrimary = DisplP();
+    }
+
+    ModeP mode = make_shared<Mode>(0, 0, 0, 0);
+    PosP pos = make_shared<Pos>(0, 0);
+    list <ModeP> modes = {mode};
+};
+
+TEST_F(ActivateDispls, PrimarySpecifiedAndLaptop) {
+
+    list <DisplP> displs;
+    DisplP displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, mode, pos);
+    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, mode, pos);
+    DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, mode, pos);
+    DisplP displ4 = make_shared<Displ>("Four", Displ::active, modes, mode, mode, mode, pos);
+    displs.push_back(displ1);
+    displs.push_back(displ2);
+    displs.push_back(displ3);
+    displs.push_back(displ4);
+
+    activateDispls(displs, true, "three", "f");
+
+    EXPECT_TRUE(displ1->desiredActive);
+    EXPECT_FALSE(displ2->desiredActive);
+    EXPECT_TRUE(displ3->desiredActive);
+    EXPECT_FALSE(displ4->desiredActive);
+
+    EXPECT_EQ(Displ::desiredPrimary, displ3);
+}
+
+TEST_F(ActivateDispls, DefaultPrimary) {
+
+    list <DisplP> displs;
+    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, mode, mode, mode, pos);
+    DisplP displ2 = make_shared<Displ>("Two", Displ::active, modes, mode, mode, mode, pos);
+    DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, mode, pos);
+    displs.push_back(displ1);
+    displs.push_back(displ2);
+    displs.push_back(displ3);
+
+    activateDispls(displs, false, "noprimary", "nolaptop");
+
+    EXPECT_FALSE(displ1->desiredActive);
+    EXPECT_TRUE(displ2->desiredActive);
+    EXPECT_TRUE(displ3->desiredActive);
+
+    EXPECT_EQ(Displ::desiredPrimary, displ2);
 }
 
 TEST(LtrDisplays, Arrange) {

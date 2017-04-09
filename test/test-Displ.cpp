@@ -11,7 +11,7 @@ protected:
 
     ModeP mode = make_shared<Mode>(0, 0, 0, 0);
     PosP pos = make_shared<Pos>(0, 0);
-    list<ModeP> modes = { shared_ptr<Mode>(mode) };
+    list <ModeP> modes = {shared_ptr<Mode>(mode)};
 };
 
 
