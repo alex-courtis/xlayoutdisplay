@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class ModeConstruction : public ::testing::Test {
+class Mode_constructor : public ::testing::Test {
 protected:
     virtual void SetUp() {
         resources.nmode = 3;
@@ -18,27 +18,27 @@ protected:
     XRRModeInfo modeInfos[3];
 };
 
-TEST_F(ModeConstruction, Valid) {
+TEST_F(Mode_constructor, valid) {
     EXPECT_NO_THROW(Mode::fromXRR(11, &resources));
 }
 
-TEST_F(ModeConstruction, ModeNotPresent) {
+TEST_F(Mode_constructor, modeNotPresent) {
     EXPECT_THROW(Mode::fromXRR(13, &resources), invalid_argument);
 }
 
-TEST_F(ModeConstruction, ResourcesNotPresent) {
+TEST_F(Mode_constructor, resourcesNotPresent) {
     EXPECT_THROW(Mode::fromXRR(11, NULL), invalid_argument);
 }
 
 
-TEST(ModeOrder, Width) {
+TEST(Mode_order, width) {
     EXPECT_TRUE(Mode(0, 1, 2, 2) < Mode(0, 2, 1, 1));
 }
 
-TEST(ModeOrder, Height) {
+TEST(Mode_order, height) {
     EXPECT_TRUE(Mode(0, 1, 1, 2) < Mode(0, 1, 2, 1));
 }
 
-TEST(ModeOrder, Refresh) {
+TEST(Mode_order, refresh) {
     EXPECT_TRUE(Mode(0, 1, 1, 1) < Mode(0, 1, 1, 2));
 }

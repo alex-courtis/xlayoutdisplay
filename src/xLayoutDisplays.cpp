@@ -228,10 +228,10 @@ int run(int argc, char **argv) {
 
     // discover current state
     list <DisplP> displs = discoverDispls();
-    const bool lidClosed = isLidClosed();
+    const bool lidClose = lidClosed();
     if (OPT_VERBOSE || OPT_INFO) {
         printDispls(displs);
-        printf("\nlid %s\n", lidClosed ? "closed" : "open or not present");
+        printf("\nlid %s\n", lidClose ? "closed" : "open or not present");
     }
 
     // current info is all output, we're done
@@ -240,7 +240,7 @@ int run(int argc, char **argv) {
 
     // determine desired state
     orderDispls(displs, OPT_ORDER);
-    activateDispls(displs, lidClosed, OPT_PRIMARY, EMBEDDED_DISPLAY_PREFIX);
+    activateDispls(displs, lidClose, OPT_PRIMARY, EMBEDDED_DISPLAY_PREFIX);
 
     // arrange left to right
     ltrDispls(displs);

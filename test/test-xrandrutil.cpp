@@ -2,6 +2,6 @@
 
 #include "../src/xrandrrutil.h"
 
-TEST(RefreshFromModeId, NullOK) {
+TEST(xrandrutil_refreshFromModeInfo, nullOK) {
     EXPECT_EQ(0, refreshFromModeInfo(NULL));
 }

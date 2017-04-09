@@ -4,7 +4,7 @@
 #include <string.h>
 #include <dirent.h>
 
-bool isLidClosed(const char *lidRootPath) {
+bool lidClosed(const char *lidRootPath) {
     bool lidClosed = false;
 
     static char lidFileName[PATH_MAX];

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TEST(OrderDispls, Reposition) {
+TEST(layout_orderDispls, reposition) {
 
     list <DisplP> displs;
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP());
@@ -32,7 +32,7 @@ TEST(OrderDispls, Reposition) {
 }
 
 
-class ActivateDispls : public ::testing::Test {
+class layout_activateDispls : public ::testing::Test {
 
 protected:
     virtual void SetUp() {
@@ -44,7 +44,7 @@ protected:
     list <ModeP> modes = {mode};
 };
 
-TEST_F(ActivateDispls, PrimarySpecifiedAndLaptop) {
+TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
 
     list <DisplP> displs;
     DisplP displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, mode, pos);
@@ -66,7 +66,7 @@ TEST_F(ActivateDispls, PrimarySpecifiedAndLaptop) {
     EXPECT_EQ(Displ::desiredPrimary, displ3);
 }
 
-TEST_F(ActivateDispls, DefaultPrimary) {
+TEST_F(layout_activateDispls, defaultPrimary) {
 
     list <DisplP> displs;
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, mode, mode, mode, pos);
@@ -85,7 +85,7 @@ TEST_F(ActivateDispls, DefaultPrimary) {
     EXPECT_EQ(Displ::desiredPrimary, displ2);
 }
 
-TEST(LtrDisplays, Arrange) {
+TEST(layout_ltrDisplays, arrange) {
 
     list <DisplP> displs;
 
