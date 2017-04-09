@@ -19,13 +19,13 @@ protected:
 };
 
 TEST_F(TestMode, ConstructValid) {
-    EXPECT_NO_THROW(Mode(11, &resources));
+    EXPECT_NO_THROW(Mode::fromXRR(11, &resources));
 }
 
 TEST_F(TestMode, ConstructModeNotPresent) {
-    EXPECT_THROW(Mode(13, &resources), invalid_argument);
+    EXPECT_THROW(Mode::fromXRR(13, &resources), invalid_argument);
 }
 
 TEST_F(TestMode, ConstructResourcesNotPresent) {
-    EXPECT_THROW(Mode(11, NULL), invalid_argument);
+    EXPECT_THROW(Mode::fromXRR(11, NULL), invalid_argument);
 }
