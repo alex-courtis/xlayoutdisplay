@@ -1,5 +1,9 @@
 #include "xrandrrutil.h"
 
+#include <sstream>
+
+using namespace std;
+
 // stolen from xrandr.c; assuming this mostly works
 const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     double rate;
@@ -21,4 +25,25 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 
     // round up, as xrandr uses the greatest rate less than passed
     return (unsigned int) (rate + 0.5);
+}
+
+const string renderCmd(const list <DisplP> &displs) {
+    stringstream ss;
+    ss << "xrandr";
+    for (const auto displ : displs) {
+        ss << " \\\n";
+        ss << " --output " << displ->name;
+        if (displ->desiredActive && displ->desiredMode && displ->desiredPos) {
+            ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
+            ss << " --rate " << displ->desiredMode->refresh;
+            ss << " --pos ";
+            ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
+            if (displ == Displ::desiredPrimary) {
+                ss << " --primary";
+            }
+        } else {
+            ss << " --off";
+        }
+    }
+    return ss.str();
 }

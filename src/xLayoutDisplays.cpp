@@ -2,6 +2,7 @@
 
 #include "laptop.h"
 #include "layout.h"
+#include "xrandrrutil.h"
 
 #include <sstream>
 #include <cstring>
@@ -135,28 +136,6 @@ void printDispls(const list <DisplP> &displs) {
     printf("*current +preferred !optimal\n");
 }
 
-// print xrandr cmd for any displays with desired mode and position
-const string renderXrandr(const list <DisplP> &displs) {
-    stringstream ss;
-    ss << "xrandr";
-    for (const auto displ : displs) {
-        ss << " \\\n";
-        ss << " --output " << displ->name;
-        if (displ->desiredActive) {
-            ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
-            ss << " --rate " << displ->desiredMode->refresh;
-            ss << " --pos ";
-            ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
-            if (displ == Displ::desiredPrimary) {
-                ss << " --primary";
-            }
-        } else {
-            ss << " --off";
-        }
-    }
-    return ss.str();
-}
-
 // display help and exit with success
 void help(char *progname) {
     printf(""
@@ -246,7 +225,7 @@ int run(int argc, char **argv) {
     ltrDispls(displs);
 
     // render desired state for xrandr
-    const string xrandr = renderXrandr(displs);
+    const string xrandr = renderCmd(displs);
     if (OPT_VERBOSE) {
         printf("\n%s\n", xrandr.c_str());
     }
