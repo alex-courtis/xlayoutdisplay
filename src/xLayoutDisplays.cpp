@@ -3,7 +3,7 @@
 #include "macros.h"
 #include "xrandrrutil.h"
 #include "laptop.h"
-#include "Displ.h"
+#include "layout.h"
 
 #include <sstream>
 #include <cstring>
@@ -141,34 +141,9 @@ void printDispls(const list <DisplP> &displs) {
     printf("*current +preferred !optimal\n");
 }
 
-// reorder displs putting those whose names match OPT_ORDER at the front
-void orderDispls(list <DisplP> &displs) {
-
-    // stack all the preferred, available displays
-    list <DisplP> preferredDispls;
-    for (const auto name : OPT_ORDER) {
-        for (const auto displ : displs) {
-            if (name == displ->name) {
-                preferredDispls.push_front(displ);
-            }
-        }
-    }
-
-    // move preferred to the front
-    for (const auto preferredDispl : preferredDispls) {
-        for (const auto displ : displs) {
-            if (strcasecmp(displ->name, preferredDispl->name) == 0) {
-                displs.remove(displ);
-                displs.push_front(displ);
-                break;
-            }
-        }
-    }
-}
-
 // arrange the displays; may reorder displs and will mutate contents
 void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
-    orderDispls(displs);
+    orderDispls(displs, OPT_ORDER);
 
     int xpos = 0;
     int ypos = 0;

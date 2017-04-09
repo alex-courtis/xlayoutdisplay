@@ -3,7 +3,7 @@
 #include "macros.h"
 
 Displ::Displ(const char *name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
-             const ModeP preferredMode, const ModeP optimalMode, const PosP currentPos) :
+             const ModeP &preferredMode, const ModeP &optimalMode, const PosP &currentPos) :
         name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode),
         optimalMode(optimalMode), currentPos(currentPos) {
     if (name == NULL) FAIL("Displ has no name")

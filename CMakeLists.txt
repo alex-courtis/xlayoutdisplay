@@ -17,16 +17,21 @@ set(SOURCE_FILES
         src/Pos.h
         src/laptop.cpp
         src/laptop.h
+        src/layout.cpp
+        src/layout.h
         src/macros.h
         src/xLayoutDisplays.cpp
         src/xLayoutDisplays.h
         src/xrandrrutil.c
-        src/xrandrrutil.h)
+        src/xrandrrutil.h
+        )
 
 set(TEST_FILES
         test/main.cpp
         test/test-laptop.cpp
-        test/test-xrandrutil.cpp)
+        test/test-layout.cpp
+        test/test-xrandrutil.cpp
+        )
 
 add_executable(gtests ${SOURCE_FILES} ${TEST_FILES})
 
