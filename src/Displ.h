@@ -32,6 +32,8 @@ public:
     const PosP currentPos;
     PosP desiredPos;
 
+    bool desiredActive = false;
+
     static std::shared_ptr<Displ> desiredPrimary;
 };
 

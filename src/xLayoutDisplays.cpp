@@ -15,13 +15,11 @@ using namespace std;
 
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
-#define EMBEDDED_DISPLAY_PREFIX "eDP"
-
 bool OPT_HELP = false;
 bool OPT_INFO = false;
 bool OPT_DRY_RUN = false;
 list <string> OPT_ORDER;
-char *OPT_PRIMARY = NULL;
+string OPT_PRIMARY;
 bool OPT_VERBOSE = true;
 
 // sorting function for shared pointers... this must be in STL somewhere...
@@ -135,41 +133,6 @@ void printDispls(const list <DisplP> &displs) {
     printf("*current +preferred !optimal\n");
 }
 
-// arrange the displays; may reorder displs and will mutate contents
-void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
-    orderDispls(displs, OPT_ORDER);
-
-    int xpos = 0;
-    int ypos = 0;
-    for (const auto displ : displs) {
-
-        if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
-            // don't use any embedded displays if the lid is closed
-            continue;
-        }
-
-        if (displ->state == Displ::active || displ->state == Displ::connected) {
-
-            // default first to primary
-            if (!Displ::desiredPrimary)
-                Displ::desiredPrimary = displ;
-
-            // user selected primary
-            if (OPT_PRIMARY && strcasecmp(OPT_PRIMARY, displ->name.c_str()) == 0)
-                Displ::desiredPrimary = displ;
-
-            // set the desired mode to optimal
-            displ->desiredMode = displ->optimalMode;
-
-            // position the screen
-            displ->desiredPos = make_shared<Pos>(xpos, ypos);
-
-            // next position
-            xpos += displ->desiredMode->width;
-        }
-    }
-}
-
 // print xrandr cmd for any displays with desired mode and position
 const string renderXrandr(const list <DisplP> &displs) {
     stringstream ss;
@@ -177,7 +140,7 @@ const string renderXrandr(const list <DisplP> &displs) {
     for (const auto displ : displs) {
         ss << " \\\n";
         ss << " --output " << displ->name;
-        if (displ->desiredMode && displ->desiredPos) {
+        if (displ->desiredActive) {
             ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
             ss << " --rate " << displ->desiredMode->refresh;
             ss << " --pos ";
@@ -201,7 +164,8 @@ void help(char *progname) {
                    "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
                    "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
-                   "\n", EMBEDDED_DISPLAY_PREFIX
+                    // todo: parameterise eDP0
+                   "\n", "eDP0"
     );
     printf(USAGE, progname);
     printf(""
@@ -274,7 +238,9 @@ int run(int argc, char **argv) {
         return EXIT_SUCCESS;
 
     // determine desired state
-    arrangeDispls(displs, lidClosed);
+    orderDispls(displs, OPT_ORDER);
+    activateDispls(displs, lidClosed, OPT_PRIMARY);
+    ltrDispls(displs);
 
     // render desired state for xrandr
     const string xrandr = renderXrandr(displs);
