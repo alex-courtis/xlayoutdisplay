@@ -22,3 +22,5 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
             break;
     }
 }
+
+DisplP Displ::desiredPrimary;

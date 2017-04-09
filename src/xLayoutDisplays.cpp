@@ -141,7 +141,6 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
 
     int xpos = 0;
     int ypos = 0;
-    DisplP displPrimary;
     for (const auto displ : displs) {
 
         if (lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, displ->name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0) {
@@ -152,12 +151,12 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
         if (displ->state == Displ::active || displ->state == Displ::connected) {
 
             // default first to primary
-            if (!displPrimary)
-                displPrimary = displ;
+            if (!Displ::desiredPrimary)
+                Displ::desiredPrimary = displ;
 
             // user selected primary
             if (OPT_PRIMARY && strcasecmp(OPT_PRIMARY, displ->name.c_str()) == 0)
-                displPrimary = displ;
+                Displ::desiredPrimary = displ;
 
             // set the desired mode to optimal
             displ->desiredMode = displ->optimalMode;
@@ -169,10 +168,6 @@ void arrangeDispls(list <DisplP> &displs, const bool &lidClosed) {
             xpos += displ->desiredMode->width;
         }
     }
-
-    // set the one and only one primary
-    if (displPrimary)
-        displPrimary->desiredPrimary = true;
 }
 
 // print xrandr cmd for any displays with desired mode and position
@@ -187,7 +182,7 @@ const string renderXrandr(const list <DisplP> &displs) {
             ss << " --rate " << displ->desiredMode->refresh;
             ss << " --pos ";
             ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
-            if (displ->desiredPrimary) {
+            if (displ == Displ::desiredPrimary) {
                 ss << " --primary";
             }
         } else {

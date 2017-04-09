@@ -32,8 +32,7 @@ public:
     const PosP currentPos;
     PosP desiredPos;
 
-    // todo: static desired primary
-    bool desiredPrimary = false;
+    static std::shared_ptr<Displ> desiredPrimary;
 };
 
 typedef std::shared_ptr<Displ> DisplP;
