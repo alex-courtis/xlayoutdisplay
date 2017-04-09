@@ -1,23 +1,21 @@
 #include "xrandrrutil.h"
 
 // stolen from xrandr.c; assuming this mostly works
-const unsigned int refreshFromModeInfo(const XRRModeInfo *modeInfo) {
-    if (!modeInfo) return 0;
-
+const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     double rate;
-    double vTotal = modeInfo->vTotal;
+    double vTotal = modeInfo.vTotal;
 
     /* doublescan doubles the number of lines */
-    if (modeInfo->modeFlags & RR_DoubleScan)
+    if (modeInfo.modeFlags & RR_DoubleScan)
         vTotal *= 2;
 
     /* interlace splits the frame into two fields */
     /* the field rate is what is typically reported by monitors */
-    if (modeInfo->modeFlags & RR_Interlace)
+    if (modeInfo.modeFlags & RR_Interlace)
         vTotal /= 2;
 
-    if (modeInfo->hTotal && vTotal)
-        rate = ((double) modeInfo->dotClock / (modeInfo->hTotal * vTotal));
+    if (modeInfo.hTotal && vTotal)
+        rate = ((double) modeInfo.dotClock / (modeInfo.hTotal * vTotal));
     else
         rate = 0;
 
