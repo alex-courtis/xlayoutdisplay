@@ -140,7 +140,7 @@ int run(int argc, char **argv) {
 
         // load command line settings
         int opt;
-        while ((opt = getopt(argc, argv, "hino:p:q")) != -1) {
+        while ((opt = getopt(argc, argv, "himno:p:q")) != -1) {
             switch (opt) {
                 case 'h':
                     settings->help = true;
