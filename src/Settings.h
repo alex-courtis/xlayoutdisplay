@@ -17,7 +17,7 @@ public:
     bool help = false;
     bool info = false;
     bool mirror = false;
-    std::list <std::string> order;
+    std::list<std::string> order;
     std::string primary;
     bool verbose = true;
 
@@ -27,6 +27,9 @@ private:
     void loadUserSettings(const char *settingsFilePath);
 
     static Settings *singletonInstance;
+
+    // for unit testing
+    friend class Settings_loadUserSettings;
 };
 
 #endif //XLAYOUTDISPLAYS_SETTINGS_H

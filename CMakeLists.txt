@@ -35,6 +35,7 @@ set(TEST_FILES
         test/test-laptop.cpp
         test/test-layout.cpp
         test/test-Mode.cpp
+        test/test-Settings.cpp
         test/test-xrandrutil.cpp
         )
 
