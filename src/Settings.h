@@ -24,6 +24,8 @@ public:
 private:
     Settings() {}
 
+    void loadUserSettings(const char *settingsFilePath);
+
     static Settings *singletonInstance;
 };
 

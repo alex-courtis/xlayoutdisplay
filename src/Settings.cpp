@@ -7,7 +7,6 @@
 
 using namespace std;
 
-#define SETTINGS_FILE_NAME ".xLayoutDisplays"
 #define SETTINGS_COMMENT_CHAR '#'
 #define SETTINGS_SEPS " =\n,"
 #define SETTINGS_LINE_MAX 512
@@ -25,13 +24,19 @@ Settings *Settings::instance() {
 }
 
 void Settings::loadUserSettings() {
-    char settingsFileName[PATH_MAX];
+
+    // load from ~/.xLayoutDisplays
+    char settingsFilePath[PATH_MAX];
+    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv("HOME"), ".xLayoutDisplays");
+    loadUserSettings(settingsFilePath);
+}
+
+void Settings::loadUserSettings(const char *settingsFilePath) {
     char line[SETTINGS_LINE_MAX];
     char *key, *val;
 
-    // open settings file for read
-    snprintf(settingsFileName, PATH_MAX, "%s/%s", getenv("HOME"), SETTINGS_FILE_NAME);
-    FILE *settingsFile = fopen(settingsFileName, "r");
+    // read settings file, if it exists
+    FILE *settingsFile = fopen(settingsFilePath, "r");
     if (settingsFile) {
 
         // read each line
@@ -46,7 +51,7 @@ void Settings::loadUserSettings() {
                 // value
                 val = strtok(NULL, SETTINGS_SEPS);
                 if (val == NULL)
-                    throw invalid_argument(string() + "missing value for key '" + key + "' in '" + settingsFileName + "'");
+                    throw invalid_argument(string() + "missing value for key '" + key + "' in '" + settingsFilePath + "'");
 
                 if (strcasecmp(key, SETTINGS_KEY_MIRROR) == 0) {
                     mirror = strcasecmp(val, "true") == 0;
@@ -60,7 +65,7 @@ void Settings::loadUserSettings() {
                 } else if (strcasecmp(key, SETTINGS_KEY_QUIET) == 0) {
                     verbose = strcasecmp(val, "true") != 0;
                 } else {
-                    throw invalid_argument(string() + "invalid key '" + key + "' in '" + settingsFileName + "'");
+                    throw invalid_argument(string() + "invalid key '" + key + "' in '" + settingsFilePath + "'");
                 }
             }
         }

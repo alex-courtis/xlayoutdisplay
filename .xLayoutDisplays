@@ -4,13 +4,13 @@
 
 
 # mirror displays using the lowest common resolution
-#mirror = true
+#mirror=true
 
 # suppress output
-#Quiet = true
+#quiet=true
 
 # order of displays, space/comma delimited
-order=DP-0, HDMI-0
+#order=DP-0,HDMI-0
 
 # primary display
-#primary = HDMI-0
+#primary=HDMI-0
