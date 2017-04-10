@@ -4,7 +4,6 @@
 #include "layout.h"
 #include "xrandrrutil.h"
 
-#include <sstream>
 #include <cstring>
 
 #include <getopt.h>
@@ -105,37 +104,6 @@ const list <DisplP> discoverDispls() {
     return displs;
 }
 
-// print info about all displs
-void printDispls(const list <DisplP> &displs) {
-    char current, preferred, optimal;
-    for (const auto displ : displs) {
-        printf("%s ", displ->name.c_str());
-        switch (displ->state) {
-            case Displ::active:
-                printf("active");
-                break;
-            case Displ::connected:
-                printf("connected");
-                break;
-            case Displ::disconnected:
-                printf("disconnected");
-                break;
-        }
-        if (displ->currentMode && displ->currentPos) {
-            printf(" %ux%u%+d%+d %uHz", displ->currentMode->width, displ->currentMode->height, displ->currentPos->x,
-                   displ->currentPos->y, displ->currentMode->refresh);
-        }
-        printf("\n");
-        for (const auto mode : displ->modes) {
-            current = mode == displ->currentMode ? '*' : ' ';
-            preferred = mode == displ->preferredMode ? '+' : ' ';
-            optimal = mode == displ->optimalMode ? '!' : ' ';
-            printf("%c%c%c%ux%u %uHz\n", current, preferred, optimal, mode->width, mode->height, mode->refresh);
-        }
-    }
-    printf("*current +preferred !optimal\n");
-}
-
 // display help and exit with success
 void help(char *progname) {
     printf(""
@@ -209,8 +177,7 @@ int run(int argc, char **argv) {
     list <DisplP> displs = discoverDispls();
     const bool lidClose = lidClosed();
     if (OPT_VERBOSE || OPT_INFO) {
-        printDispls(displs);
-        printf("\nlid %s\n", lidClose ? "closed" : "open or not present");
+        printf("%s\n\nlid %s\n", renderUserInfo(displs).c_str(), lidClose ? "closed" : "open or not present");
     }
 
     // current info is all output, we're done

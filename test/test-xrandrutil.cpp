@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TEST(xrandrutil_render, renderAll) {
+TEST(xrandrutil_renderCmd, renderAll) {
     list <DisplP> displs;
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP());
@@ -35,17 +35,44 @@ TEST(xrandrutil_render, renderAll) {
     Displ::desiredPrimary = displ2;
 
     const string expected = ""
-            "xrandr"
-            " \\\n "
-            "--output One --off"
-            " \\\n "
-            "--output Two --mode 2x3 --rate 4 --pos 5x6 --primary"
-            " \\\n "
-            "--output Three --off"
-            " \\\n "
-            "--output Four --off"
-            " \\\n "
-            "--output Five --mode 8x9 --rate 10 --pos 11x12";
+            "xrandr \\\n"
+            " --output One --off \\\n"
+            " --output Two --mode 2x3 --rate 4 --pos 5x6 --primary \\\n"
+            " --output Three --off \\\n"
+            " --output Four --off \\\n"
+            " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
     EXPECT_EQ(expected, renderCmd(displs));
+}
+
+TEST(xrandrutil_renderUserInfo, renderAll) {
+    ModeP mode1 = make_shared<Mode>(1, 2, 3, 4);
+    ModeP mode2 = make_shared<Mode>(5, 6, 7, 8);
+    ModeP mode3 = make_shared<Mode>(9, 10, 11, 12);
+    PosP pos = make_shared<Pos>(13, 14);
+
+    list <DisplP> displs;
+
+    DisplP dis = make_shared<Displ>("dis", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP());
+    displs.push_back(dis);
+
+    DisplP con = make_shared<Displ>("con", Displ::connected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), mode2, PosP());
+    displs.push_back(con);
+
+    DisplP act = make_shared<Displ>("act", Displ::active, list<ModeP>({mode3, mode2, mode1}), mode2, mode3, mode1, pos);
+    displs.push_back(act);
+
+    const string expected = ""
+            "dis disconnected\n"
+            "con connected\n"
+            "   2x3 4Hz\n"
+            "  !6x7 8Hz\n"
+            "act active 6x7+13+14 8Hz\n"
+            " + 10x11 12Hz\n"
+            "*  6x7 8Hz\n"
+            "  !2x3 4Hz\n"
+            "*current +preferred !optimal";
+
+    EXPECT_EQ(expected, renderUserInfo(displs));
+
 }

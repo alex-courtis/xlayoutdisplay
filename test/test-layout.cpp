@@ -47,13 +47,17 @@ protected:
 TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
 
     list <DisplP> displs;
+
     DisplP displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, mode, pos);
-    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, mode, pos);
-    DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, mode, pos);
-    DisplP displ4 = make_shared<Displ>("Four", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ1);
+
+    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, mode, pos);
     displs.push_back(displ2);
+
+    DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
+
+    DisplP displ4 = make_shared<Displ>("Four", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ4);
 
     activateDispls(displs, true, "three", "f");
@@ -69,11 +73,14 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
 TEST_F(layout_activateDispls, defaultPrimary) {
 
     list <DisplP> displs;
+
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, mode, mode, mode, pos);
-    DisplP displ2 = make_shared<Displ>("Two", Displ::active, modes, mode, mode, mode, pos);
-    DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ1);
+
+    DisplP displ2 = make_shared<Displ>("Two", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ2);
+
+    DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
 
     activateDispls(displs, false, "noprimary", "nolaptop");
