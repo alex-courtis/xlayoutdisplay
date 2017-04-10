@@ -16,6 +16,7 @@ using namespace std;
 
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
+// TODO: add this to laptop; maybe a singleton class?
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
 
 // build a list of Displ based on the current and possible state of the world
