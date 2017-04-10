@@ -1,11 +1,11 @@
 #include "xLayoutDisplays.h"
 
+#include "util.h"
 #include "laptop.h"
 #include "layout.h"
 #include "xrandrrutil.h"
 
-#include <cstring>
-
+#include <string.h>
 #include <getopt.h>
 
 using namespace std;
@@ -23,12 +23,6 @@ bool OPT_DRY_RUN = false;
 list <string> OPT_ORDER;
 string OPT_PRIMARY;
 bool OPT_VERBOSE = true;
-
-// sorting function for shared pointers... this must be in STL somewhere...
-template<typename T>
-bool sortSharedPtr(const shared_ptr<T> &l, const shared_ptr<T> &r) {
-    return *l < *r;
-}
 
 // build a list of Displ based on the current and possible state of the world
 const list <DisplP> discoverDispls() {
@@ -105,7 +99,8 @@ const list <DisplP> discoverDispls() {
 }
 
 // display help and exit with success
-void help(char *progname) {
+void help(char *progPath) {
+    char *progName = basename(progPath);
     printf(""
                    "Detects and arranges displays in a left to right manner.\n"
                    "Invokes xrandr to perform arrangement.\n"
@@ -115,7 +110,7 @@ void help(char *progname) {
                    "The first display will be primary unless -p specified.\n"
                    "\n", EMBEDDED_DISPLAY_PREFIX
     );
-    printf(USAGE, progname);
+    printf(USAGE, progName);
     printf(""
                    "  -h  display this help text and exit\n"
                    "  -i  display information about current displays and exit\n"
@@ -129,15 +124,16 @@ void help(char *progname) {
     printf("\n"
                    "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"
                    "  arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary\n"
-                   "", progname
+                   "", progName
     );
     exit(EXIT_SUCCESS);
 }
 
 // display usage and help hint then exit with failure
-void usage(char *progname) {
-    fprintf(stderr, USAGE, progname);
-    fprintf(stderr, "Try '%s -h' for more information.\n", progname);
+void usage(char *progPath) {
+    char *progName = basename(progPath);
+    fprintf(stderr, USAGE, progName);
+    fprintf(stderr, "Try '%s -h' for more information.\n", progName);
     exit(EXIT_FAILURE);
 }
 
@@ -165,13 +161,13 @@ int run(int argc, char **argv) {
                 OPT_VERBOSE = false;
                 break;
             default:
-                usage(basename(argv[0]));
+                usage(argv[0]);
         }
     }
     if (argc > optind)
-        usage(basename(argv[0]));
+        usage(argv[0]);
     if (OPT_HELP)
-        help(basename(argv[0]));
+        help(argv[0]);
 
     // discover current state
     list <DisplP> displs = discoverDispls();
