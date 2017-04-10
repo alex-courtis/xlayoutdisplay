@@ -2,6 +2,8 @@
 
 using namespace std;
 
+DisplP Displ::desiredPrimary;
+
 Displ::Displ(const string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
              const ModeP &preferredMode, const ModeP &optimalMode, const PosP &currentPos) :
         name(name), state(state), modes(modes), currentMode(currentMode), preferredMode(preferredMode),
@@ -22,5 +24,3 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
             break;
     }
 }
-
-DisplP Displ::desiredPrimary;

@@ -4,6 +4,7 @@
 #include "laptop.h"
 #include "layout.h"
 #include "xrandrrutil.h"
+#include "Settings.h"
 
 #include <string.h>
 #include <getopt.h>
@@ -16,13 +17,6 @@ using namespace std;
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
-
-bool OPT_HELP = false;
-bool OPT_INFO = false;
-bool OPT_DRY_RUN = false;
-list <string> OPT_ORDER;
-string OPT_PRIMARY;
-bool OPT_VERBOSE = true;
 
 // build a list of Displ based on the current and possible state of the world
 const list <DisplP> discoverDispls() {
@@ -114,7 +108,7 @@ void help(char *progPath) {
     printf(""
                    "  -h  display this help text and exit\n"
                    "  -i  display information about current displays and exit\n"
-                   "  -m  *mirror displays using the lowest common resolution (not ready yet, havering about panning)\n"
+                   "  -m  mirror displays using the lowest common resolution\n"
                    "  -n  perform a trial run and exit\n"
                    "  -o  order of displays, space/comma delimited\n"
                    "  -p  primary display\n"
@@ -138,69 +132,89 @@ void usage(char *progPath) {
 }
 
 int run(int argc, char **argv) {
-    int opt;
-    while ((opt = getopt(argc, argv, "hino:p:q")) != -1) {
-        switch (opt) {
-            case 'h':
-                OPT_HELP = true;
-                break;
-            case 'i':
-                OPT_INFO = true;
-                break;
-            case 'n':
-                OPT_DRY_RUN = true;
-                break;
-            case 'o':
-                for (char *token = strtok(optarg, " ,"); token != NULL; token = strtok(NULL, " ,"))
-                    OPT_ORDER.push_back(string(token));
-                break;
-            case 'p':
-                OPT_PRIMARY = optarg;
-                break;
-            case 'q':
-                OPT_VERBOSE = false;
-                break;
-            default:
-                usage(argv[0]);
+    try {
+        Settings *settings = Settings::instance();
+        
+        // load persistent settings
+        settings->loadUserSettings();
+
+        // load command line settings
+        int opt;
+        while ((opt = getopt(argc, argv, "hino:p:q")) != -1) {
+            switch (opt) {
+                case 'h':
+                    settings->help = true;
+                    break;
+                case 'i':
+                    settings->info = true;
+                    break;
+                case 'm':
+                    settings->mirror = true;
+                    break;
+                case 'n':
+                    settings->dryRun = true;
+                    break;
+                case 'o':
+                    for (char *token = strtok(optarg, " ,"); token != NULL; token = strtok(NULL, " ,"))
+                        settings->order.push_back(string(token));
+                    break;
+                case 'p':
+                    settings->primary = optarg;
+                    break;
+                case 'q':
+                    settings->verbose = false;
+                    break;
+                default:
+                    usage(argv[0]);
+            }
         }
-    }
-    if (argc > optind)
-        usage(argv[0]);
-    if (OPT_HELP)
-        help(argv[0]);
+        if (argc > optind)
+            usage(argv[0]);
+        if (settings->help)
+            help(argv[0]);
 
-    // discover current state
-    list <DisplP> displs = discoverDispls();
-    const bool lidClose = lidClosed();
-    if (OPT_VERBOSE || OPT_INFO) {
-        printf("%s\n\nlid %s\n", renderUserInfo(displs).c_str(), lidClose ? "closed" : "open or not present");
-    }
-
-    // current info is all output, we're done
-    if (OPT_INFO)
-        return EXIT_SUCCESS;
-
-    // determine desired state
-    orderDispls(displs, OPT_ORDER);
-    activateDispls(displs, lidClose, OPT_PRIMARY, EMBEDDED_DISPLAY_PREFIX);
-
-    // arrange left to right
-    ltrDispls(displs);
-
-    // render desired state for xrandr
-    const string xrandr = renderCmd(displs);
-    if (OPT_VERBOSE) {
-        printf("\n%s\n", xrandr.c_str());
-    }
-
-    if (OPT_DRY_RUN) {
-        if (!OPT_VERBOSE) {
-            // print xrandr command for quiet dry run
-            printf("%s\n", xrandr.c_str());
+        // discover current state
+        list <DisplP> displs = discoverDispls();
+        const bool lidClose = lidClosed();
+        
+        // output verbose information
+        if (settings->verbose || settings->info) {
+            printf("%s\n\nlid %s\n", renderUserInfo(displs).c_str(), lidClose ? "closed" : "open or not present");
         }
-        return EXIT_SUCCESS;
-    }
 
-    // invoke xrandr
-    return system(xrandr.c_str());
+        // current info is all output, we're done
+        if (settings->info)
+            return EXIT_SUCCESS;
+
+        // determine desired state
+        orderDispls(displs, settings->order);
+        activateDispls(displs, lidClose, settings->primary, EMBEDDED_DISPLAY_PREFIX);
+
+        // arrange left to right
+        ltrDispls(displs);
+
+        // render desired state for xrandr
+        const string xrandr = renderCmd(displs);
+        if (settings->verbose) {
+            printf("\n%s\n", xrandr.c_str());
+        }
+
+        if (settings->dryRun) {
+            if (!settings->verbose) {
+                // still print xrandr command for quiet dry run
+                printf("%s\n", xrandr.c_str());
+            }
+            return EXIT_SUCCESS;
+        }
+
+        // invoke xrandr
+        return system(xrandr.c_str());
+
+    } catch (const exception &e) {
+        fprintf(stderr, "FAIL: %s, exiting\n", e.what());
+        return EXIT_FAILURE;
+    } catch (...) {
+        fprintf(stderr, "EPIC FAIL: unknown exception, exiting\n");
+        return EXIT_FAILURE;
+    }
 }

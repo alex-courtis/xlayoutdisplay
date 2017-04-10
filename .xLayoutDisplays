@@ -1,0 +1,16 @@
+# copy this file to your home directory and modify
+
+# all options here will be overridden by command line options
+
+
+# mirror displays using the lowest common resolution
+#mirror = true
+
+# suppress output
+#Quiet = true
+
+# order of displays, space/comma delimited
+order=DP-0, HDMI-0
+
+# primary display
+#primary = HDMI-0
