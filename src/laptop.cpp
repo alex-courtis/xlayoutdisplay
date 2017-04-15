@@ -1,8 +1,9 @@
 #include "laptop.h"
 
-#include <stdio.h>
 #include <string.h>
 #include <dirent.h>
+
+#define EMBEDDED_DISPLAY_PREFIX "eDP"
 
 bool lidClosed(const char *lidRootPath) {
     bool lidClosed = false;
@@ -34,4 +35,12 @@ bool lidClosed(const char *lidRootPath) {
         closedir(dir);
     }
     return lidClosed;
+}
+
+bool shouldDisableDisplay(const std::string name, const bool lidClosed) {
+    return lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0;
+}
+
+const char *embeddedDisplayPrefix() {
+    return EMBEDDED_DISPLAY_PREFIX;
 }

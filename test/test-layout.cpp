@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "../src/layout.h"
+#include "../src/laptop.h"
 
 using namespace std;
 
@@ -57,10 +58,10 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
 
-    DisplP displ4 = make_shared<Displ>("Four", Displ::active, modes, mode, mode, mode, pos);
+    DisplP displ4 = make_shared<Displ>(string(embeddedDisplayPrefix()) + "Four", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ4);
 
-    activateDispls(displs, true, "three", "f");
+    activateDispls(displs, true, "three");
 
     EXPECT_TRUE(displ1->desiredActive);
     EXPECT_FALSE(displ2->desiredActive);
@@ -83,7 +84,7 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
 
-    activateDispls(displs, false, "noprimary", "nolaptop");
+    activateDispls(displs, false, "noprimary");
 
     EXPECT_FALSE(displ1->desiredActive);
     EXPECT_TRUE(displ2->desiredActive);

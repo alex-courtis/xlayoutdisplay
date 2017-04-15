@@ -6,18 +6,10 @@
 #include "xrandrrutil.h"
 #include "Settings.h"
 
-#include <string.h>
-#include <getopt.h>
-
 using namespace std;
 
 // TODO: refactor this as a throw from cpp, with c functions returning zeros instead of FAIL
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
-
-#define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
-
-// TODO: add this to laptop; maybe a singleton class?
-#define EMBEDDED_DISPLAY_PREFIX "eDP"
 
 // build a list of Displ based on the current and possible state of the world
 const list <DisplP> discoverDispls() {
@@ -93,45 +85,6 @@ const list <DisplP> discoverDispls() {
     return displs;
 }
 
-// display help and exit with success
-void help(char *progPath) {
-    char *progName = basename(progPath);
-    printf(""
-                   "Detects and arranges displays in a left to right manner.\n"
-                   "Invokes xrandr to perform arrangement.\n"
-                   "Highest resolution and refresh are used for each display.\n"
-                   "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
-                   "Displays are ordered via Xrandr default.\n"
-                   "The first display will be primary unless -p specified.\n"
-                   "\n", EMBEDDED_DISPLAY_PREFIX
-    );
-    printf(USAGE, progName);
-    printf(""
-                   "  -h  display this help text and exit\n"
-                   "  -i  display information about current displays and exit\n"
-                   "  -m  mirror displays using the lowest common resolution\n"
-                   "  -n  perform a trial run and exit\n"
-                   "  -o  order of displays, space/comma delimited\n"
-                   "  -p  primary display\n"
-                   "  -q  suppress output\n"
-                   "  -v  *arrange displays in a top to bottom manner (is this needed?)\n"
-    );
-    printf("\n"
-                   "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"
-                   "  arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary\n"
-                   "", progName
-    );
-    exit(EXIT_SUCCESS);
-}
-
-// display usage and help hint then exit with failure
-void usage(char *progPath) {
-    char *progName = basename(progPath);
-    fprintf(stderr, USAGE, progName);
-    fprintf(stderr, "Try '%s -h' for more information.\n", progName);
-    exit(EXIT_FAILURE);
-}
-
 int run(int argc, char **argv) {
     try {
         Settings *settings = Settings::instance();
@@ -139,40 +92,8 @@ int run(int argc, char **argv) {
         // load persistent settings
         settings->loadUserSettings();
 
-        // load command line settings
-        int opt;
-        while ((opt = getopt(argc, argv, "himno:p:q")) != -1) {
-            switch (opt) {
-                case 'h':
-                    settings->help = true;
-                    break;
-                case 'i':
-                    settings->info = true;
-                    break;
-                case 'm':
-                    settings->mirror = true;
-                    break;
-                case 'n':
-                    settings->dryRun = true;
-                    break;
-                case 'o':
-                    for (char *token = strtok(optarg, " ,"); token != NULL; token = strtok(NULL, " ,"))
-                        settings->order.push_back(string(token));
-                    break;
-                case 'p':
-                    settings->primary = optarg;
-                    break;
-                case 'q':
-                    settings->verbose = false;
-                    break;
-                default:
-                    usage(argv[0]);
-            }
-        }
-        if (argc > optind)
-            usage(argv[0]);
-        if (settings->help)
-            help(argv[0]);
+        // override with CLI settings
+        settings->loadCliSettings(argc, argv);
 
         // discover current state
         list <DisplP> displs = discoverDispls();
@@ -189,7 +110,7 @@ int run(int argc, char **argv) {
 
         // determine desired state
         orderDispls(displs, settings->order);
-        activateDispls(displs, lidClose, settings->primary, EMBEDDED_DISPLAY_PREFIX);
+        activateDispls(displs, lidClose, settings->primary);
 
         // arrange left to right
         ltrDispls(displs);

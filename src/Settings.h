@@ -13,6 +13,9 @@ public:
     // load user settings from ~/.xLayoutDisplays
     void loadUserSettings();
 
+    // load settings via getopts
+    void loadCliSettings(int argc, char **argv);
+
     bool dryRun = false;
     bool help = false;
     bool info = false;
