@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "../src/xrandrrutil.h"
 
 using namespace std;
+using ::testing::Return;
 
 TEST(xrandrutil_renderCmd, renderAll) {
     list <DisplP> displs;
@@ -76,3 +78,61 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     EXPECT_EQ(expected, renderUserInfo(displs));
 
 }
+
+class MockXRRWrapper : public XRRWrapper {
+public:
+    MOCK_METHOD1(xOpenDisplay, Display*(_Xconst char*));
+    MOCK_METHOD1(defaultScreen, int(Display*));
+    MOCK_METHOD1(screenCount, int(Display*));
+    MOCK_METHOD2(rootWindow, Window(Display*, int));
+    MOCK_METHOD2(xrrGetScreenResources, XRRScreenResources*(Display*, Window));
+    MOCK_METHOD3(xrrGetOutputInfo, XRROutputInfo*(Display*, XRRScreenResources*, RROutput));
+    MOCK_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo*(Display*, XRRScreenResources*, RRCrtc));
+};
+
+class xrandrutil_discoverDispls : public ::testing::Test {
+protected:
+    void SetUp() override {
+    }
+
+    Display *dpy = (Display*)1;
+    int screen = 2;
+    Window rootWindow;
+    XRRScreenResources screenResources;
+};
+
+TEST_F(xrandrutil_discoverDispls, cannotOpenDisplay) {
+    MockXRRWrapper xrrWrapper;
+
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL));
+
+    EXPECT_THROW(discoverDispls(&xrrWrapper), runtime_error);
+}
+
+TEST_F(xrandrutil_discoverDispls, excessScreens) {
+    MockXRRWrapper xrrWrapper;
+
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
+    EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));
+    EXPECT_CALL(xrrWrapper, screenCount(dpy)).Times(2).WillRepeatedly(Return(1));
+
+    EXPECT_THROW(discoverDispls(&xrrWrapper), runtime_error);
+}
+
+TEST_F(xrandrutil_discoverDispls, winning) {
+    MockXRRWrapper xrrWrapper;
+
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
+    EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));
+    EXPECT_CALL(xrrWrapper, screenCount(dpy)).WillOnce(Return(3));
+    EXPECT_CALL(xrrWrapper, rootWindow(dpy, screen)).WillOnce(Return(rootWindow));
+    EXPECT_CALL(xrrWrapper, xrrGetScreenResources(dpy, rootWindow)).WillOnce(Return(&screenResources));
+
+    screenResources.noutput = 0;
+
+    const list<DisplP> displs = discoverDispls(&xrrWrapper);
+
+    EXPECT_TRUE(displs.empty());
+}
+
+// TODO: more tests!

@@ -74,7 +74,7 @@ const string renderUserInfo(const list <DisplP> &displs) {
             ss << (mode == displ->currentMode ? '*' : ' ');
             ss << (mode == displ->preferredMode ? '+' : ' ');
             ss << (mode == displ->optimalMode ? '!' : ' ');
-            ss << mode->width << 'x'<< mode->height << ' ' << mode->refresh << "Hz";
+            ss << mode->width << 'x' << mode->height << ' ' << mode->refresh << "Hz";
             ss << endl;
         }
     }
@@ -86,16 +86,24 @@ const string renderUserInfo(const list <DisplP> &displs) {
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
 // build a list of Displ based on the current and possible state of the world
-const list <DisplP> discoverDispls() {
+const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
+    bool deleteWrapper = false;
+    if (xrrWrapper == NULL) {
+        xrrWrapper = new XRRWrapperReal();
+        deleteWrapper = true;
+    }
+
     list <DisplP> displs;
 
     // open up X information
-    Display *dpy = XOpenDisplay(NULL);
-    if (dpy == NULL) FAIL("Failed to open display defined by DISPLAY environment variable");
-    int screen = DefaultScreen(dpy);
-    if (screen >= ScreenCount(dpy)) FAIL("Invalid screen number %d (display has %d)\n", screen, ScreenCount(dpy));
-    Window rootWindow = RootWindow(dpy, screen);
-    XRRScreenResources *screenResources = XRRGetScreenResources(dpy, rootWindow);
+    Display *dpy = xrrWrapper->xOpenDisplay(NULL);
+    if (dpy == NULL)
+        throw runtime_error("Failed to open display defined by DISPLAY environment variable");
+    int screen = xrrWrapper->defaultScreen(dpy);
+    if (screen >= xrrWrapper->screenCount(dpy))
+        throw runtime_error("Invalid screen number " + to_string(screen) + " (display has " + to_string(xrrWrapper->screenCount(dpy)) + ")");
+    Window rootWindow = xrrWrapper->rootWindow(dpy, screen);
+    XRRScreenResources *screenResources = xrrWrapper->xrrGetScreenResources(dpy, rootWindow);
 
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
@@ -105,7 +113,7 @@ const list <DisplP> discoverDispls() {
         PosP currentPos;
 
         // current state
-        const XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
+        const XRROutputInfo *outputInfo = xrrWrapper->xrrGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
         const char *name = outputInfo->name;
         RRMode rrMode = 0;
         if (outputInfo->crtc != 0) {
@@ -113,7 +121,7 @@ const list <DisplP> discoverDispls() {
             state = Displ::active;
 
             // current position and mode
-            XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
+            XRRCrtcInfo *crtcInfo = xrrWrapper->xrrGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
             rrMode = crtcInfo->mode;
             currentMode = shared_ptr<Mode>(Mode::fromXRR(rrMode, screenResources));
@@ -156,5 +164,9 @@ const list <DisplP> discoverDispls() {
         // add the displ
         displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, optimalMode, currentPos));
     }
+
+    if (deleteWrapper)
+        delete(xrrWrapper);
+
     return displs;
 }
