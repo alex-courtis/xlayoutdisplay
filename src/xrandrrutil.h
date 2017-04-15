@@ -16,4 +16,7 @@ const std::string renderCmd(const std::list <DisplP> &displs);
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list <DisplP> &displs);
 
+// build a list of Displ based on the current and possible state of the world
+const std::list <DisplP> discoverDispls();
+
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H

@@ -23,8 +23,6 @@ set(SOURCE_FILES
         src/layout.cpp
         src/layout.h
         src/util.h
-        src/xLayoutDisplays.cpp
-        src/xLayoutDisplays.h
         src/xrandrrutil.cpp
         src/xrandrrutil.h
         )

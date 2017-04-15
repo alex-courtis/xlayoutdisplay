@@ -70,7 +70,7 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
 
     setLidClosed(true);
 
-    activateDispls(displs, true, "three");
+    activateDispls(displs, "three");
 
     EXPECT_TRUE(displ1->desiredActive);
     EXPECT_FALSE(displ2->desiredActive);
@@ -93,7 +93,7 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
 
-    activateDispls(displs, false, "noprimary");
+    activateDispls(displs, "noprimary");
 
     setLidClosed(false);
 

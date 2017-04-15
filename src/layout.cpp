@@ -24,7 +24,7 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
     }
 }
 
-void activateDispls(std::list<DisplP> &displs, const bool &lidClosed, const string &primary) {
+void activateDispls(std::list<DisplP> &displs, const string &primary) {
     Laptop *laptop = Laptop::instance();
     for (const auto displ : displs) {
 
