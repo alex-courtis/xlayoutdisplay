@@ -23,7 +23,7 @@ public:
     const std::string name;
     const State state;
 
-    const std::list<ModeP> modes;
+    const std::list<ModeP> modes;   // should be ordered descending when constructing
     const ModeP currentMode;
     const ModeP preferredMode;
     const ModeP optimalMode;

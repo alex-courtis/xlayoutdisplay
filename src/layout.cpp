@@ -2,6 +2,7 @@
 #include "Laptop.h"
 
 #include <string.h>
+#include <iostream>
 
 using namespace std;
 
@@ -50,7 +51,6 @@ void activateDispls(std::list<DisplP> &displs, const string &primary) {
 }
 
 void ltrDispls(list <DisplP> &displs) {
-
     int xpos = 0;
     int ypos = 0;
     for (const auto displ : displs) {
@@ -67,4 +67,56 @@ void ltrDispls(list <DisplP> &displs) {
             xpos += displ->desiredMode->width;
         }
     }
+}
+
+void mirrorDispls(list <DisplP> &displs) {
+
+    // find the first active display
+    DisplP firstDispl;
+    for (const auto displ : displs) {
+        if (displ->desiredActive) {
+            firstDispl = displ;
+            break;
+        }
+    }
+    if (!firstDispl)
+        return;
+
+    // iterate through first active display's modes
+    for (const auto possibleMode : firstDispl->modes) {
+        bool matchedMode = true;
+
+        // attempt to match mode to each active displ
+        for (const auto displ : displs) {
+            if (!displ->desiredActive)
+                continue;
+
+            // reset previous matches
+            displ->desiredMode.reset();
+            displ->desiredPos.reset();
+
+            // match height and width only
+            for (const auto mode : displ->modes) {
+                if (mode->width == possibleMode->width && mode->height == possibleMode->height) {
+
+                    // set mode and pos
+                    displ->desiredMode = mode;
+                    displ->desiredPos = make_shared<Pos>(0, 0);
+                    break;
+                }
+            }
+
+            // match a mode for every display
+            matchedMode = matchedMode && displ->desiredMode;
+            if (matchedMode)
+                continue;
+        }
+
+        // we've set desiredMode and desiredPos (zero) for all displays, all done
+        if (matchedMode)
+            return;
+    }
+
+    // couldn't find a common mode, exit
+    throw runtime_error("unable to find common width/height for mirror");
 }

@@ -31,8 +31,11 @@ int main(int argc, char **argv) {
         orderDispls(displs, settings->order);
         activateDispls(displs, settings->primary);
 
-        // arrange left to right
-        ltrDispls(displs);
+        // arrange mirrored or left to right (default)
+        if (settings->mirror)
+            mirrorDispls(displs);
+        else
+            ltrDispls(displs);
 
         // render desired state for xrandr
         const string xrandr = renderCmd(displs);

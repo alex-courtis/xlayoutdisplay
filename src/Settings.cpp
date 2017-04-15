@@ -40,7 +40,6 @@ void printHelp(char *progPath) {
                    "  -o  order of displays, space/comma delimited\n"
                    "  -p  primary display\n"
                    "  -q  suppress output\n"
-                   "  -v  *arrange displays in a top to bottom manner (is this needed?)\n"
     );
     printf("\n"
                    "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"

@@ -12,15 +12,14 @@ Displays starting with "eDP" are disabled if the laptop lid is closed as per /pr
 Displays are ordered via Xrandr default.
 The first display will be primary unless -p specified.
 
-Usage: xLayoutDisplays [-h] [-i] [-n] [-o order] [-p primary] [-q]
+Usage: xLayoutDisplays [-h] [-i] [-m] [-n] [-o order] [-p primary] [-q]
   -h  display this help text and exit
   -i  display information about current displays and exit
-  -m  *mirror displays using the lowest common resolution (not ready yet, havering about panning)
+  -m  mirror displays using the lowest common resolution
   -n  perform a trial run and exit
   -o  order of displays, space/comma delimited
   -p  primary display
   -q  suppress output
-  -v  *arrange displays in a top to bottom manner (is this needed?)
 
 e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
   arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary
@@ -91,12 +90,8 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
--m mirror
-
 maybe -v or other arrangement options
 
 -a after e.g. `xmonad --restart`
 
 xrdb Xft.dpi suggestion or setting
-
-User settings... surely C++14 has YAML...
