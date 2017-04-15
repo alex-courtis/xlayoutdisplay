@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "../src/Laptop.h"
 #include "../src/layout.h"
-#include "../src/laptop.h"
 
 using namespace std;
 
@@ -40,13 +40,20 @@ protected:
         Displ::desiredPrimary = DisplP();
     }
 
+    void TearDown() override {
+        Laptop::singletonInstance = NULL;
+    }
+
+    void setLidClosed(const bool closed) {
+        Laptop::instance()->lidClosed = closed;
+    }
+
     ModeP mode = make_shared<Mode>(0, 0, 0, 0);
     PosP pos = make_shared<Pos>(0, 0);
     list <ModeP> modes = {mode};
 };
 
 TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
-
     list <DisplP> displs;
 
     DisplP displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, mode, pos);
@@ -58,8 +65,10 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, mode, pos);
     displs.push_back(displ3);
 
-    DisplP displ4 = make_shared<Displ>(string(embeddedDisplayPrefix()) + "Four", Displ::active, modes, mode, mode, mode, pos);
+    DisplP displ4 = make_shared<Displ>(Laptop::embeddedDisplayPrefix() + string("Four"), Displ::active, modes, mode, mode, mode, pos);
     displs.push_back(displ4);
+
+    setLidClosed(true);
 
     activateDispls(displs, true, "three");
 
@@ -85,6 +94,8 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     displs.push_back(displ3);
 
     activateDispls(displs, false, "noprimary");
+
+    setLidClosed(false);
 
     EXPECT_FALSE(displ1->desiredActive);
     EXPECT_TRUE(displ2->desiredActive);

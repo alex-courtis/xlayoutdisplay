@@ -1,10 +1,11 @@
 #include "xLayoutDisplays.h"
 
+#include "Settings.h"
+#include "Laptop.h"
+
 #include "util.h"
-#include "laptop.h"
 #include "layout.h"
 #include "xrandrrutil.h"
-#include "Settings.h"
 
 using namespace std;
 
@@ -97,7 +98,7 @@ int run(int argc, char **argv) {
 
         // discover current state
         list <DisplP> displs = discoverDispls();
-        const bool lidClose = lidClosed();
+        const bool lidClose = Laptop::instance()->isLidClosed();
         
         // output verbose information
         if (settings->verbose || settings->info) {

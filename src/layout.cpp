@@ -1,5 +1,5 @@
 #include "layout.h"
-#include "laptop.h"
+#include "Laptop.h"
 
 #include <string.h>
 
@@ -25,10 +25,11 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
 }
 
 void activateDispls(std::list<DisplP> &displs, const bool &lidClosed, const string &primary) {
+    Laptop *laptop = Laptop::instance();
     for (const auto displ : displs) {
 
         // don't use any laptop displays if the lid is closed
-        if (shouldDisableDisplay(displ->name, lidClosed))
+        if (laptop->shouldDisableDisplay(displ->name))
             continue;
 
         // only activate currently active or connected displays

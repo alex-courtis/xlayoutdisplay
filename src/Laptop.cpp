@@ -1,12 +1,34 @@
-#include "laptop.h"
+#include "Laptop.h"
 
 #include <string.h>
 #include <dirent.h>
 
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
 
-bool lidClosed(const char *lidRootPath) {
-    bool lidClosed = false;
+Laptop *Laptop::singletonInstance = NULL;
+
+Laptop *Laptop::instance() {
+    if (!singletonInstance) {
+        singletonInstance = new Laptop();
+        singletonInstance->calculateLidClosed();
+    }
+    return singletonInstance;
+}
+
+const bool Laptop::isLidClosed() {
+    return lidClosed;
+}
+
+const bool Laptop::shouldDisableDisplay(const std::string name) {
+    return lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0;
+}
+
+const char *Laptop::embeddedDisplayPrefix() {
+    return EMBEDDED_DISPLAY_PREFIX;
+}
+
+void Laptop::calculateLidClosed(const char *lidRootPath) {
+    lidClosed = false;
 
     static char lidFileName[PATH_MAX];
     static char line[512];
@@ -34,13 +56,4 @@ bool lidClosed(const char *lidRootPath) {
         }
         closedir(dir);
     }
-    return lidClosed;
-}
-
-bool shouldDisableDisplay(const std::string name, const bool lidClosed) {
-    return lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0;
-}
-
-const char *embeddedDisplayPrefix() {
-    return EMBEDDED_DISPLAY_PREFIX;
 }

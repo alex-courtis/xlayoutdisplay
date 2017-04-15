@@ -13,13 +13,13 @@ link_libraries(gtest)
 set(SOURCE_FILES
         src/Displ.cpp
         src/Displ.h
+        src/Laptop.cpp
+        src/Laptop.h
         src/Mode.cpp
         src/Mode.h
         src/Pos.h
         src/Settings.cpp
         src/Settings.h
-        src/laptop.cpp
-        src/laptop.h
         src/layout.cpp
         src/layout.h
         src/util.h
@@ -32,7 +32,7 @@ set(SOURCE_FILES
 set(TEST_FILES
         test/main.cpp
         test/test-Displ.cpp
-        test/test-laptop.cpp
+        test/test-Laptop.cpp
         test/test-layout.cpp
         test/test-Mode.cpp
         test/test-Settings.cpp
