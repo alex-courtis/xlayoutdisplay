@@ -134,7 +134,7 @@ TEST_F(xrandrutil_discoverDispls, excessScreens) {
     EXPECT_THROW(discoverDispls(&xrrWrapper), runtime_error);
 }
 
-TEST_F(xrandrutil_discoverDispls, winning) {
+TEST_F(xrandrutil_discoverDispls, noDisplays) {
     MockXRRWrapper xrrWrapper;
 
     EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
