@@ -27,7 +27,9 @@ private:
 
     // just for unit testing
     friend class Laptop_shouldDisableDisplay;
+
     friend class Laptop_calculateLidClosed;
+
     friend class layout_activateDispls;
 };
 

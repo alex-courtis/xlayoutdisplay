@@ -50,7 +50,9 @@ TEST(xrandrutil_renderCmd, renderAll) {
 class MockEdid : public Edid {
 public:
     MockEdid() {};
+
     MOCK_CONST_METHOD0(maxCmHoriz, int());
+
     MOCK_CONST_METHOD0(maxCmVert, int());
 };
 
@@ -97,7 +99,7 @@ public:
     MOCK_METHOD1(xOpenDisplay, Display*(_Xconst char*));
     MOCK_METHOD1(defaultScreen, int(Display*));
     MOCK_METHOD1(screenCount, int(Display*));
-    MOCK_METHOD2(rootWindow, Window(Display*, int));
+    MOCK_METHOD2(rootWindow, Window(Display * , int));
     MOCK_METHOD2(xrrGetScreenResources, XRRScreenResources*(Display*, Window));
     MOCK_METHOD3(xrrGetOutputInfo, XRROutputInfo*(Display*, XRRScreenResources*, RROutput));
     MOCK_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo*(Display*, XRRScreenResources*, RRCrtc));
@@ -108,7 +110,7 @@ protected:
     void SetUp() override {
     }
 
-    Display *dpy = (Display*)1;
+    Display *dpy = (Display *) 1;
     int screen = 2;
     Window rootWindow;
     XRRScreenResources screenResources;
@@ -143,7 +145,7 @@ TEST_F(xrandrutil_discoverDispls, winning) {
 
     screenResources.noutput = 0;
 
-    const list<DisplP> displs = discoverDispls(&xrrWrapper);
+    const list <DisplP> displs = discoverDispls(&xrrWrapper);
 
     EXPECT_TRUE(displs.empty());
 }
