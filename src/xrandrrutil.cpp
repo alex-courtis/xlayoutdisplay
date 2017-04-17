@@ -93,7 +93,7 @@ const string renderUserInfo(const list <DisplP> &displs) {
 const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
     bool deleteWrapper = false;
     if (xrrWrapper == NULL) {
-        xrrWrapper = new XRRWrapperReal();
+        xrrWrapper = new XRRWrapperImpl();
         deleteWrapper = true;
     }
 

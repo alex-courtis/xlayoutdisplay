@@ -22,7 +22,7 @@ public:
     virtual XRRCrtcInfo *xrrGetCrtcInfo(Display *dpy, XRRScreenResources *resources, RRCrtc crtc) = 0;
 };
 
-class XRRWrapperReal : public XRRWrapper {
+class XRRWrapperImpl : public XRRWrapper {
 public:
     Display *xOpenDisplay(_Xconst char *name) {
         return XOpenDisplay(name);
