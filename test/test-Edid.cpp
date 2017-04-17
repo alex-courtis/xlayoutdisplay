@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "../src/Edid.h"
-#include "../src/edidConsts.h"
 
 using namespace std;
 

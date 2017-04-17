@@ -1,7 +1,5 @@
 #include "Edid.h"
 
-#include "edidConsts.h"
-
 #include <string.h>
 
 using namespace std;
