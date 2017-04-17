@@ -4,6 +4,8 @@
 #include <memory>
 #include "Mode.h"
 
+#define DPI_STEP 24 // use quarters to prevent blurring, see https://wiki.archlinux.org/index.php/xorg#Setting_DPI_manually
+
 // Edid info from monitor - assumes 1.4 spec
 class Edid {
 public:
@@ -16,7 +18,7 @@ public:
     // average horiz/vert DPI for mode
     virtual double dpiForMode(const ModeP &mode) const = 0;
 
-    // closest DPI_STEP for dpiForMode
+    // closest DPI_STEP from dpiForMode
     virtual int closestDpiForMode(const ModeP &mode) const = 0;
 };
 
@@ -47,8 +49,6 @@ private:
 
 #define EDID_MAX_CM_HORIZ 0x15
 #define EDID_MAX_CM_VERT 0x16
-
-#define DPI_STEP 24
 
 #define INCHES_PER_CM 2.54 // apparently this is exact
 

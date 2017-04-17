@@ -31,5 +31,5 @@ double EdidImpl::dpiForMode(const ModeP &mode) const {
 }
 
 int EdidImpl::closestDpiForMode(const ModeP &mode) const {
-    return (int)((dpiForMode(mode) + DPI_STEP / 2) / 24) * 24;
+    return (int)((dpiForMode(mode) + DPI_STEP / 2) / DPI_STEP) * DPI_STEP;
 }
