@@ -90,10 +90,10 @@ const string renderUserInfo(const list <DisplP> &displs) {
 #define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
 
 // build a list of Displ based on the current and possible state of the world
-const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
+const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
     bool deleteWrapper = false;
     if (xrrWrapper == NULL) {
-        xrrWrapper = new XRRWrapperImpl();
+        xrrWrapper = new XrrWrapperImpl();
         deleteWrapper = true;
     }
 

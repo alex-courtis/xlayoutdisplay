@@ -1,7 +1,7 @@
 #ifndef XLAYOUTDISPLAYS_XRANDRUTIL_H
 #define XLAYOUTDISPLAYS_XRANDRUTIL_H
 
-#include "XRRWrapper.h"
+#include "XrrWrapper.h"
 #include "Displ.h"
 
 // v refresh frequency in even Hz, zero if modeInfo is NULL
@@ -15,7 +15,7 @@ const std::string renderCmd(const std::list<DisplP> &displs);
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list<DisplP> &displs);
 
-// build a list of Displ based on the current and possible state of the world; subclassed XRRWrapper used for testing
-const std::list<DisplP> discoverDispls(XRRWrapper *xrrWrapper = NULL);
+// build a list of Displ based on the current and possible state of the world; subclassed XrrWrapper used for testing
+const std::list<DisplP> discoverDispls(XrrWrapper *xrrWrapper = NULL);
 
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H
