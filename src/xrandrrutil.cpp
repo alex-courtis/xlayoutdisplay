@@ -81,12 +81,11 @@ const string renderUserInfo(const list <DisplP> &displs) {
         for (const auto mode : displ->modes) {
             ss << (mode == displ->currentMode ? '*' : ' ');
             ss << (mode == displ->preferredMode ? '+' : ' ');
-            ss << (mode == displ->optimalMode ? '!' : ' ');
             ss << mode->width << 'x' << mode->height << ' ' << mode->refresh << "Hz";
             ss << endl;
         }
     }
-    ss << "*current +preferred !optimal";
+    ss << "*current +preferred";
     return ss.str();
 }
 
@@ -117,7 +116,7 @@ const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         Displ::State state;
         list <ModeP> modes;
-        ModeP currentMode, preferredMode, optimalMode;
+        ModeP currentMode, preferredMode;
         PosP currentPos;
         EdidP edid;
 
@@ -192,15 +191,14 @@ const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
                 currentMode = mode;
         }
 
-        // highest res/refresh is optimal mode
+        // highest noninterlace/resolution/refresh is fir
         if (!modes.empty()) {
             modes.sort(sortSharedPtr<Mode>);
             modes.reverse();
-            optimalMode = *modes.begin();
         }
 
         // add the displ
-        displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, optimalMode, currentPos, edid));
+        displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, currentPos, edid));
     }
 
     if (deleteWrapper)

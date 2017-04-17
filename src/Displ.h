@@ -19,7 +19,7 @@ public:
     //   active must have: currentMode, currentPos, optimalMode, modes
     //   connected must have: optimalMode, modes
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
-          const ModeP &optimalMode, const PosP &currentPos, const EdidP edid);
+          const PosP &currentPos, const EdidP edid);
 
     virtual ~Displ() {
     }
@@ -30,7 +30,6 @@ public:
     const std::list<ModeP> modes;   // should be ordered descending when constructing
     const ModeP currentMode;
     const ModeP preferredMode;
-    const ModeP optimalMode; // todo: use preferredMode res with highest refresh, but must consider interlacing, 3d etc.
     ModeP desiredMode;
 
     const PosP currentPos;
