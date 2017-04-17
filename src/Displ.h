@@ -30,7 +30,7 @@ public:
     const std::list<ModeP> modes;   // should be ordered descending when constructing
     const ModeP currentMode;
     const ModeP preferredMode;
-    const ModeP optimalMode;
+    const ModeP optimalMode; // todo: use preferredMode res with highest refresh, but must consider interlacing, 3d etc.
     ModeP desiredMode;
 
     const PosP currentPos;
