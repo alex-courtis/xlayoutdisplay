@@ -90,8 +90,7 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
-maybe -v or other arrangement options
-
 -a after e.g. `xmonad --restart`
 
-xrdb Xft.dpi suggestion or setting
+xrdb --dpi setting based on EDID, for primary display, finds nearest 24 (quarter) from 96+
+
