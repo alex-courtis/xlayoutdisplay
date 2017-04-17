@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 
+// singleton representing settings of this utility
 class Settings {
 
 public:

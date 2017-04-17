@@ -3,9 +3,9 @@
 
 #include <X11/extensions/Xrandr.h>
 
-class XRRWrapper {
+class XrrWrapper {
 public:
-    virtual ~XRRWrapper() {};
+    virtual ~XrrWrapper() {};
 
     virtual Display *xOpenDisplay(_Xconst char *name) = 0;
 
@@ -22,7 +22,7 @@ public:
     virtual XRRCrtcInfo *xrrGetCrtcInfo(Display *dpy, XRRScreenResources *resources, RRCrtc crtc) = 0;
 };
 
-class XRRWrapperImpl : public XRRWrapper {
+class XrrWrapperImpl : public XrrWrapper {
 public:
     Display *xOpenDisplay(_Xconst char *name) {
         return XOpenDisplay(name);

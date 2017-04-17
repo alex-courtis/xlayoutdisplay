@@ -24,7 +24,7 @@ set(SOURCE_FILES
         src/Pos.h
         src/Settings.cpp
         src/Settings.h
-        src/XRRWrapper.h
+        src/XrrWrapper.h
         src/layout.cpp
         src/layout.h
         src/util.h

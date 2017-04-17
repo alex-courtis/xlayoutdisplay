@@ -94,7 +94,7 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
 
 }
 
-class MockXRRWrapper : public XRRWrapper {
+class MockXrrWrapper : public XrrWrapper {
 public:
     MOCK_METHOD1(xOpenDisplay, Display*(_Xconst char*));
     MOCK_METHOD1(defaultScreen, int(Display*));
@@ -117,7 +117,7 @@ protected:
 };
 
 TEST_F(xrandrutil_discoverDispls, cannotOpenDisplay) {
-    MockXRRWrapper xrrWrapper;
+    MockXrrWrapper xrrWrapper;
 
     EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL));
 
@@ -125,7 +125,7 @@ TEST_F(xrandrutil_discoverDispls, cannotOpenDisplay) {
 }
 
 TEST_F(xrandrutil_discoverDispls, excessScreens) {
-    MockXRRWrapper xrrWrapper;
+    MockXrrWrapper xrrWrapper;
 
     EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
     EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));
@@ -135,7 +135,7 @@ TEST_F(xrandrutil_discoverDispls, excessScreens) {
 }
 
 TEST_F(xrandrutil_discoverDispls, noDisplays) {
-    MockXRRWrapper xrrWrapper;
+    MockXrrWrapper xrrWrapper;
 
     EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
     EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));

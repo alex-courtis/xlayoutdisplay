@@ -3,6 +3,7 @@
 
 #include <string>
 
+// singleton to access laptop specific information
 class Laptop {
 public:
     // singleton accessor
