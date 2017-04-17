@@ -14,7 +14,9 @@ public:
     virtual ~Mode() {
     }
 
-    // pseudo-constructor that validates prior to invoking constructor
+    // throws invalid_argument:
+    //   null resources
+    //   id not found in resources
     static Mode *fromXRR(const RRMode id, const XRRScreenResources *resources);
 
     // order by width, height, refresh

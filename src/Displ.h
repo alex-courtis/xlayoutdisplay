@@ -15,6 +15,9 @@ public:
         active, connected, disconnected
     };
 
+    // throws invalid_argument:
+    //   active must have: currentMode, currentPos, optimalMode, modes
+    //   connected must have: optimalMode, modes
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
           const ModeP &optimalMode, const PosP &currentPos, const EdidP edid);
 

@@ -18,7 +18,8 @@ typedef std::shared_ptr<Edid> EdidP;
 class EdidImpl : public Edid {
 public:
 
-    // create Edid from edid; will fail if length > EDID_LENGTH
+    // throws invalid_argument:
+    //   length > EDID_LENGTH
     EdidImpl(const unsigned char *edid, const size_t length, const char *name);
 
     virtual ~EdidImpl();

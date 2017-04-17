@@ -37,16 +37,16 @@ int main(int argc, char **argv) {
         else
             ltrDispls(displs);
 
-        // render desired state for xrandr
-        const string xrandr = renderCmd(displs);
+        // render desired cmd for xrandr
+        const string xrandrCmd = renderCmd(displs);
         if (settings->verbose || settings->dryRun)
-            printf("\n%s\n", xrandr.c_str());
+            printf("\n%s\n", xrandrCmd.c_str());
 
+        // execute xrandr, returning its return
         if (settings->dryRun)
             return EXIT_SUCCESS;
-
-        // invoke xrandr
-        return system(xrandr.c_str());
+        else
+            return system(xrandrCmd.c_str());
 
     } catch (const exception &e) {
         fprintf(stderr, "FAIL: %s, exiting\n", e.what());
