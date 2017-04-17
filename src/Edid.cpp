@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Edid::Edid(const unsigned char *edid, const size_t length, const char *name) {
+EdidImpl::EdidImpl(const unsigned char *edid, const size_t length, const char *name) {
     if (length < EDID_LENGTH)
         throw invalid_argument(string(name) + " has Edid size " + to_string(length) + ", expected at least " + to_string(EDID_LENGTH));
 
@@ -14,14 +14,14 @@ Edid::Edid(const unsigned char *edid, const size_t length, const char *name) {
     memcpy(this->edid, edid, length);
 }
 
-Edid::~Edid() {
+EdidImpl::~EdidImpl() {
     free(edid);
 }
 
-int Edid::maxCmHoriz() const {
+int EdidImpl::maxCmHoriz() const {
     return edid[EDID_MAX_CM_HORIZ];
 }
 
-int Edid::maxCmVert() const {
+int EdidImpl::maxCmVert() const {
     return edid[EDID_MAX_CM_VERT];
 }

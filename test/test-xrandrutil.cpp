@@ -47,29 +47,42 @@ TEST(xrandrutil_renderCmd, renderAll) {
     EXPECT_EQ(expected, renderCmd(displs));
 }
 
+class MockEdid : public Edid {
+public:
+    MockEdid() {};
+    MOCK_CONST_METHOD0(maxCmHoriz, int());
+    MOCK_CONST_METHOD0(maxCmVert, int());
+};
+
 TEST(xrandrutil_renderUserInfo, renderAll) {
     ModeP mode1 = make_shared<Mode>(1, 2, 3, 4);
     ModeP mode2 = make_shared<Mode>(5, 6, 7, 8);
     ModeP mode3 = make_shared<Mode>(9, 10, 11, 12);
     PosP pos = make_shared<Pos>(13, 14);
+    shared_ptr<MockEdid> edid1 = make_shared<MockEdid>();
+    EXPECT_CALL(*edid1, maxCmHoriz()).WillOnce(Return(15));
+    EXPECT_CALL(*edid1, maxCmVert()).WillOnce(Return(16));
+    shared_ptr<MockEdid> edid3 = make_shared<MockEdid>();
+    EXPECT_CALL(*edid3, maxCmHoriz()).WillOnce(Return(17));
+    EXPECT_CALL(*edid3, maxCmVert()).WillOnce(Return(18));
 
     list <DisplP> displs;
 
-    DisplP dis = make_shared<Displ>("dis", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP(), EdidP());
+    DisplP dis = make_shared<Displ>("dis", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP(), edid1);
     displs.push_back(dis);
 
     DisplP con = make_shared<Displ>("con", Displ::connected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), mode2, PosP(), EdidP());
     displs.push_back(con);
 
-    DisplP act = make_shared<Displ>("act", Displ::active, list<ModeP>({mode3, mode2, mode1}), mode2, mode3, mode1, pos, EdidP());
+    DisplP act = make_shared<Displ>("act", Displ::active, list<ModeP>({mode3, mode2, mode1}), mode2, mode3, mode1, pos, edid3);
     displs.push_back(act);
 
     const string expected = ""
-            "dis disconnected\n"
+            "dis disconnected 15cmx16cm\n"
             "con connected\n"
             "   2x3 4Hz\n"
             "  !6x7 8Hz\n"
-            "act active 6x7+13+14 8Hz\n"
+            "act active 6x7+13+14 8Hz 17cmx18cm\n"
             " + 10x11 12Hz\n"
             "*  6x7 8Hz\n"
             "  !2x3 4Hz\n"

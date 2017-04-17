@@ -6,8 +6,18 @@
 // Edid info from monitor - assumes 1.4 spec
 class Edid {
 public:
-    Edid(const unsigned char *edid, const size_t length, const char *name);
-    virtual ~Edid();
+    virtual ~Edid() {};
+
+    virtual int maxCmHoriz() const = 0;
+    virtual int maxCmVert() const = 0;
+};
+
+typedef std::shared_ptr<Edid> EdidP;
+
+class EdidImpl : public Edid {
+public:
+    EdidImpl(const unsigned char *edid, const size_t length, const char *name);
+    virtual ~EdidImpl();
 
     int maxCmHoriz() const;
     int maxCmVert() const;
@@ -15,7 +25,5 @@ public:
 private:
     unsigned char *edid;
 };
-
-typedef std::shared_ptr<Edid> EdidP;
 
 #endif //XLAYOUTDISPLAYS_EDID_H
