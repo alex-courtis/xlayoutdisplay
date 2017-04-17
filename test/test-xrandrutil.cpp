@@ -6,15 +6,29 @@
 using namespace std;
 using ::testing::Return;
 
+class MockEdid : public Edid {
+public:
+    MOCK_CONST_METHOD0(maxCmHoriz, int());
+
+    MOCK_CONST_METHOD0(maxCmVert, int());
+
+    MOCK_CONST_METHOD1(dpiForMode, double(const ModeP &mode));
+
+    MOCK_CONST_METHOD1(closestDpiForMode, int(const ModeP &mode));
+};
+
 TEST(xrandrutil_renderCmd, renderAll) {
     list <DisplP> displs;
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP(), EdidP());
     displs.push_back(displ1);
 
-    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<MockEdid> edid2 = make_shared<MockEdid>();
+    ModeP mode2 = make_shared<Mode>(0, 1, 2, 3);
+    EXPECT_CALL(*edid2, closestDpiForMode(mode2)).WillOnce(Return(4));
+    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), ModeP(), PosP(), edid2);
     displ2->desiredActive = true;
-    displ2->desiredMode = make_shared<Mode>(1, 2, 3, 4);
+    displ2->desiredMode = mode2;
     displ2->desiredPos = make_shared<Pos>(5, 6);
     displs.push_back(displ2);
 
@@ -38,23 +52,15 @@ TEST(xrandrutil_renderCmd, renderAll) {
 
     const string expected = ""
             "xrandr \\\n"
+            " --dpi 4 \\\n"
             " --output One --off \\\n"
-            " --output Two --mode 2x3 --rate 4 --pos 5x6 --primary \\\n"
+            " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n"
             " --output Three --off \\\n"
             " --output Four --off \\\n"
             " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
     EXPECT_EQ(expected, renderCmd(displs));
 }
-
-class MockEdid : public Edid {
-public:
-    MockEdid() {};
-
-    MOCK_CONST_METHOD0(maxCmHoriz, int());
-
-    MOCK_CONST_METHOD0(maxCmVert, int());
-};
 
 TEST(xrandrutil_renderUserInfo, renderAll) {
     ModeP mode1 = make_shared<Mode>(1, 2, 3, 4);
@@ -96,13 +102,19 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
 
 class MockXrrWrapper : public XrrWrapper {
 public:
-    MOCK_METHOD1(xOpenDisplay, Display*(_Xconst char*));
-    MOCK_METHOD1(defaultScreen, int(Display*));
-    MOCK_METHOD1(screenCount, int(Display*));
+    MOCK_METHOD1(xOpenDisplay, Display *(_Xconst char*));
+
+    MOCK_METHOD1(defaultScreen, int(Display *));
+
+    MOCK_METHOD1(screenCount, int(Display *));
+
     MOCK_METHOD2(rootWindow, Window(Display * , int));
-    MOCK_METHOD2(xrrGetScreenResources, XRRScreenResources*(Display*, Window));
-    MOCK_METHOD3(xrrGetOutputInfo, XRROutputInfo*(Display*, XRRScreenResources*, RROutput));
-    MOCK_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo*(Display*, XRRScreenResources*, RRCrtc));
+
+    MOCK_METHOD2(xrrGetScreenResources, XRRScreenResources *(Display *, Window));
+
+    MOCK_METHOD3(xrrGetOutputInfo, XRROutputInfo *(Display *, XRRScreenResources *, RROutput));
+
+    MOCK_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo *(Display *, XRRScreenResources *, RRCrtc));
 };
 
 class xrandrutil_discoverDispls : public ::testing::Test {

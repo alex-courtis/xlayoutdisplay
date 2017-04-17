@@ -32,6 +32,10 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 const string renderCmd(const list <DisplP> &displs) {
     stringstream ss;
     ss << "xrandr";
+    if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
+        ss << " \\\n";
+        ss << " --dpi " << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode);
+    }
     for (const auto displ : displs) {
         ss << " \\\n";
         ss << " --output " << displ->name;

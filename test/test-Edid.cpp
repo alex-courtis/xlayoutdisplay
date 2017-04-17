@@ -5,7 +5,7 @@
 using namespace std;
 
 TEST(Edid_constructor, validEdid) {
-    const size_t len = EDID_LENGTH * 3 / 2;
+    const size_t len = EDID_MIN_LENGTH * 3 / 2;
     unsigned char val[len];
     memset(val, 1, len);
 
@@ -13,7 +13,7 @@ TEST(Edid_constructor, validEdid) {
 }
 
 TEST(Edid_constructor, shortEdid) {
-    const size_t len = EDID_LENGTH - 1;
+    const size_t len = EDID_MIN_LENGTH - 1;
     unsigned char val[len];
     memset(val, 1, len);
 
@@ -21,7 +21,7 @@ TEST(Edid_constructor, shortEdid) {
 }
 
 TEST(Edid_maxCmHorizVert, valid) {
-    const size_t len = EDID_LENGTH;
+    const size_t len = EDID_MIN_LENGTH;
     unsigned char val[len];
     memset(val, 1, len);
     val[EDID_MAX_CM_HORIZ] = 2;
