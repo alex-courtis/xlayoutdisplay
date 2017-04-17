@@ -92,5 +92,15 @@ Hotplug event detection... my udev event hacks are too unreliable and shameworth
 
 -a after e.g. `xmonad --restart`
 
-xrdb --dpi setting based on EDID, for primary display, finds nearest 24 (quarter) from 96+
+xrdb --dpi setting based on Edid, for primary display, finds nearest 24 (quarter) from 96+
 
+output current state of the world according to X e.g.
+```
+    int displayWidth = XDisplayWidth(dpy, screen);
+    int displayHeight = XDisplayHeight(dpy, screen);
+    int displayWidthMm = XDisplayWidthMM(dpy, screen);
+    int displayHeightMm = XDisplayHeightMM(dpy, screen);
+    int xDpi = (int) (displayWidth * 25.4 / displayWidthMm + 0.5);
+    int yDpi = (int) (displayHeight * 25.4 / displayHeightMm + 0.5);
+    printf("%dx%d pixels  %dx%d mm  ~%dx%d dpi\n\n", displayWidth, displayHeight, displayWidthMm, displayHeightMm, xDpi, yDpi);
+```

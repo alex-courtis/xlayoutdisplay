@@ -2,6 +2,7 @@
 #include "util.h"
 
 #include <sstream>
+#include <string.h>
 
 using namespace std;
 
@@ -69,6 +70,9 @@ const string renderUserInfo(const list <DisplP> &displs) {
             ss << '+' << displ->currentPos->x << '+' << displ->currentPos->y;
             ss << ' ' << displ->currentMode->refresh << "Hz";
         }
+        if (displ->edid) {
+            ss << ' ' << displ->edid->maxCmHoriz() << "cmx" << displ->edid->maxCmVert() << "cm";
+        }
         ss << endl;
         for (const auto mode : displ->modes) {
             ss << (mode == displ->currentMode ? '*' : ' ');
@@ -111,9 +115,11 @@ const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
         list <ModeP> modes;
         ModeP currentMode, preferredMode, optimalMode;
         PosP currentPos;
+        EdidP edid;
 
         // current state
-        const XRROutputInfo *outputInfo = xrrWrapper->xrrGetOutputInfo(dpy, screenResources, screenResources->outputs[i]);
+        const RROutput rrOutput = screenResources->outputs[i];
+        const XRROutputInfo *outputInfo = xrrWrapper->xrrGetOutputInfo(dpy, screenResources, rrOutput);
         const char *name = outputInfo->name;
         RRMode rrMode = 0;
         if (outputInfo->crtc != 0) {
@@ -135,6 +141,34 @@ const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
             state = Displ::connected;
         } else {
             state = Displ::disconnected;
+        }
+
+        // iterate all properties
+        int nprop;
+        Atom *atoms = XRRListOutputProperties(dpy, rrOutput, &nprop);
+        for (int j = 0; j < nprop; j++) {
+            Atom atom = atoms[j];
+            char *atomName = XGetAtomName(dpy, atom);
+
+            // drill down on Edid
+            if (strcmp(atomName, RR_PROPERTY_RANDR_EDID) == 0) {
+
+                // retrieve property specifics
+                Atom actualType;
+                int actualFormat;
+                unsigned long nitems, bytesAfter;
+                unsigned char *prop;
+                XRRGetOutputProperty(dpy, rrOutput, atom,
+                                     0, // offset
+                                     100, //length - NFI, copied from xrandr.c
+                                     false, // delete
+                                     false, // pending
+                                     AnyPropertyType, &actualType, &actualFormat, &nitems, &bytesAfter, &prop
+                );
+
+                // record Edid
+                edid = make_shared<Edid>(prop, nitems, name);
+            }
         }
 
         // add available modes
@@ -162,11 +196,11 @@ const list <DisplP> discoverDispls(XRRWrapper *xrrWrapper) {
         }
 
         // add the displ
-        displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, optimalMode, currentPos));
+        displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, optimalMode, currentPos, edid));
     }
 
     if (deleteWrapper)
-        delete(xrrWrapper);
+        delete (xrrWrapper);
 
     return displs;
 }

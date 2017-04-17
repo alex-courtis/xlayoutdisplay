@@ -3,6 +3,7 @@
 
 #include "Mode.h"
 #include "Pos.h"
+#include "Edid.h"
 
 #include <memory>
 #include <list>
@@ -14,8 +15,8 @@ public:
         active, connected, disconnected
     };
 
-    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
-          const ModeP &preferredMode, const ModeP &optimalMode, const PosP &currentPos);
+    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
+          const ModeP &optimalMode, const PosP &currentPos, const EdidP edid);
 
     virtual ~Displ() {
     }
@@ -31,6 +32,8 @@ public:
 
     const PosP currentPos;
     PosP desiredPos;
+
+    const EdidP edid;
 
     bool desiredActive = false;
 

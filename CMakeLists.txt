@@ -13,6 +13,9 @@ link_libraries(gmock)
 link_libraries(pthread) # used for gmock
 
 set(SOURCE_FILES
+        src/edidConsts.h
+        src/Edid.cpp
+        src/Edid.h
         src/Displ.cpp
         src/Displ.h
         src/Laptop.cpp
@@ -32,6 +35,7 @@ set(SOURCE_FILES
 
 set(TEST_FILES
         test/main.cpp
+        test/test-Edid.cpp
         test/test-Displ.cpp
         test/test-Laptop.cpp
         test/test-layout.cpp
