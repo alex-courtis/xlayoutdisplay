@@ -107,16 +107,20 @@ TEST_F(layout_activateDispls, defaultPrimary) {
 TEST(layout_ltrDispls, arrange) {
 
     list <DisplP> displs;
+    list <ModeP> modes;
 
-    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), make_shared<Mode>(0, 10, 20, 0), PosP(), EdidP());
+    modes = { make_shared<Mode>(0, 10, 20, 30) };
+    DisplP displ1 = make_shared<Displ>("One", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ1->desiredActive = true;
     displs.push_back(displ1);
 
-    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), make_shared<Mode>(0, 30, 40, 0), PosP(), EdidP());
+    modes = {};
+    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displ2->desiredActive = false;
     displs.push_back(displ2);
 
-    DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>(), ModeP(), make_shared<Mode>(0, 50, 60, 0), PosP(), EdidP());
+    modes = { make_shared<Mode>(0, 50, 60, 70) };
+    DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ3->desiredActive = true;
     displs.push_back(displ3);
 
@@ -124,6 +128,9 @@ TEST(layout_ltrDispls, arrange) {
 
     EXPECT_TRUE(displ1->desiredActive);
     EXPECT_TRUE(displ1->desiredMode);
+    EXPECT_EQ(10, displ1->desiredMode->width);
+    EXPECT_EQ(20, displ1->desiredMode->height);
+    EXPECT_EQ(30, displ1->desiredMode->refresh);
     EXPECT_TRUE(displ1->desiredPos);
     EXPECT_EQ(0, displ1->desiredPos->x);
     EXPECT_EQ(0, displ1->desiredPos->y);
@@ -134,6 +141,9 @@ TEST(layout_ltrDispls, arrange) {
 
     EXPECT_TRUE(displ3->desiredActive);
     EXPECT_TRUE(displ3->desiredMode);
+    EXPECT_EQ(50, displ3->desiredMode->width);
+    EXPECT_EQ(60, displ3->desiredMode->height);
+    EXPECT_EQ(70, displ3->desiredMode->refresh);
     EXPECT_TRUE(displ3->desiredPos);
     EXPECT_EQ(10, displ3->desiredPos->x);
     EXPECT_EQ(0, displ3->desiredPos->y);

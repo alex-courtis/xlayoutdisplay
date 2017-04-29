@@ -88,13 +88,13 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     const string expected = ""
             "dis disconnected 15cmx16cm\n"
             "con connected\n"
-            "  6x7 8Hz\n"
-            "  2x3 4Hz\n"
+            "  !6x7 8Hz\n"
+            "   2x3 4Hz\n"
             "act active 6x7+13+14 8Hz 17cmx18cm\n"
-            " +10x11 12Hz\n"
-            "* 6x7 8Hz\n"
-            "  2x3 4Hz\n"
-            "*current +preferred";
+            " +!10x11 12Hz\n"
+            "*  6x7 8Hz\n"
+            "   2x3 4Hz\n"
+            "*current +preferred !optimal";
 
     EXPECT_EQ(expected, renderUserInfo(displs));
 

@@ -22,4 +22,17 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
         default:
             break;
     }
+
+    if (!this->modes.empty()) {
+        if (this->preferredMode) {
+            for (const ModeP mode : this->modes) {
+                if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
+                    optimalMode = mode;
+                    break;
+                }
+            }
+        } else {
+            optimalMode = this->modes.front();
+        }
+    }
 }
