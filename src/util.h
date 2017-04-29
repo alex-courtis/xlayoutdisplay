@@ -9,13 +9,20 @@ inline bool sortSharedPtr(const std::shared_ptr<T> &l, const std::shared_ptr<T> 
     return (*l) < (*r);
 }
 
-// copy shared_ptr list, sort it, reverse it, return it
+// copy list of shared_ptr, sort it, return it as const
 template<typename T>
-inline const std::list<std::shared_ptr<T>> reverseSortListSharedPtr(const std::list<std::shared_ptr<T>> &list) {
-    std::list<std::shared_ptr<T>> sortedReversed = list;
-    sortedReversed.sort(sortSharedPtr<T>);
-    sortedReversed.reverse();
-    return sortedReversed;
+inline const std::list<std::shared_ptr<T>> sortSharedPtrList(const std::list<std::shared_ptr<T>> &list) {
+    std::list<std::shared_ptr<T>> sorted = list;
+    sorted.sort(sortSharedPtr<T>);
+    return sorted;
+}
+
+// copy list of shared_ptr, reverse it, return it as const
+template<typename T>
+inline const std::list<std::shared_ptr<T>> reverseSharedPtrList(const std::list<std::shared_ptr<T>> &list) {
+    std::list<std::shared_ptr<T>> reversed = list;
+    reversed.reverse();
+    return reversed;
 }
 
 #endif //XLAYOUTDISPLAYS_STDUTIL_H
