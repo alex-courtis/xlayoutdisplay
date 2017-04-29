@@ -93,7 +93,6 @@ void mirrorDispls(list <DisplP> &displs) {
 
             // reset failed matches
             ModeP desiredMode;
-            displ->desiredPos.reset();
 
             // match height and width only
             for (const auto mode : displ->modes) {
@@ -101,15 +100,15 @@ void mirrorDispls(list <DisplP> &displs) {
 
                     // set mode and pos
                     desiredMode = mode;
-                    displ->desiredPos = make_shared<Pos>(0, 0);
                     break;
                 }
            }
 
-            // match a mode for every display
+            // match a mode for every display; root it at 0, 0
             matched = matched && desiredMode;
             if (matched) {
                 displ->setDesiredMode(desiredMode);
+                displ->desiredPos = make_shared<Pos>(0, 0);
                 continue;
             }
         }

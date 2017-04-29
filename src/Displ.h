@@ -35,7 +35,6 @@ public:
     const PosP currentPos;
     const EdidP edid;
 
-    // todo: secure this as per desiredMode
     PosP desiredPos;
 
     // may be empty
