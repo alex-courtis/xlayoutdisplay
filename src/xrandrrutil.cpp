@@ -1,5 +1,4 @@
 #include "xrandrrutil.h"
-#include "util.h"
 
 #include <sstream>
 #include <string.h>
@@ -189,12 +188,6 @@ const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
             // replace currentMode with the one from the list
             if (mode->rrMode == rrMode)
                 currentMode = mode;
-        }
-
-        // highest noninterlace/resolution/refresh is fir
-        if (!modes.empty()) {
-            modes.sort(sortSharedPtr<Mode>);
-            modes.reverse();
         }
 
         // add the displ

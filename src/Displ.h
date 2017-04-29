@@ -16,8 +16,9 @@ public:
     };
 
     // throws invalid_argument:
-    //   active must have: currentMode, currentPos, optimalMode, modes
-    //   connected must have: optimalMode, modes
+    //   active must have: currentMode, currentPos, modes
+    //   connected must have: modes
+    // modes will be ordered descending
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
           const PosP &currentPos, const EdidP edid);
 
@@ -27,7 +28,7 @@ public:
     const std::string name;
     const State state;
 
-    const std::list<ModeP> modes;   // should be ordered descending when constructing
+    const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
     ModeP desiredMode;
