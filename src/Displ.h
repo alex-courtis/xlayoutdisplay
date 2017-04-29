@@ -20,7 +20,6 @@ public:
     //   connected must have: modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    // todo: check that currentMode, preferredMode is in modes
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
           const PosP &currentPos, const EdidP edid);
 

@@ -1,6 +1,8 @@
 #include "Displ.h"
 #include "util.h"
 
+#include <algorithm>
+
 using namespace std;
 
 DisplP Displ::desiredPrimary;
@@ -35,6 +37,14 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
             optimalMode = this->modes.front();
         }
     }
+
+    // currentMode must be in modes
+    if (currentMode && find(this->modes.begin(), this->modes.end(), currentMode) == this->modes.end())
+        throw invalid_argument("Displ '" + name + "' has currentMode not present in modes");
+
+    // preferredMode must be in modes
+    if (preferredMode && find(this->modes.begin(), this->modes.end(), preferredMode) == this->modes.end())
+        throw invalid_argument("Displ '" + name + "' has preferredMode not present in modes");
 }
 
 bool Displ::isDesiredActive() const {
