@@ -89,9 +89,6 @@ const string renderUserInfo(const list <DisplP> &displs) {
     return ss.str();
 }
 
-// TODO: refactor this as a throw from cpp, with c functions returning zeros instead of FAIL
-#define FAIL(...) { fprintf(stderr, "FAIL: "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(EXIT_FAILURE); }
-
 // build a list of Displ based on the current and possible state of the world
 const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
     bool deleteWrapper = false;
@@ -176,7 +173,6 @@ const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
 
         // add available modes
         for (int j = 0; j < outputInfo->nmode; j++) {
-            if (state == Displ::disconnected) FAIL("apparently disconnected display has modes available");
 
             // add to modes
             const auto mode = shared_ptr<Mode>(Mode::fromXRR(outputInfo->modes[j], screenResources));

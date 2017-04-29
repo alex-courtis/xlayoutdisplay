@@ -28,15 +28,14 @@ public:
 
     const std::string name;
     const State state;
-
     const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
-
     const PosP currentPos;
-    PosP desiredPos;
-
     const EdidP edid;
+
+    // todo: secure this as per desiredMode
+    PosP desiredPos;
 
     // may be empty
     const ModeP &getOptimalMode() const;
@@ -44,7 +43,7 @@ public:
     // may be empty
     const ModeP &getDesiredMode() const;
 
-    // desiredMode must be in modes and nonempty
+    // desiredMode must be in modes
     void setDesiredMode(const ModeP &desiredMode);
 
     // true ensures optimalMode available
