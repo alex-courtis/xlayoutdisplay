@@ -40,11 +40,12 @@ public:
 
     const EdidP edid;
 
-    // must have been set during construction
     const ModeP &getOptimalMode() const;
 
-    // optimalMode must be present
+    // guaranteees optimalMode available
     bool isDesiredActive() const;
+
+    // optimalMode must be present
     void setDesiredActive();
 
     static std::shared_ptr<Displ> desiredPrimary;
