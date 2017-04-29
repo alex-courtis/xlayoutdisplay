@@ -68,5 +68,7 @@ const ModeP &Displ::getDesiredMode() const {
 }
 
 void Displ::setDesiredMode(const ModeP &desiredMode) {
-    Displ::desiredMode = desiredMode;
+    if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
+        throw invalid_argument("Displ '" + name + "' cannot set desiredMode which not present in modes");
+    this->desiredMode = desiredMode;
 }

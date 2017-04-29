@@ -38,8 +38,10 @@ public:
 
     const EdidP edid;
 
+    // may be empty
     const ModeP &getOptimalMode() const;
 
+    // may be empty
     const ModeP &getDesiredMode() const;
 
     // desiredMode must be in modes and nonempty
@@ -55,7 +57,6 @@ public:
 
 private:
     ModeP optimalMode;
-    // todo: add preconditions e.g. in modes
     ModeP desiredMode;
     bool desiredActive = false;
 };
