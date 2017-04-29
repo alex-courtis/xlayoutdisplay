@@ -9,7 +9,7 @@ TEST(Edid_constructor, validEdid) {
     unsigned char val[len];
     memset(val, 1, len);
 
-    EXPECT_NO_THROW(EdidImpl(val, len, "blargh"));
+    EdidImpl(val, len, "blargh");
 }
 
 TEST(Edid_constructor, shortEdid) {

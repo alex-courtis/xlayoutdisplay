@@ -19,15 +19,15 @@ protected:
 
 
 TEST_F(Displ_constructor, validActive) {
-    EXPECT_NO_THROW(Displ("va", Displ::active, modes, mode1, NULL, pos, edid));
+    Displ("va", Displ::active, modes, mode1, NULL, pos, edid);
 }
 
 TEST_F(Displ_constructor, validConnected) {
-    EXPECT_NO_THROW(Displ("vc", Displ::connected, modes, NULL, NULL, NULL, edid));
+    Displ("vc", Displ::connected, modes, NULL, NULL, NULL, edid);
 }
 
 TEST_F(Displ_constructor, validDisconnected) {
-    EXPECT_NO_THROW(Displ("vd", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, edid));
+    Displ("vd", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, edid);
 }
 
 TEST_F(Displ_constructor, activeMissingCurrentMode) {
@@ -70,7 +70,7 @@ TEST_F(Displ_constructor, optimalPreferredHigherRefresh) {
 
 TEST(Displ_setDesiredActive, optimalPresent) {
     Displ displ = Displ("op", Displ::disconnected, {make_shared<Mode>(0, 0, 0, 0)}, NULL, NULL, NULL, NULL);
-    EXPECT_NO_THROW(displ.setDesiredActive());
+    displ.setDesiredActive();
 }
 
 TEST(Displ_setDesiredActive, missingOptimal) {

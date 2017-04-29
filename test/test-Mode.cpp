@@ -19,7 +19,7 @@ protected:
 };
 
 TEST_F(Mode_constructor, valid) {
-    EXPECT_NO_THROW(Mode::fromXRR(11, &resources));
+    Mode::fromXRR(11, &resources);
 }
 
 TEST_F(Mode_constructor, modeNotPresent) {
