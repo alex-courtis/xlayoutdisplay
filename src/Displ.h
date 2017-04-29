@@ -32,8 +32,6 @@ public:
     const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
-    // todo: make this const; maybe not practical; perhaps just a getter
-    ModeP optimalMode;
     // todo: add preconditions e.g. in mode
     ModeP desiredMode;
 
@@ -42,7 +40,10 @@ public:
 
     const EdidP edid;
 
-    // must have optimalMode
+    // must have been set during construction
+    const ModeP &getOptimalMode() const;
+
+    // optimalMode must be present
     bool isDesiredActive() const;
     void setDesiredActive();
 
@@ -50,6 +51,7 @@ public:
 
 private:
     bool desiredActive = false;
+    ModeP optimalMode;
 };
 
 typedef std::shared_ptr<Displ> DisplP;

@@ -58,7 +58,7 @@ void ltrDispls(list <DisplP> &displs) {
         if (displ->isDesiredActive()) {
 
             // set the desired mode to optimal
-            displ->desiredMode = displ->optimalMode;
+            displ->desiredMode = displ->getOptimalMode();
 
             // position the screen
             displ->desiredPos = make_shared<Pos>(xpos, ypos);

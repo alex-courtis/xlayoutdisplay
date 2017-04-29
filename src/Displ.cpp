@@ -25,17 +25,19 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
             break;
     }
 
+    // default optimal mode is empty
     if (!this->modes.empty()) {
-        if (this->preferredMode) {
-            for (const ModeP mode : this->modes) {
+
+        // use highest mode for optimal
+        optimalMode = this->modes.front();
+
+        // override with highest refresh of preferred
+        if (this->preferredMode)
+            for (const ModeP mode : this->modes)
                 if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
                     optimalMode = mode;
                     break;
                 }
-            }
-        } else {
-            optimalMode = this->modes.front();
-        }
     }
 
     // currentMode must be in modes
@@ -55,4 +57,8 @@ void Displ::setDesiredActive() {
     if (!optimalMode)
         throw invalid_argument("cannot set desiredActive for a Displ without optimalMode");
     desiredActive = true;
+}
+
+const ModeP &Displ::getOptimalMode() const {
+    return optimalMode;
 }

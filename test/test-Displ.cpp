@@ -48,24 +48,24 @@ TEST_F(Displ_constructor, connectedEmptyModes) {
 
 TEST_F(Displ_constructor, optimalMissing) {
     Displ displ = Displ("optimalMissing", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, edid);
-    EXPECT_FALSE(displ.optimalMode);
+    EXPECT_FALSE(displ.getOptimalMode());
 }
 
 TEST_F(Displ_constructor, optimalFirst) {
     Displ displ = Displ("optimalFirst", Displ::disconnected, modes, NULL, NULL, NULL, edid);
-    EXPECT_EQ(mode2, displ.optimalMode);
+    EXPECT_EQ(mode2, displ.getOptimalMode());
 }
 
 TEST_F(Displ_constructor, optimalPreferred) {
     Displ displ = Displ("optimalPreferred", Displ::disconnected, modes, NULL, mode1, NULL, edid);
-    EXPECT_EQ(mode1, displ.optimalMode);
+    EXPECT_EQ(mode1, displ.getOptimalMode());
 }
 
 TEST_F(Displ_constructor, optimalPreferredHigherRefresh) {
     ModeP mode3 = make_shared<Mode>(4, 5, 6, 70);
     modes.push_front(mode3);
     Displ displ = Displ("optimalPreferredHigherRefresh", Displ::disconnected, modes, NULL, mode2, NULL, edid);
-    EXPECT_EQ(mode3, displ.optimalMode);
+    EXPECT_EQ(mode3, displ.getOptimalMode());
 }
 
 TEST_F(Displ_constructor, currentNotInModes) {
