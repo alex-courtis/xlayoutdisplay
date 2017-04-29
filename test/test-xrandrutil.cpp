@@ -12,14 +12,16 @@ public:
 
     MOCK_CONST_METHOD0(maxCmVert, int());
 
-    MOCK_CONST_METHOD1(dpiForMode, double(const ModeP &mode));
+    MOCK_CONST_METHOD1(dpiForMode, double(
+            const ModeP &mode));
 
-    MOCK_CONST_METHOD1(closestDpiForMode, int(const ModeP &mode));
+    MOCK_CONST_METHOD1(closestDpiForMode, int(
+            const ModeP &mode));
 };
 
 TEST(xrandrutil_renderCmd, renderAll) {
     list <DisplP> displs;
-    list <ModeP> modes = { make_shared<Mode>(0, 0, 0, 0) };
+    list <ModeP> modes = {make_shared<Mode>(0, 0, 0, 0)};
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displs.push_back(displ1);
@@ -52,13 +54,28 @@ TEST(xrandrutil_renderCmd, renderAll) {
     Displ::desiredPrimary = displ2;
 
     const string expected = ""
-            "xrandr \\\n"
-            " --dpi 4 \\\n"
+            "xrandr \\\n --dpi 4 \\\n"
             " --output One --off \\\n"
             " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n"
             " --output Three --off \\\n"
             " --output Four --off \\\n"
             " --output Five --mode 8x9 --rate 10 --pos 11x12";
+
+    EXPECT_EQ(expected, renderCmd(displs));
+}
+
+TEST(xrandrutil_renderCmd, renderNoDpi) {
+    list <DisplP> displs;
+    list <ModeP> modes = {make_shared<Mode>(0, 0, 0, 0)};
+
+    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
+    displs.push_back(displ1);
+
+    Displ::desiredPrimary = displ1;
+
+    const string expected = ""
+            "xrandr \\\n --dpi 96 \\\n"
+            " --output One --off";
 
     EXPECT_EQ(expected, renderCmd(displs));
 }

@@ -30,15 +30,14 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 
 const string renderCmd(const list <DisplP> &displs) {
     stringstream ss;
-    ss << "xrandr";
+    ss << "xrandr \\\n --dpi ";
     if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
-        ss << " \\\n";
-        ss << " --dpi " << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode);
+        ss << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode);
+    } else {
+        ss << "96";
     }
-    // todo: use 96 as default for dpi
     for (const auto displ : displs) {
-        ss << " \\\n";
-        ss << " --output " << displ->name;
+        ss << " \\\n --output " << displ->name;
         if (displ->isDesiredActive() && displ->desiredMode && displ->desiredPos) {
             ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
             ss << " --rate " << displ->desiredMode->refresh;

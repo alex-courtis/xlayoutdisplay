@@ -68,12 +68,12 @@ TEST_F(Displ_constructor, optimalPreferredHigherRefresh) {
     EXPECT_EQ(mode3, displ.optimalMode);
 }
 
-TEST(DISPL_setDesiredActive, optimalPresent) {
+TEST(Displ_setDesiredActive, optimalPresent) {
     Displ displ = Displ("op", Displ::disconnected, {make_shared<Mode>(0, 0, 0, 0)}, NULL, NULL, NULL, NULL);
     EXPECT_NO_THROW(displ.setDesiredActive());
 }
 
-TEST(DISPL_setDesiredActive, missingOptimal) {
+TEST(Displ_setDesiredActive, missingOptimal) {
     Displ displ = Displ("mo", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, NULL);
     EXPECT_THROW(displ.setDesiredActive(), invalid_argument);
 }
