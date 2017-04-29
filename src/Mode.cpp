@@ -22,7 +22,7 @@ Mode *Mode::fromXRR(const RRMode id, const XRRScreenResources *resources) {
     return new Mode(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(*modeInfo));
 }
 
-bool Mode::operator<(const Mode &o) {
+bool Mode::operator<(const Mode &o) const {
     if (width == o.width)
         if (height == o.height)
             return refresh < o.refresh;

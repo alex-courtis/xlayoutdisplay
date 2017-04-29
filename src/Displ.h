@@ -20,6 +20,7 @@ public:
     //   connected must have: modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
+    // todo: check that currentMode, preferredMode is in modes
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
           const PosP &currentPos, const EdidP edid);
 
@@ -32,7 +33,7 @@ public:
     const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
-    // todo: make this const
+    // todo: make this const; maybe not practical; perhaps just a getter
     ModeP optimalMode;
     // todo: add preconditions e.g. in mode
     ModeP desiredMode;
@@ -42,10 +43,14 @@ public:
 
     const EdidP edid;
 
-    // todo: add preconditions i.e. optimalMode not null or a method that takes desiredMode, desiredPos
-    bool desiredActive = false;
+    // must have optimalMode
+    bool isDesiredActive() const;
+    void setDesiredActive();
 
     static std::shared_ptr<Displ> desiredPrimary;
+
+private:
+    bool desiredActive = false;
 };
 
 typedef std::shared_ptr<Displ> DisplP;

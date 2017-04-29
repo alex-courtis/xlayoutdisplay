@@ -20,7 +20,7 @@ public:
     static Mode *fromXRR(const RRMode id, const XRRScreenResources *resources);
 
     // order by width, height, refresh
-    bool operator<(const Mode &o);
+    bool operator<(const Mode &o) const;
 
     const RRMode rrMode;
     const unsigned int width;

@@ -14,7 +14,7 @@ protected:
 
     PosP pos = make_shared<Pos>(0, 0);
     EdidP edid;
-    list <ModeP> modes = { mode1, mode2 };
+    list <ModeP> modes = {mode1, mode2};
 };
 
 
@@ -66,4 +66,14 @@ TEST_F(Displ_constructor, optimalPreferredHigherRefresh) {
     modes.push_front(mode3);
     Displ displ = Displ("oph", Displ::disconnected, modes, NULL, mode2, NULL, edid);
     EXPECT_EQ(mode3, displ.optimalMode);
+}
+
+TEST(DISPL_setDesiredActive, optimalPresent) {
+    Displ displ = Displ("op", Displ::disconnected, {make_shared<Mode>(0, 0, 0, 0)}, NULL, NULL, NULL, NULL);
+    EXPECT_NO_THROW(displ.setDesiredActive());
+}
+
+TEST(DISPL_setDesiredActive, missingOptimal) {
+    Displ displ = Displ("mo", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, NULL);
+    EXPECT_THROW(displ.setDesiredActive(), invalid_argument);
 }

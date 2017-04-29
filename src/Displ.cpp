@@ -36,3 +36,13 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
         }
     }
 }
+
+bool Displ::isDesiredActive() const {
+    return desiredActive;
+}
+
+void Displ::setDesiredActive() {
+    if (!optimalMode)
+        throw invalid_argument("cannot set desiredActive for a Displ without optimalMode");
+    desiredActive = true;
+}

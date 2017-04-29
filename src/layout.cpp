@@ -38,7 +38,7 @@ void activateDispls(std::list<DisplP> &displs, const string &primary) {
             continue;
 
         // mark active
-        displ->desiredActive = true;
+        displ->setDesiredActive();
 
         // default first to primary
         if (!Displ::desiredPrimary)
@@ -55,7 +55,7 @@ void ltrDispls(list <DisplP> &displs) {
     int ypos = 0;
     for (const auto displ : displs) {
 
-        if (displ->desiredActive) {
+        if (displ->isDesiredActive()) {
 
             // set the desired mode to optimal
             displ->desiredMode = displ->optimalMode;
@@ -74,7 +74,7 @@ void mirrorDispls(list <DisplP> &displs) {
     // find the first active display
     DisplP firstDispl;
     for (const auto displ : displs) {
-        if (displ->desiredActive) {
+        if (displ->isDesiredActive()) {
             firstDispl = displ;
             break;
         }
@@ -88,7 +88,7 @@ void mirrorDispls(list <DisplP> &displs) {
 
         // attempt to match mode to each active displ
         for (const auto displ : displs) {
-            if (!displ->desiredActive)
+            if (!displ->isDesiredActive())
                 continue;
 
             // reset previous matches

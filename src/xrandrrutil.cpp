@@ -35,10 +35,11 @@ const string renderCmd(const list <DisplP> &displs) {
         ss << " \\\n";
         ss << " --dpi " << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode);
     }
+    // todo: use 96 as default for dpi
     for (const auto displ : displs) {
         ss << " \\\n";
         ss << " --output " << displ->name;
-        if (displ->desiredActive && displ->desiredMode && displ->desiredPos) {
+        if (displ->isDesiredActive() && displ->desiredMode && displ->desiredPos) {
             ss << " --mode " << displ->desiredMode->width << "x" << displ->desiredMode->height;
             ss << " --rate " << displ->desiredMode->refresh;
             ss << " --pos ";
