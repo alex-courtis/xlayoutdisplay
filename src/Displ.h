@@ -32,8 +32,6 @@ public:
     const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
-    // todo: add preconditions e.g. in mode
-    ModeP desiredMode;
 
     const PosP currentPos;
     PosP desiredPos;
@@ -42,7 +40,12 @@ public:
 
     const ModeP &getOptimalMode() const;
 
-    // guaranteees optimalMode available
+    const ModeP &getDesiredMode() const;
+
+    // desiredMode must be in modes and nonempty
+    void setDesiredMode(const ModeP &desiredMode);
+
+    // true ensures optimalMode available
     bool isDesiredActive() const;
 
     // optimalMode must be present
@@ -51,8 +54,10 @@ public:
     static std::shared_ptr<Displ> desiredPrimary;
 
 private:
-    bool desiredActive = false;
     ModeP optimalMode;
+    // todo: add preconditions e.g. in modes
+    ModeP desiredMode;
+    bool desiredActive = false;
 };
 
 typedef std::shared_ptr<Displ> DisplP;

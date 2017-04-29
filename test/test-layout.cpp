@@ -126,23 +126,23 @@ TEST(layout_ltrDispls, arrange) {
     ltrDispls(displs);
 
     EXPECT_TRUE(displ1->isDesiredActive());
-    EXPECT_TRUE(displ1->desiredMode);
-    EXPECT_EQ(10, displ1->desiredMode->width);
-    EXPECT_EQ(20, displ1->desiredMode->height);
-    EXPECT_EQ(30, displ1->desiredMode->refresh);
+    EXPECT_TRUE(displ1->getDesiredMode());
+    EXPECT_EQ(10, displ1->getDesiredMode()->width);
+    EXPECT_EQ(20, displ1->getDesiredMode()->height);
+    EXPECT_EQ(30, displ1->getDesiredMode()->refresh);
     EXPECT_TRUE(displ1->desiredPos);
     EXPECT_EQ(0, displ1->desiredPos->x);
     EXPECT_EQ(0, displ1->desiredPos->y);
 
     EXPECT_FALSE(displ2->isDesiredActive());
-    EXPECT_FALSE(displ2->desiredMode);
+    EXPECT_FALSE(displ2->getDesiredMode());
     EXPECT_FALSE(displ2->desiredPos);
 
     EXPECT_TRUE(displ3->isDesiredActive());
-    EXPECT_TRUE(displ3->desiredMode);
-    EXPECT_EQ(50, displ3->desiredMode->width);
-    EXPECT_EQ(60, displ3->desiredMode->height);
-    EXPECT_EQ(70, displ3->desiredMode->refresh);
+    EXPECT_TRUE(displ3->getDesiredMode());
+    EXPECT_EQ(50, displ3->getDesiredMode()->width);
+    EXPECT_EQ(60, displ3->getDesiredMode()->height);
+    EXPECT_EQ(70, displ3->getDesiredMode()->refresh);
     EXPECT_TRUE(displ3->desiredPos);
     EXPECT_EQ(10, displ3->desiredPos->x);
     EXPECT_EQ(0, displ3->desiredPos->y);
@@ -160,10 +160,10 @@ TEST(layout_mirrorDisplays, noneActive) {
 
     mirrorDispls(displs);
 
-    EXPECT_FALSE(displ1->desiredMode);
+    EXPECT_FALSE(displ1->getDesiredMode());
     EXPECT_FALSE(displ1->desiredPos);
 
-    EXPECT_FALSE(displ2->desiredMode);
+    EXPECT_FALSE(displ2->getDesiredMode());
     EXPECT_FALSE(displ2->desiredPos);
 }
 
@@ -183,11 +183,11 @@ TEST(layout_mirrorDisplays, oneActive) {
 
     mirrorDispls(displs);
 
-    EXPECT_EQ(mode1, displ1->desiredMode);
+    EXPECT_EQ(mode1, displ1->getDesiredMode());
     EXPECT_EQ(0, displ1->desiredPos->x);
     EXPECT_EQ(0, displ1->desiredPos->y);
 
-    EXPECT_FALSE(displ2->desiredMode);
+    EXPECT_FALSE(displ2->getDesiredMode());
     EXPECT_FALSE(displ2->desiredPos);
 }
 
@@ -214,14 +214,14 @@ TEST(layout_mirrorDisplays, someActive) {
 
     mirrorDispls(displs);
 
-    EXPECT_FALSE(displ1->desiredMode);
+    EXPECT_FALSE(displ1->getDesiredMode());
     EXPECT_FALSE(displ1->desiredPos);
 
-    EXPECT_EQ(mode4, displ2->desiredMode);
+    EXPECT_EQ(mode4, displ2->getDesiredMode());
     EXPECT_EQ(0, displ2->desiredPos->x);
     EXPECT_EQ(0, displ2->desiredPos->y);
 
-    EXPECT_EQ(mode4, displ3->desiredMode);
+    EXPECT_EQ(mode4, displ3->getDesiredMode());
     EXPECT_EQ(0, displ3->desiredPos->x);
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
@@ -249,15 +249,15 @@ TEST(layout_mirrorDisplays, manyActive) {
 
     mirrorDispls(displs);
 
-    EXPECT_EQ(mode3, displ1->desiredMode);
+    EXPECT_EQ(mode3, displ1->getDesiredMode());
     EXPECT_EQ(0, displ1->desiredPos->x);
     EXPECT_EQ(0, displ1->desiredPos->y);
 
-    EXPECT_EQ(mode3, displ2->desiredMode);
+    EXPECT_EQ(mode3, displ2->getDesiredMode());
     EXPECT_EQ(0, displ2->desiredPos->x);
     EXPECT_EQ(0, displ2->desiredPos->y);
 
-    EXPECT_EQ(mode3, displ3->desiredMode);
+    EXPECT_EQ(mode3, displ3->getDesiredMode());
     EXPECT_EQ(0, displ3->desiredPos->x);
     EXPECT_EQ(0, displ3->desiredPos->y);
 }

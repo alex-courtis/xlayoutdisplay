@@ -58,13 +58,13 @@ void ltrDispls(list <DisplP> &displs) {
         if (displ->isDesiredActive()) {
 
             // set the desired mode to optimal
-            displ->desiredMode = displ->getOptimalMode();
+            displ->setDesiredMode(displ->getOptimalMode());
 
             // position the screen
             displ->desiredPos = make_shared<Pos>(xpos, ypos);
 
             // next position
-            xpos += displ->desiredMode->width;
+            xpos += displ->getDesiredMode()->width;
         }
     }
 }
@@ -84,15 +84,15 @@ void mirrorDispls(list <DisplP> &displs) {
 
     // iterate through first active display's modes
     for (const auto possibleMode : firstDispl->modes) {
-        bool matchedMode = true;
+        bool matched = true;
 
         // attempt to match mode to each active displ
         for (const auto displ : displs) {
             if (!displ->isDesiredActive())
                 continue;
 
-            // reset previous matches
-            displ->desiredMode.reset();
+            // reset failed matches
+            ModeP desiredMode;
             displ->desiredPos.reset();
 
             // match height and width only
@@ -100,20 +100,22 @@ void mirrorDispls(list <DisplP> &displs) {
                 if (mode->width == possibleMode->width && mode->height == possibleMode->height) {
 
                     // set mode and pos
-                    displ->desiredMode = mode;
+                    desiredMode = mode;
                     displ->desiredPos = make_shared<Pos>(0, 0);
                     break;
                 }
-            }
+           }
 
             // match a mode for every display
-            matchedMode = matchedMode && displ->desiredMode;
-            if (matchedMode)
+            matched = matched && desiredMode;
+            if (matched) {
+                displ->setDesiredMode(desiredMode);
                 continue;
+            }
         }
 
         // we've set desiredMode and desiredPos (zero) for all displays, all done
-        if (matchedMode)
+        if (matched)
             return;
     }
 

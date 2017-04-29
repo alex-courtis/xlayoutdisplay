@@ -62,3 +62,11 @@ void Displ::setDesiredActive() {
 const ModeP &Displ::getOptimalMode() const {
     return optimalMode;
 }
+
+const ModeP &Displ::getDesiredMode() const {
+    return desiredMode;
+}
+
+void Displ::setDesiredMode(const ModeP &desiredMode) {
+    Displ::desiredMode = desiredMode;
+}

@@ -31,7 +31,7 @@ TEST(xrandrutil_renderCmd, renderAll) {
     EXPECT_CALL(*edid2, closestDpiForMode(mode2)).WillOnce(Return(4));
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), edid2);
     displ2->setDesiredActive();
-    displ2->desiredMode = mode2;
+    displ2->setDesiredMode(mode2);
     displ2->desiredPos = make_shared<Pos>(5, 6);
     displs.push_back(displ2);
 
@@ -42,12 +42,12 @@ TEST(xrandrutil_renderCmd, renderAll) {
 
     DisplP displ4 = make_shared<Displ>("Four", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displ4->setDesiredActive();
-    displ4->desiredMode = make_shared<Mode>(15, 16, 17, 18);
+    displ4->setDesiredMode(make_shared<Mode>(15, 16, 17, 18));
     displs.push_back(displ4);
 
     DisplP displ5 = make_shared<Displ>("Five", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displ5->setDesiredActive();
-    displ5->desiredMode = make_shared<Mode>(7, 8, 9, 10);
+    displ5->setDesiredMode(make_shared<Mode>(7, 8, 9, 10));
     displ5->desiredPos = make_shared<Pos>(11, 12);
     displs.push_back(displ5);
 
