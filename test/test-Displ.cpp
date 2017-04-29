@@ -76,6 +76,10 @@ TEST_F(Displ_constructor, preferredNotInModes) {
     EXPECT_THROW(Displ("preferredNotInModes", Displ::connected, modes, NULL, make_shared<Mode>(5, 6, 7, 8), NULL, edid), invalid_argument);
 }
 
+TEST_F(Displ_constructor, disconnectedNotInModes) {
+    Displ("disconnectedNotInModes", Displ::disconnected, list<ModeP>(), make_shared<Mode>(11, 12, 13, 14), make_shared<Mode>(15, 16, 17, 18), NULL, edid);
+}
+
 
 TEST(Displ_setDesiredActive, optimalPresent) {
     Displ displ = Displ("optimalPresent", Displ::disconnected, {make_shared<Mode>(9, 0, 9, 8)}, NULL, NULL, NULL, NULL);

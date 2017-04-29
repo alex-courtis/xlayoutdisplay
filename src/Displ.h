@@ -18,6 +18,7 @@ public:
     // throws invalid_argument:
     //   active must have: currentMode, currentPos, modes
     //   connected must have: modes
+    //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,

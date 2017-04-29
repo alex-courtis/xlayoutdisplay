@@ -40,13 +40,17 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
                 }
     }
 
-    // currentMode must be in modes
-    if (currentMode && find(this->modes.begin(), this->modes.end(), currentMode) == this->modes.end())
-        throw invalid_argument("Displ '" + name + "' has currentMode not present in modes");
+    // active / connected must have NULL or valid modes
+    if (state == active || state == connected) {
 
-    // preferredMode must be in modes
-    if (preferredMode && find(this->modes.begin(), this->modes.end(), preferredMode) == this->modes.end())
-        throw invalid_argument("Displ '" + name + "' has preferredMode not present in modes");
+        // currentMode must be in modes
+        if (currentMode && find(this->modes.begin(), this->modes.end(), currentMode) == this->modes.end())
+            throw invalid_argument("Displ '" + name + "' has currentMode not present in modes");
+
+        // preferredMode must be in modes
+        if (preferredMode && find(this->modes.begin(), this->modes.end(), preferredMode) == this->modes.end())
+            throw invalid_argument("Displ '" + name + "' has preferredMode not present in modes");
+    }
 }
 
 bool Displ::isDesiredActive() const {

@@ -31,6 +31,9 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 const string renderCmd(const list <DisplP> &displs) {
     stringstream ss;
     ss << "xrandr \\\n --dpi ";
+    // todo: create a "global" DPI: we need to select a DPI that matches, even when the size is 0
+    //   mirror: uses the least or 96
+    //   ltr: uses the primary
     if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
         ss << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->getDesiredMode());
     } else {
