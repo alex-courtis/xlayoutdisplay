@@ -5,6 +5,10 @@
 
 #define EMBEDDED_DISPLAY_PREFIX "eDP"
 
+const char *embeddedDisplayPrefix() {
+    return EMBEDDED_DISPLAY_PREFIX;
+}
+
 Laptop *Laptop::singletonInstance = NULL;
 
 Laptop *Laptop::instance() {
@@ -21,10 +25,6 @@ const bool Laptop::isLidClosed() {
 
 const bool Laptop::shouldDisableDisplay(const std::string name) {
     return lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0;
-}
-
-const char *Laptop::embeddedDisplayPrefix() {
-    return EMBEDDED_DISPLAY_PREFIX;
 }
 
 void Laptop::calculateLidClosed(const char *lidRootPath) {

@@ -65,7 +65,7 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, pos, EdidP());
     displs.push_back(displ3);
 
-    DisplP displ4 = make_shared<Displ>(Laptop::embeddedDisplayPrefix() + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
+    DisplP displ4 = make_shared<Displ>(embeddedDisplayPrefix() + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
     displs.push_back(displ4);
 
     setLidClosed(true);

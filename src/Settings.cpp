@@ -29,7 +29,7 @@ void printHelp(char *progPath) {
                    "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
                    "Displays are ordered via Xrandr default.\n"
                    "The first display will be primary unless -p specified.\n"
-                   "\n", Laptop::embeddedDisplayPrefix()
+                   "\n", embeddedDisplayPrefix()
     );
     printf(USAGE, progName);
     printf(""

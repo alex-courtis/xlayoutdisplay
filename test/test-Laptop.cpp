@@ -64,7 +64,7 @@ protected:
 
 TEST_F(Laptop_shouldDisableDisplay, matchLidClosed) {
     setLidClosed(true);
-    EXPECT_TRUE(Laptop::instance()->shouldDisableDisplay(string(Laptop::embeddedDisplayPrefix()) + "blargh"));
+    EXPECT_TRUE(Laptop::instance()->shouldDisableDisplay(string(embeddedDisplayPrefix()) + "blargh"));
 }
 
 TEST_F(Laptop_shouldDisableDisplay, noMatchLidClosed) {
@@ -74,5 +74,5 @@ TEST_F(Laptop_shouldDisableDisplay, noMatchLidClosed) {
 
 TEST_F(Laptop_shouldDisableDisplay, matchLidOpen) {
     setLidClosed(false);
-    EXPECT_FALSE(Laptop::instance()->shouldDisableDisplay(string(Laptop::embeddedDisplayPrefix()) + "blargh"));
+    EXPECT_FALSE(Laptop::instance()->shouldDisableDisplay(string(embeddedDisplayPrefix()) + "blargh"));
 }
