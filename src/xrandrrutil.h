@@ -16,7 +16,7 @@ const std::string renderCmd(const std::list<DisplP> &displs);
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list<DisplP> &displs);
 
-// build a list of Displ based on the current and possible state of the world; subclassed XrrWrapper used for testing
-const std::list<DisplP> discoverDispls(XrrWrapper *xrrWrapper = NULL);
+// build a list of Displ based on the current and possible state of the world; override xrrWrapper for testing
+const std::list<DisplP> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapperImpl());
 
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H

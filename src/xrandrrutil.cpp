@@ -96,13 +96,7 @@ const string renderUserInfo(const list <DisplP> &displs) {
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
-    bool deleteWrapper = false;
-    if (xrrWrapper == NULL) {
-        xrrWrapper = new XrrWrapperImpl();
-        deleteWrapper = true;
-    }
-
+const list <DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
     list <DisplP> displs;
 
     // open up X information
@@ -196,9 +190,6 @@ const list <DisplP> discoverDispls(XrrWrapper *xrrWrapper) {
         // add the displ
         displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, currentPos, edid));
     }
-
-    if (deleteWrapper)
-        delete (xrrWrapper);
 
     return displs;
 }

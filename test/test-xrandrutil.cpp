@@ -122,24 +122,24 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
 
 class MockXrrWrapper : public XrrWrapper {
 public:
-    MOCK_METHOD1(xOpenDisplay, Display *(_Xconst
+    MOCK_CONST_METHOD1(xOpenDisplay, Display *(_Xconst
             char*));
 
-    MOCK_METHOD1(defaultScreen, int(Display
+    MOCK_CONST_METHOD1(defaultScreen, int(Display
             *));
 
-    MOCK_METHOD1(screenCount, int(Display
+    MOCK_CONST_METHOD1(screenCount, int(Display
             *));
 
-    MOCK_METHOD2(rootWindow, Window(Display * , int));
+    MOCK_CONST_METHOD2(rootWindow, Window(Display * , int));
 
-    MOCK_METHOD2(xrrGetScreenResources, XRRScreenResources *(Display
+    MOCK_CONST_METHOD2(xrrGetScreenResources, XRRScreenResources *(Display
             *, Window));
 
-    MOCK_METHOD3(xrrGetOutputInfo, XRROutputInfo *(Display
+    MOCK_CONST_METHOD3(xrrGetOutputInfo, XRROutputInfo *(Display
             *, XRRScreenResources *, RROutput));
 
-    MOCK_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo *(Display
+    MOCK_CONST_METHOD3(xrrGetCrtcInfo, XRRCrtcInfo *(Display
             *, XRRScreenResources *, RRCrtc));
 };
 
