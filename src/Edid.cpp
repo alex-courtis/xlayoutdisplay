@@ -4,7 +4,7 @@
 
 using namespace std;
 
-EdidImpl::EdidImpl(const unsigned char *edid, const size_t length, const char *name) {
+Edid::Edid(const unsigned char *edid, const size_t length, const char *name) {
     if (length < EDID_MIN_LENGTH)
         throw invalid_argument(string(name) + " has Edid size " + to_string(length) + ", expected at least " + to_string(EDID_MIN_LENGTH));
 
@@ -12,24 +12,24 @@ EdidImpl::EdidImpl(const unsigned char *edid, const size_t length, const char *n
     memcpy(this->edid, edid, length);
 }
 
-EdidImpl::~EdidImpl() {
+Edid::~Edid() {
     free(edid);
 }
 
-int EdidImpl::maxCmHoriz() const {
+int Edid::maxCmHoriz() const {
     return edid[EDID_MAX_CM_HORIZ];
 }
 
-int EdidImpl::maxCmVert() const {
+int Edid::maxCmVert() const {
     return edid[EDID_MAX_CM_VERT];
 }
 
-double EdidImpl::dpiForMode(const ModeP &mode) const {
+double Edid::dpiForMode(const ModeP &mode) const {
     double dpiHoriz = mode->width * INCHES_PER_CM / maxCmHoriz();
     double dpiVert = mode->height * INCHES_PER_CM / maxCmVert();
     return (dpiHoriz + dpiVert) / 2;
 }
 
-int EdidImpl::closestDpiForMode(const ModeP &mode) const {
+int Edid::closestDpiForMode(const ModeP &mode) const {
     return (int)((dpiForMode(mode) + DPI_STEP / 2) / DPI_STEP) * DPI_STEP;
 }

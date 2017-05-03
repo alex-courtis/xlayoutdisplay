@@ -9,7 +9,7 @@ TEST(Edid_constructor, validEdid) {
     unsigned char val[len];
     memset(val, 1, len);
 
-    EdidImpl(val, len, "blargh");
+    Edid(val, len, "blargh");
 }
 
 TEST(Edid_constructor, shortEdid) {
@@ -17,7 +17,7 @@ TEST(Edid_constructor, shortEdid) {
     unsigned char val[len];
     memset(val, 1, len);
 
-    EXPECT_THROW(EdidImpl(val, len, "blargh"), invalid_argument);
+    EXPECT_THROW(Edid(val, len, "blargh"), invalid_argument);
 }
 
 TEST(Edid_maxCmHorizVert, valid) {
@@ -27,7 +27,7 @@ TEST(Edid_maxCmHorizVert, valid) {
     val[EDID_MAX_CM_HORIZ] = 2;
     val[EDID_MAX_CM_VERT] = 3;
 
-    EdidImpl edid = EdidImpl(val, len, "blargh");
+    Edid edid = Edid(val, len, "blargh");
 
     EXPECT_EQ(2, edid.maxCmHoriz());
     EXPECT_EQ(3, edid.maxCmVert());

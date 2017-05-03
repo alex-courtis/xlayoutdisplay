@@ -6,44 +6,28 @@
 
 #define DPI_STEP 24 // use quarters to prevent blurring, see https://wiki.archlinux.org/index.php/xorg#Setting_DPI_manually
 
-// Edid info from monitor - assumes 1.4 spec
 class Edid {
-public:
-    virtual ~Edid() {};
-
-    virtual int maxCmHoriz() const = 0;
-
-    virtual int maxCmVert() const = 0;
-
-    // average horiz/vert DPI for mode
-    virtual double dpiForMode(const ModeP &mode) const = 0;
-
-    // closest DPI_STEP from dpiForMode
-    virtual int closestDpiForMode(const ModeP &mode) const = 0;
-};
-
-typedef std::shared_ptr<Edid> EdidP;
-
-class EdidImpl : public Edid {
 public:
 
     // throws invalid_argument:
     //   length > EDID_MIN_LENGTH
-    EdidImpl(const unsigned char *edid, const size_t length, const char *name);
+    Edid(const unsigned char *edid, const size_t length, const char *name);
 
-    virtual ~EdidImpl();
+    virtual ~Edid();
 
-    int maxCmHoriz() const;
+    virtual int maxCmHoriz() const;
 
-    int maxCmVert() const;
+    virtual int maxCmVert() const;
 
-    double dpiForMode(const ModeP &mode) const;
+    virtual double dpiForMode(const ModeP &mode) const;
 
-    int closestDpiForMode(const ModeP &mode) const;
+    virtual int closestDpiForMode(const ModeP &mode) const;
 
 private:
     unsigned char *edid;
 };
+
+typedef std::shared_ptr<Edid> EdidP;
 
 #define EDID_MIN_LENGTH 128
 

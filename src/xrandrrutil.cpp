@@ -167,7 +167,7 @@ const list <DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
                 );
 
                 // record Edid
-                edid = make_shared<EdidImpl>(prop, nitems, name);
+                edid = make_shared<Edid>(prop, nitems, name);
             }
         }
 
