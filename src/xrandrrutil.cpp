@@ -86,7 +86,7 @@ const string renderUserInfo(const list <DisplP> &displs) {
         for (const auto mode : displ->modes) {
             ss << (mode == displ->currentMode ? '*' : ' ');
             ss << (mode == displ->preferredMode ? '+' : ' ');
-            ss << (mode == displ->getOptimalMode() ? '!' : ' ');
+            ss << (mode == displ->optimalMode ? '!' : ' ');
             ss << mode->width << 'x' << mode->height << ' ' << mode->refresh << "Hz";
             ss << endl;
         }

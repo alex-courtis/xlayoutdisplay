@@ -32,13 +32,11 @@ public:
     const std::list<ModeP> modes;
     const ModeP currentMode;
     const ModeP preferredMode;
+    const ModeP optimalMode;
     const PosP currentPos;
     const EdidP edid;
 
     PosP desiredPos;
-
-    // may be empty
-    const ModeP &getOptimalMode() const;
 
     // may be empty
     const ModeP &getDesiredMode() const;
@@ -55,7 +53,6 @@ public:
     static std::shared_ptr<Displ> desiredPrimary;
 
 private:
-    ModeP optimalMode;
     ModeP desiredMode;
     bool desiredActive = false;
 };

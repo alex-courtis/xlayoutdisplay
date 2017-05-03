@@ -5,12 +5,16 @@
 
 using namespace std;
 
+// generate an optimal mode from a sorted list of modes and preferredMode
+ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode);
+
+// one and only primary
 DisplP Displ::desiredPrimary;
 
-Displ::Displ(const string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
-             const PosP &currentPos, const EdidP edid) :
+Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode, const PosP &currentPos,
+             const EdidP edid) :
         name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode), preferredMode(preferredMode),
-        currentPos(currentPos), edid(edid) {
+        optimalMode(generateOptimalMode(this->modes, preferredMode)), currentPos(currentPos), edid(edid) {
 
     switch (state) {
         case active:
@@ -23,21 +27,6 @@ Displ::Displ(const string &name, const State &state, const std::list<ModeP> &mod
             break;
         default:
             break;
-    }
-
-    // default optimal mode is empty
-    if (!this->modes.empty()) {
-
-        // use highest mode for optimal
-        optimalMode = this->modes.front();
-
-        // override with highest refresh of preferred
-        if (this->preferredMode)
-            for (const ModeP mode : this->modes)
-                if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
-                    optimalMode = mode;
-                    break;
-                }
     }
 
     // active / connected must have NULL or valid modes
@@ -63,10 +52,6 @@ void Displ::setDesiredActive() {
     desiredActive = true;
 }
 
-const ModeP &Displ::getOptimalMode() const {
-    return optimalMode;
-}
-
 const ModeP &Displ::getDesiredMode() const {
     return desiredMode;
 }
@@ -75,4 +60,25 @@ void Displ::setDesiredMode(const ModeP &desiredMode) {
     if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
         throw invalid_argument("Displ '" + name + "' cannot set desiredMode which is not present in modes");
     this->desiredMode = desiredMode;
+}
+
+ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode) {
+    ModeP optimalMode;
+
+    // default optimal mode is empty
+    if (!modes.empty()) {
+
+        // use highest mode for optimal
+        optimalMode = modes.front();
+
+        // override with highest refresh of preferred
+        if (preferredMode)
+            for (const ModeP mode : modes)
+                if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
+                    optimalMode = mode;
+                    break;
+                }
+    }
+
+    return optimalMode;
 }
