@@ -83,10 +83,10 @@ TEST_F(Displ_constructor, disconnectedNotInModes) {
 
 TEST(Displ_setDesiredActive, optimalPresent) {
     Displ displ = Displ("optimalPresent", Displ::disconnected, {make_shared<Mode>(9, 0, 9, 8)}, NULL, NULL, NULL, NULL);
-    displ.setDesiredActive();
+    displ.desiredActive(true);
 }
 
 TEST(Displ_setDesiredActive, missingOptimal) {
     Displ displ = Displ("missingOptimal", Displ::disconnected, list<ModeP>(), NULL, NULL, NULL, NULL);
-    EXPECT_THROW(displ.setDesiredActive(), invalid_argument);
+    EXPECT_THROW(displ.desiredActive(true), invalid_argument);
 }

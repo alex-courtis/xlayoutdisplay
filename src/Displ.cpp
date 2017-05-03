@@ -42,14 +42,14 @@ Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, 
     }
 }
 
-bool Displ::isDesiredActive() const {
-    return desiredActive;
+bool Displ::desiredActive() const {
+    return _desiredActive;
 }
 
-void Displ::setDesiredActive() {
-    if (!optimalMode)
-        throw invalid_argument("cannot set desiredActive for a Displ without optimalMode");
-    desiredActive = true;
+void Displ::desiredActive(const bool desiredActive) {
+    if (desiredActive && !optimalMode)
+        throw invalid_argument("Displ '" + name + "' cannot set desiredActive without optimalMode");
+    _desiredActive = desiredActive;
 }
 
 const ModeP &Displ::desiredMode() const {

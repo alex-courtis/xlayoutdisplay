@@ -44,7 +44,7 @@ const string renderCmd(const list <DisplP> &displs) {
     }
     for (const auto displ : displs) {
         ss << " \\\n --output " << displ->name;
-        if (displ->isDesiredActive() && displ->desiredMode() && displ->desiredPos) {
+        if (displ->desiredActive() && displ->desiredMode() && displ->desiredPos) {
             ss << " --mode " << displ->desiredMode()->width << "x" << displ->desiredMode()->height;
             ss << " --rate " << displ->desiredMode()->refresh;
             ss << " --pos ";

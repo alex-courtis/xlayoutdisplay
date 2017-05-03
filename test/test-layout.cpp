@@ -72,10 +72,10 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
 
     activateDispls(displs, "three");
 
-    EXPECT_TRUE(displ1->isDesiredActive());
-    EXPECT_FALSE(displ2->isDesiredActive());
-    EXPECT_TRUE(displ3->isDesiredActive());
-    EXPECT_FALSE(displ4->isDesiredActive());
+    EXPECT_TRUE(displ1->desiredActive());
+    EXPECT_FALSE(displ2->desiredActive());
+    EXPECT_TRUE(displ3->desiredActive());
+    EXPECT_FALSE(displ4->desiredActive());
 
     EXPECT_EQ(Displ::desiredPrimary, displ3);
 }
@@ -97,9 +97,9 @@ TEST_F(layout_activateDispls, defaultPrimary) {
 
     setLidClosed(false);
 
-    EXPECT_FALSE(displ1->isDesiredActive());
-    EXPECT_TRUE(displ2->isDesiredActive());
-    EXPECT_TRUE(displ3->isDesiredActive());
+    EXPECT_FALSE(displ1->desiredActive());
+    EXPECT_TRUE(displ2->desiredActive());
+    EXPECT_TRUE(displ3->desiredActive());
 
     EXPECT_EQ(Displ::desiredPrimary, displ2);
 }
@@ -111,7 +111,7 @@ TEST(layout_ltrDispls, arrange) {
 
     modes = { make_shared<Mode>(0, 10, 20, 30) };
     DisplP displ1 = make_shared<Displ>("One", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
-    displ1->setDesiredActive();
+    displ1->desiredActive(true);
     displs.push_back(displ1);
 
     modes = {};
@@ -120,12 +120,12 @@ TEST(layout_ltrDispls, arrange) {
 
     modes = { make_shared<Mode>(0, 50, 60, 70) };
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
-    displ3->setDesiredActive();
+    displ3->desiredActive(true);
     displs.push_back(displ3);
 
     ltrDispls(displs);
 
-    EXPECT_TRUE(displ1->isDesiredActive());
+    EXPECT_TRUE(displ1->desiredActive());
     EXPECT_TRUE(displ1->desiredMode());
     EXPECT_EQ(10, displ1->desiredMode()->width);
     EXPECT_EQ(20, displ1->desiredMode()->height);
@@ -134,11 +134,11 @@ TEST(layout_ltrDispls, arrange) {
     EXPECT_EQ(0, displ1->desiredPos->x);
     EXPECT_EQ(0, displ1->desiredPos->y);
 
-    EXPECT_FALSE(displ2->isDesiredActive());
+    EXPECT_FALSE(displ2->desiredActive());
     EXPECT_FALSE(displ2->desiredMode());
     EXPECT_FALSE(displ2->desiredPos);
 
-    EXPECT_TRUE(displ3->isDesiredActive());
+    EXPECT_TRUE(displ3->desiredActive());
     EXPECT_TRUE(displ3->desiredMode());
     EXPECT_EQ(50, displ3->desiredMode()->width);
     EXPECT_EQ(60, displ3->desiredMode()->height);
@@ -175,7 +175,7 @@ TEST(layout_mirrorDisplays, oneActive) {
     const ModeP mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
-    displ1->setDesiredActive();
+    displ1->desiredActive(true);
     displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
@@ -205,11 +205,11 @@ TEST(layout_mirrorDisplays, someActive) {
     displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode5, mode4}), ModeP(), ModeP(), PosP(), EdidP());
-    displ2->setDesiredActive();
+    displ2->desiredActive(true);
     displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode2, mode5, mode4}), ModeP(), ModeP(), PosP(), EdidP());
-    displ3->setDesiredActive();
+    displ3->desiredActive(true);
     displs.push_back(displ3);
 
     mirrorDispls(displs);
@@ -236,15 +236,15 @@ TEST(layout_mirrorDisplays, manyActive) {
     ModeP mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2, mode3}), ModeP(), ModeP(), PosP(), EdidP());
-    displ1->setDesiredActive();
+    displ1->desiredActive(true);
     displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode4}), ModeP(), ModeP(), PosP(), EdidP());
-    displ2->setDesiredActive();
+    displ2->desiredActive(true);
     displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode2, mode3}), ModeP(), ModeP(), PosP(), EdidP());
-    displ3->setDesiredActive();
+    displ3->desiredActive(true);
     displs.push_back(displ3);
 
     mirrorDispls(displs);
@@ -272,15 +272,15 @@ TEST(layout_mirrorDisplays, noCommon) {
     ModeP mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
-    displ1->setDesiredActive();
+    displ1->desiredActive(true);
     displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode4}), ModeP(), ModeP(), PosP(), EdidP());
-    displ2->setDesiredActive();
+    displ2->desiredActive(true);
     displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode1, mode4}), ModeP(), ModeP(), PosP(), EdidP());
-    displ3->setDesiredActive();
+    displ3->desiredActive(true);
     displs.push_back(displ3);
 
     EXPECT_THROW(mirrorDispls(displs), runtime_error);
