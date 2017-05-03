@@ -39,10 +39,10 @@ public:
     PosP desiredPos;
 
     // may be empty
-    const ModeP &getDesiredMode() const;
+    const ModeP &desiredMode() const;
 
     // desiredMode must be in modes
-    void setDesiredMode(const ModeP &desiredMode);
+    void desiredMode(const ModeP &desiredMode);
 
     // true ensures optimalMode available
     bool isDesiredActive() const;
@@ -53,7 +53,7 @@ public:
     static std::shared_ptr<Displ> desiredPrimary;
 
 private:
-    ModeP desiredMode;
+    ModeP _desiredMode;
     bool desiredActive = false;
 };
 

@@ -52,14 +52,14 @@ void Displ::setDesiredActive() {
     desiredActive = true;
 }
 
-const ModeP &Displ::getDesiredMode() const {
-    return desiredMode;
+const ModeP &Displ::desiredMode() const {
+    return _desiredMode;
 }
 
-void Displ::setDesiredMode(const ModeP &desiredMode) {
+void Displ::desiredMode(const ModeP &desiredMode) {
     if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
         throw invalid_argument("Displ '" + name + "' cannot set desiredMode which is not present in modes");
-    this->desiredMode = desiredMode;
+    this->_desiredMode = desiredMode;
 }
 
 ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode) {

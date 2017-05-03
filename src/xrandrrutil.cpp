@@ -38,15 +38,15 @@ const string renderCmd(const list <DisplP> &displs) {
     //   mirror: uses the least or 96
     //   ltr: uses the primary
     if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
-        ss << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->getDesiredMode());
+        ss << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode());
     } else {
         ss << "96";
     }
     for (const auto displ : displs) {
         ss << " \\\n --output " << displ->name;
-        if (displ->isDesiredActive() && displ->getDesiredMode() && displ->desiredPos) {
-            ss << " --mode " << displ->getDesiredMode()->width << "x" << displ->getDesiredMode()->height;
-            ss << " --rate " << displ->getDesiredMode()->refresh;
+        if (displ->isDesiredActive() && displ->desiredMode() && displ->desiredPos) {
+            ss << " --mode " << displ->desiredMode()->width << "x" << displ->desiredMode()->height;
+            ss << " --rate " << displ->desiredMode()->refresh;
             ss << " --pos ";
             ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
             if (displ == Displ::desiredPrimary) {

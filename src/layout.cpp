@@ -58,13 +58,13 @@ void ltrDispls(list <DisplP> &displs) {
         if (displ->isDesiredActive()) {
 
             // set the desired mode to optimal
-            displ->setDesiredMode(displ->optimalMode);
+            displ->desiredMode(displ->optimalMode);
 
             // position the screen
             displ->desiredPos = make_shared<Pos>(xpos, ypos);
 
             // next position
-            xpos += displ->getDesiredMode()->width;
+            xpos += displ->desiredMode()->width;
         }
     }
 }
@@ -107,7 +107,7 @@ void mirrorDispls(list <DisplP> &displs) {
             // match a mode for every display; root it at 0, 0
             matched = matched && desiredMode;
             if (matched) {
-                displ->setDesiredMode(desiredMode);
+                displ->desiredMode(desiredMode);
                 displ->desiredPos = make_shared<Pos>(0, 0);
                 continue;
             }
