@@ -8,8 +8,6 @@ using ::testing::Return;
 
 class MockEdid : public Edid {
 public:
-    MockEdid() : Edid(mockEdid, EDID_MIN_LENGTH, "MockEdid") {};
-
     MOCK_CONST_METHOD0(maxCmHoriz, int());
 
     MOCK_CONST_METHOD0(maxCmVert, int());
@@ -19,9 +17,6 @@ public:
 
     MOCK_CONST_METHOD1(closestDpiForMode, int(
             const ModeP &mode));
-
-private:
-    unsigned char mockEdid[EDID_MIN_LENGTH];
 };
 
 TEST(xrandrutil_renderCmd, renderAll) {

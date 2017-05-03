@@ -25,6 +25,10 @@ public:
 
 private:
     unsigned char *edid;
+
+    Edid() {};
+
+    friend class MockEdid;
 };
 
 typedef std::shared_ptr<Edid> EdidP;
