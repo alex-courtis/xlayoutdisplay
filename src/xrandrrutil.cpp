@@ -32,6 +32,9 @@ const string renderCmd(const list <DisplP> &displs) {
     stringstream ss;
     ss << "xrandr \\\n --dpi ";
     // todo: create a "global" DPI: we need to select a DPI that matches, even when the size is 0
+    //       it should be selected by minimum/96 for mirror
+    //     or
+    //       it should be the Dpi/24 of the screen
     //   mirror: uses the least or 96
     //   ltr: uses the primary
     if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
