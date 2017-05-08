@@ -16,4 +16,6 @@ void ltrDispls(std::list<DisplP> &displs);
 // throws runtime_error if no common mode found
 void mirrorDispls(std::list<DisplP> &displs);
 
+std::string calculateDpi(std::list<DisplP> &displs);
+
 #endif //XLAYOUTDISPLAYS_LAYOUT_H

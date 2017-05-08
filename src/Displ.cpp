@@ -11,6 +11,8 @@ ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode)
 // one and only primary
 DisplP Displ::desiredPrimary;
 
+unsigned int Displ::desiredDpi = DEFAULT_DPI;
+
 Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode, const PosP &currentPos,
              const EdidP edid) :
         name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode), preferredMode(preferredMode),

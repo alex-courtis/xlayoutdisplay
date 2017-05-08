@@ -5,6 +5,21 @@
 
 using namespace std;
 
+class abstractLayoutTest : public ::testing::Test {
+
+protected:
+    virtual void SetUp() {
+        Displ::desiredPrimary.reset();
+        Displ::desiredDpi = DEFAULT_DPI;
+        Laptop::singletonInstance = NULL;
+    }
+
+    void setLidClosed(const bool closed) {
+        Laptop::instance()->lidClosed = closed;
+    }
+};
+
+
 TEST(layout_orderDispls, reposition) {
 
     list <DisplP> displs;
@@ -33,21 +48,9 @@ TEST(layout_orderDispls, reposition) {
 }
 
 
-class layout_activateDispls : public ::testing::Test {
+class layout_activateDispls : public abstractLayoutTest {
 
 protected:
-    virtual void SetUp() {
-        Displ::desiredPrimary = DisplP();
-    }
-
-    void TearDown() override {
-        Laptop::singletonInstance = NULL;
-    }
-
-    void setLidClosed(const bool closed) {
-        Laptop::instance()->lidClosed = closed;
-    }
-
     ModeP mode = make_shared<Mode>(0, 0, 0, 0);
     PosP pos = make_shared<Pos>(0, 0);
     list <ModeP> modes = {mode};
@@ -104,12 +107,16 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     EXPECT_EQ(Displ::desiredPrimary, displ2);
 }
 
+
+class layout_ltrDispls : public abstractLayoutTest {
+};
+
 TEST(layout_ltrDispls, arrange) {
 
     list <DisplP> displs;
     list <ModeP> modes;
 
-    modes = { make_shared<Mode>(0, 10, 20, 30) };
+    modes = {make_shared<Mode>(0, 10, 20, 30)};
     DisplP displ1 = make_shared<Displ>("One", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ1->desiredActive(true);
     displs.push_back(displ1);
@@ -118,7 +125,7 @@ TEST(layout_ltrDispls, arrange) {
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displs.push_back(displ2);
 
-    modes = { make_shared<Mode>(0, 50, 60, 70) };
+    modes = {make_shared<Mode>(0, 50, 60, 70)};
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ3->desiredActive(true);
     displs.push_back(displ3);
@@ -147,6 +154,10 @@ TEST(layout_ltrDispls, arrange) {
     EXPECT_EQ(10, displ3->desiredPos->x);
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
+
+
+class layout_mirrorDisplays : public abstractLayoutTest {
+};
 
 TEST(layout_mirrorDisplays, noneActive) {
 

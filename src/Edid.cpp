@@ -25,11 +25,14 @@ int Edid::maxCmVert() const {
 }
 
 double Edid::dpiForMode(const ModeP &mode) const {
+    if (maxCmVert() == 0 || maxCmHoriz() == 0) {
+        return 0;
+    }
     double dpiHoriz = mode->width * INCHES_PER_CM / maxCmHoriz();
     double dpiVert = mode->height * INCHES_PER_CM / maxCmVert();
     return (dpiHoriz + dpiVert) / 2;
 }
 
-int Edid::closestDpiForMode(const ModeP &mode) const {
-    return (int)((dpiForMode(mode) + DPI_STEP / 2) / DPI_STEP) * DPI_STEP;
+unsigned int Edid::closestDpiForMode(const ModeP &mode) const {
+    return (unsigned int)((dpiForMode(mode) + DPI_STEP / 2) / DPI_STEP) * DPI_STEP;
 }

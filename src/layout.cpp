@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -102,7 +103,7 @@ void mirrorDispls(list <DisplP> &displs) {
                     desiredMode = mode;
                     break;
                 }
-           }
+            }
 
             // match a mode for every display; root it at 0, 0
             matched = matched && desiredMode;
@@ -120,4 +121,27 @@ void mirrorDispls(list <DisplP> &displs) {
 
     // couldn't find a common mode, exit
     throw runtime_error("unable to find common width/height for mirror");
+}
+
+// todo: document and test this; refactor needed
+string calculateDpi(std::list<DisplP> &displs) {
+    stringstream verbose;
+    if (!Displ::desiredPrimary) {
+        verbose << "DPI defaulting to " << Displ::desiredDpi << "; no primary display has been set set";
+    } else if (!Displ::desiredPrimary->edid) {
+        verbose << "DPI defaulting to " << Displ::desiredDpi << "; EDID information not available for primary display " << Displ::desiredPrimary->name;
+    } else if (!Displ::desiredPrimary->desiredMode()) {
+        verbose << "DPI defaulting to " << Displ::desiredDpi << "; desiredMode not available for primary display " << Displ::desiredPrimary->name;
+    } else {
+        const unsigned int desiredDpi = Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode());
+        if (desiredDpi == 0) {
+            verbose << "DPI defaulting to " << Displ::desiredDpi << "; no display size EDID information available for " << Displ::desiredPrimary->name;
+        } else {
+            Displ::desiredDpi = desiredDpi;
+            verbose << "DPI rounded to " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name << " with DPI: "
+                    << Displ::desiredPrimary->edid->dpiForMode(Displ::desiredPrimary->desiredMode());
+        }
+    }
+
+    return verbose.str();
 }

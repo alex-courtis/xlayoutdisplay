@@ -30,18 +30,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 
 const string renderCmd(const list <DisplP> &displs) {
     stringstream ss;
-    ss << "xrandr \\\n --dpi ";
-    // todo: create a "global" DPI: we need to select a DPI that matches, even when the size is 0
-    //       it should be selected by minimum/96 for mirror
-    //     or
-    //       it should be the Dpi/24 of the screen
-    //   mirror: uses the least or 96
-    //   ltr: uses the primary
-    if (Displ::desiredPrimary && Displ::desiredPrimary->edid) {
-        ss << Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode());
-    } else {
-        ss << "96";
-    }
+    ss << "xrandr \\\n --dpi " << Displ::desiredDpi;
     for (const auto displ : displs) {
         ss << " \\\n --output " << displ->name;
         if (displ->desiredActive() && displ->desiredMode() && displ->desiredPos) {
@@ -74,13 +63,13 @@ const string renderUserInfo(const list <DisplP> &displs) {
                 ss << " disconnected";
                 break;
         }
+        if (displ->edid) {
+            ss << ' ' << displ->edid->maxCmHoriz() << "cm/" << displ->edid->maxCmVert() << "cm";
+        }
         if (displ->currentMode && displ->currentPos) {
             ss << ' ' << displ->currentMode->width << 'x' << displ->currentMode->height;
             ss << '+' << displ->currentPos->x << '+' << displ->currentPos->y;
             ss << ' ' << displ->currentMode->refresh << "Hz";
-        }
-        if (displ->edid) {
-            ss << ' ' << displ->edid->maxCmHoriz() << "cmx" << displ->edid->maxCmVert() << "cm";
         }
         ss << endl;
         for (const auto mode : displ->modes) {

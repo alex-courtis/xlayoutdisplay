@@ -31,11 +31,16 @@ int main(int argc, char **argv) {
         orderDispls(displs, settings->order);
         activateDispls(displs, settings->primary);
 
-        // arrange mirrored or left to right (default)
+        // arrange mirrored or left to right
         if (settings->mirror)
             mirrorDispls(displs);
         else
             ltrDispls(displs);
+
+        // determine DPI for all displays
+        string dpiExplaination = calculateDpi(displs);
+        if (settings->verbose)
+            printf("\n%s\n", dpiExplaination.c_str());
 
         // render desired cmd for xrandr
         const string xrandrCmd = renderCmd(displs);

@@ -3,6 +3,22 @@
 
 using namespace std;
 
+class abstractLaptopTest : public ::testing::Test {
+
+protected:
+    virtual void SetUp() {
+        Laptop::singletonInstance = NULL;
+    }
+
+    void setLidClosed(const bool closed) {
+        Laptop::instance()->lidClosed = closed;
+    }
+
+    void calculateLidClosed(const char *lidRootPath) {
+        Laptop::instance()->calculateLidClosed(lidRootPath);
+    }
+};
+
 void createStateFile(const char *contents) {
     ASSERT_EQ(0, mkdir("./lid", 0755));
     ASSERT_EQ(0, mkdir("./lid/LIDX", 0755));
@@ -19,15 +35,7 @@ void removeStateFile() {
     rmdir("./lid");
 }
 
-class Laptop_calculateLidClosed : public ::testing::Test {
-protected:
-    void TearDown() override {
-        Laptop::singletonInstance = NULL;
-    }
-
-    void calculateLidClosed(const char *lidRootPath) {
-        Laptop::instance()->calculateLidClosed(lidRootPath);
-    }
+class Laptop_calculateLidClosed : public abstractLaptopTest {
 };
 
 TEST_F(Laptop_calculateLidClosed, notClosedMissingFile) {
@@ -55,11 +63,7 @@ TEST_F(Laptop_calculateLidClosed, closed) {
 }
 
 
-class Laptop_shouldDisableDisplay : public ::testing::Test {
-protected:
-    void setLidClosed(const bool closed) {
-        Laptop::instance()->lidClosed = closed;
-    }
+class Laptop_shouldDisableDisplay : public abstractLaptopTest {
 };
 
 TEST_F(Laptop_shouldDisableDisplay, matchLidClosed) {

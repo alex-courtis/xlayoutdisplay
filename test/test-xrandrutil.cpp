@@ -15,7 +15,7 @@ public:
     MOCK_CONST_METHOD1(dpiForMode, double(
             const ModeP &mode));
 
-    MOCK_CONST_METHOD1(closestDpiForMode, int(
+    MOCK_CONST_METHOD1(closestDpiForMode, unsigned int(
             const ModeP &mode));
 };
 
@@ -33,7 +33,6 @@ TEST(xrandrutil_renderCmd, renderAll) {
     displ2->desiredMode(mode2);
     displ2->desiredPos = make_shared<Pos>(5, 6);
     displs.push_back(displ2);
-    EXPECT_CALL(*edid2, closestDpiForMode(mode2)).WillOnce(Return(4));
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
     displ3->desiredActive(true);
@@ -55,31 +54,16 @@ TEST(xrandrutil_renderCmd, renderAll) {
 
     Displ::desiredPrimary = displ2;
 
-    const string expected = ""
-            "xrandr \\\n --dpi 4 \\\n"
-            " --output One --off \\\n"
-            " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n"
-            " --output Three --off \\\n"
-            " --output Four --off \\\n"
-            " --output Five --mode 8x9 --rate 10 --pos 11x12";
+    stringstream expected;
+    expected << "xrandr \\\n";
+    expected << " --dpi " << DEFAULT_DPI << " \\\n";
+    expected << " --output One --off \\\n";
+    expected << " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n";
+    expected << " --output Three --off \\\n";
+    expected << " --output Four --off \\\n";
+    expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
-    EXPECT_EQ(expected, renderCmd(displs));
-}
-
-TEST(xrandrutil_renderCmd, renderNoDpi) {
-    list <DisplP> displs;
-    list <ModeP> modes = {make_shared<Mode>(0, 0, 0, 0)};
-
-    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ1);
-
-    Displ::desiredPrimary = displ1;
-
-    const string expected = ""
-            "xrandr \\\n --dpi 96 \\\n"
-            " --output One --off";
-
-    EXPECT_EQ(expected, renderCmd(displs));
+    EXPECT_EQ(expected.str(), renderCmd(displs));
 }
 
 TEST(xrandrutil_renderUserInfo, renderAll) {
@@ -106,11 +90,11 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     displs.push_back(act);
 
     const string expected = ""
-            "dis disconnected 15cmx16cm\n"
+            "dis disconnected 15cm/16cm\n"
             "con connected\n"
             "  !6x7 8Hz\n"
             "   2x3 4Hz\n"
-            "act active 6x7+13+14 8Hz 17cmx18cm\n"
+            "act active 17cm/18cm 6x7+13+14 8Hz\n"
             " +!10x11 12Hz\n"
             "*  6x7 8Hz\n"
             "   2x3 4Hz\n"

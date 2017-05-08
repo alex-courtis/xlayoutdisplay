@@ -21,7 +21,7 @@ public:
 
     virtual double dpiForMode(const ModeP &mode) const;
 
-    virtual int closestDpiForMode(const ModeP &mode) const;
+    virtual unsigned int closestDpiForMode(const ModeP &mode) const;
 
 private:
     unsigned char *edid;

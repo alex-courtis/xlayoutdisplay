@@ -29,12 +29,9 @@ private:
 
     bool lidClosed;
 
-    // just for unit testing
-    friend class Laptop_shouldDisableDisplay;
+    friend class abstractLayoutTest;
 
-    friend class Laptop_calculateLidClosed;
-
-    friend class layout_activateDispls;
+    friend class abstractLaptopTest;
 };
 
 #endif //XLAYOUTDISPLAYS_LAPTOP_H
