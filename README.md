@@ -90,8 +90,7 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
-xrdb --dpi setting based on Edid, for primary display, finds nearest 24 (quarter) from 96+
-Also merge Xft.dpi: XXX into xrdb for programs like firefox
+Merge Xft.dpi: XXX into xrdb for programs like firefox
 
 output current state of the world according to X e.g.
 ```
