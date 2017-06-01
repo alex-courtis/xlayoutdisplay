@@ -92,13 +92,5 @@ Hotplug event detection... my udev event hacks are too unreliable and shameworth
 
 Merge Xft.dpi: XXX into xrdb for programs like firefox
 
-output current state of the world according to X e.g.
-```
-    int displayWidth = XDisplayWidth(dpy, screen);
-    int displayHeight = XDisplayHeight(dpy, screen);
-    int displayWidthMm = XDisplayWidthMM(dpy, screen);
-    int displayHeightMm = XDisplayHeightMM(dpy, screen);
-    int xDpi = (int) (displayWidth * 25.4 / displayWidthMm + 0.5);
-    int yDpi = (int) (displayHeight * 25.4 / displayHeightMm + 0.5);
-    printf("%dx%d pixels  %dx%d mm  ~%dx%d dpi\n\n", displayWidth, displayHeight, displayWidthMm, displayHeightMm, xDpi, yDpi);
-```
+Adjust cursor size; `Xcursor.size` has no units and behaves eratically; on some instances (168) it behaves well without settings, on other instances (216) it goes back to default 96dpi size
+A means of setting cursor size in DPI which obeys everything must be determined
