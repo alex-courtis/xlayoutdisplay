@@ -24,8 +24,6 @@ set(SOURCE_FILES
         src/Pos.h
         src/Settings.cpp
         src/Settings.h
-        src/layout.cpp
-        src/layout.h
         src/util.h
         src/xrandrrutil.cpp
         src/xrandrrutil.h
@@ -36,7 +34,6 @@ set(TEST_FILES
         test/test-Edid.cpp
         test/test-Displ.cpp
         test/test-Laptop.cpp
-        test/test-layout.cpp
         test/test-Mode.cpp
         test/test-Settings.cpp
         test/test-xrandrutil.cpp

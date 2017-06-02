@@ -2,7 +2,6 @@
 #include "Laptop.h"
 
 #include "xrandrrutil.h"
-#include "layout.h"
 
 using namespace std;
 
