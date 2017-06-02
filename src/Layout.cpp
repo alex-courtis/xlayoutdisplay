@@ -4,8 +4,8 @@
 using namespace std;
 
 Layout::Layout(int argc, char **argv) :
-    settings(Settings(argc, argv)),
-    displs(discoverDispls()) {
+        displs(discoverDispls()),
+        settings(Settings(argc, argv)) {
 }
 
 const int Layout::apply() {

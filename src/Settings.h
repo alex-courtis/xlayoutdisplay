@@ -8,7 +8,7 @@
 class Settings {
 public:
 
-    // construct settings with user provided arguments, overriding with ~/.xLayoutDisplays
+    // construct settings from ~/.xLayoutDisplays, overriding with with user provided arguments
     Settings(int argc, char **argv);
 
     bool dryRun = false;
