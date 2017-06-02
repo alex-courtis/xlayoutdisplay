@@ -1,8 +1,6 @@
-#include "Settings.h"
-#include "Laptop.h"
+#include "Layout.h"
 
 #include "xrandrrutil.h"
-#include "layout.h"
 
 using namespace std;
 
@@ -17,33 +15,33 @@ int main(int argc, char **argv) {
         settings->loadCliSettings(argc, argv);
 
         // discover current state
-        list <DisplP> displs = discoverDispls();
+        Layout layout = Layout(discoverDispls());
 
         // output verbose information
         if (settings->verbose || settings->info)
-            printf("%s\n\nlid %s\n", renderUserInfo(displs).c_str(), Laptop::instance()->isLidClosed() ? "closed" : "open or not present");
+            printf("%s\n\nlid %s\n", renderUserInfo(layout.displs).c_str(), Laptop::instance()->isLidClosed() ? "closed" : "open or not present");
 
         // current info is all output, we're done
         if (settings->info)
             return EXIT_SUCCESS;
 
         // determine desired state
-        orderDispls(displs, settings->order);
-        activateDispls(displs, settings->primary);
+        layout.orderDispls(settings->order);
+        layout.activateDispls(settings->primary);
 
         // arrange mirrored or left to right
         if (settings->mirror)
-            mirrorDispls(displs);
+            layout.mirrorDispls();
         else
-            ltrDispls(displs);
+            layout.ltrDispls();
 
         // determine DPI for all displays
-        string dpiExplaination = calculateDpi(displs);
+        string dpiExplaination = layout.calculateDpi();
         if (settings->verbose)
             printf("\n%s\n", dpiExplaination.c_str());
 
         // render desired cmd for xrandr
-        const string xrandrCmd = renderCmd(displs);
+        const string xrandrCmd = renderCmd(layout.displs);
         if (settings->verbose || settings->dryRun)
             printf("\n%s\n", xrandrCmd.c_str());
 

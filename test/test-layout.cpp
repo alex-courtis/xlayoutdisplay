@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "../src/Laptop.h"
-#include "../src/layout.h"
+#include "../src/Layout.h"
 
 using namespace std;
 
@@ -20,60 +20,49 @@ protected:
 };
 
 
-TEST(layout_orderDispls, reposition) {
+TEST(Layout_orderDispls, reposition) {
 
-    list <DisplP> displs;
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ1);
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ2);
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ3);
     DisplP displ4 = make_shared<Displ>("Four", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ4);
     DisplP displ5 = make_shared<Displ>("Five", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ5);
 
-    orderDispls(displs, {"FOUR", "THREE", "TWO"});
+    Layout layout = Layout({displ1, displ2, displ3, displ4, displ5});
 
-    EXPECT_EQ(displ4, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ3, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ2, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ1, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ5, displs.front());
+    layout.orderDispls({"FOUR", "THREE", "TWO"});
+
+    EXPECT_EQ(displ4, layout.displs.front());
+    layout.displs.pop_front();
+    EXPECT_EQ(displ3, layout.displs.front());
+    layout.displs.pop_front();
+    EXPECT_EQ(displ2, layout.displs.front());
+    layout.displs.pop_front();
+    EXPECT_EQ(displ1, layout.displs.front());
+    layout.displs.pop_front();
+    EXPECT_EQ(displ5, layout.displs.front());
 }
 
 
-class layout_activateDispls : public abstractLayoutTest {
+class Layout_activateDispls : public abstractLayoutTest {
 
 protected:
     ModeP mode = make_shared<Mode>(0, 0, 0, 0);
     PosP pos = make_shared<Pos>(0, 0);
-    list <ModeP> modes = {mode};
+    list<ModeP> modes = {mode};
 };
 
-TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
-    list <DisplP> displs;
+TEST_F(Layout_activateDispls, primarySpecifiedAndLaptop) {
 
     DisplP displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ1);
-
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ2);
-
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ3);
-
     DisplP displ4 = make_shared<Displ>(embeddedDisplayPrefix() + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ4);
+    Layout layout = Layout({displ1, displ2, displ3, displ4});
 
     setLidClosed(true);
 
-    activateDispls(displs, "three");
+    layout.activateDispls("three");
 
     EXPECT_TRUE(displ1->desiredActive());
     EXPECT_FALSE(displ2->desiredActive());
@@ -83,20 +72,14 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     EXPECT_EQ(Displ::desiredPrimary, displ3);
 }
 
-TEST_F(layout_activateDispls, defaultPrimary) {
-
-    list <DisplP> displs;
+TEST_F(Layout_activateDispls, defaultPrimary) {
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ1);
-
     DisplP displ2 = make_shared<Displ>("Two", Displ::active, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ2);
-
     DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, EdidP());
-    displs.push_back(displ3);
+    Layout layout = Layout({displ1, displ2, displ3});
 
-    activateDispls(displs, "noprimary");
+    layout.activateDispls("noprimary");
 
     setLidClosed(false);
 
@@ -108,29 +91,27 @@ TEST_F(layout_activateDispls, defaultPrimary) {
 }
 
 
-class layout_ltrDispls : public abstractLayoutTest {
+class Layout_ltrDispls : public abstractLayoutTest {
 };
 
-TEST(layout_ltrDispls, arrange) {
+TEST(Layout_ltrDispls, arrange) {
 
-    list <DisplP> displs;
-    list <ModeP> modes;
+    list<ModeP> modes;
 
     modes = {make_shared<Mode>(0, 10, 20, 30)};
     DisplP displ1 = make_shared<Displ>("One", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ1->desiredActive(true);
-    displs.push_back(displ1);
 
     modes = {};
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ2);
 
     modes = {make_shared<Mode>(0, 50, 60, 70)};
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, ModeP(), modes.front(), PosP(), EdidP());
     displ3->desiredActive(true);
-    displs.push_back(displ3);
 
-    ltrDispls(displs);
+    Layout layout = Layout({displ1, displ2, displ3});
+
+    layout.ltrDispls();
 
     EXPECT_TRUE(displ1->desiredActive());
     EXPECT_TRUE(displ1->desiredMode());
@@ -156,20 +137,17 @@ TEST(layout_ltrDispls, arrange) {
 }
 
 
-class layout_mirrorDisplays : public abstractLayoutTest {
+class Layout_mirrorDisplays : public abstractLayoutTest {
 };
 
-TEST(layout_mirrorDisplays, noneActive) {
-
-    list <DisplP> displs;
+TEST(Layout_mirrorDisplays, noneActive) {
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ1);
-
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ2);
 
-    mirrorDispls(displs);
+    Layout layout = Layout({displ1, displ2});
+
+    layout.mirrorDispls();
 
     EXPECT_FALSE(displ1->desiredMode());
     EXPECT_FALSE(displ1->desiredPos);
@@ -178,21 +156,18 @@ TEST(layout_mirrorDisplays, noneActive) {
     EXPECT_FALSE(displ2->desiredPos);
 }
 
-TEST(layout_mirrorDisplays, oneActive) {
-
-    list <DisplP> displs;
+TEST(Layout_mirrorDisplays, oneActive) {
 
     const ModeP mode2 = make_shared<Mode>(0, 5, 6, 0);
     const ModeP mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
     displ1->desiredActive(true);
-    displs.push_back(displ1);
-
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ2);
 
-    mirrorDispls(displs);
+    Layout layout = Layout({displ1, displ2});
+
+    layout.mirrorDispls();
 
     EXPECT_EQ(mode1, displ1->desiredMode());
     EXPECT_EQ(0, displ1->desiredPos->x);
@@ -202,9 +177,7 @@ TEST(layout_mirrorDisplays, oneActive) {
     EXPECT_FALSE(displ2->desiredPos);
 }
 
-TEST(layout_mirrorDisplays, someActive) {
-
-    list <DisplP> displs;
+TEST(Layout_mirrorDisplays, someActive) {
 
     ModeP mode5 = make_shared<Mode>(0, 1, 2, 0);
     ModeP mode4 = make_shared<Mode>(0, 1, 2, 1);
@@ -213,17 +186,16 @@ TEST(layout_mirrorDisplays, someActive) {
     ModeP mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
-    displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode5, mode4}), ModeP(), ModeP(), PosP(), EdidP());
     displ2->desiredActive(true);
-    displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode2, mode5, mode4}), ModeP(), ModeP(), PosP(), EdidP());
     displ3->desiredActive(true);
-    displs.push_back(displ3);
 
-    mirrorDispls(displs);
+    Layout layout = Layout({displ1, displ2, displ3});
+
+    layout.mirrorDispls();
 
     EXPECT_FALSE(displ1->desiredMode());
     EXPECT_FALSE(displ1->desiredPos);
@@ -237,9 +209,7 @@ TEST(layout_mirrorDisplays, someActive) {
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
 
-TEST(layout_mirrorDisplays, manyActive) {
-
-    list <DisplP> displs;
+TEST(Layout_mirrorDisplays, manyActive) {
 
     ModeP mode4 = make_shared<Mode>(0, 1, 2, 0);
     ModeP mode3 = make_shared<Mode>(0, 3, 4, 0);
@@ -248,17 +218,16 @@ TEST(layout_mirrorDisplays, manyActive) {
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2, mode3}), ModeP(), ModeP(), PosP(), EdidP());
     displ1->desiredActive(true);
-    displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode4}), ModeP(), ModeP(), PosP(), EdidP());
     displ2->desiredActive(true);
-    displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode2, mode3}), ModeP(), ModeP(), PosP(), EdidP());
     displ3->desiredActive(true);
-    displs.push_back(displ3);
 
-    mirrorDispls(displs);
+    Layout layout = Layout({displ1, displ2, displ3});
+
+    layout.mirrorDispls();
 
     EXPECT_EQ(mode3, displ1->desiredMode());
     EXPECT_EQ(0, displ1->desiredPos->x);
@@ -273,9 +242,7 @@ TEST(layout_mirrorDisplays, manyActive) {
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
 
-TEST(layout_mirrorDisplays, noCommon) {
-
-    list <DisplP> displs;
+TEST(Layout_mirrorDisplays, noCommon) {
 
     ModeP mode4 = make_shared<Mode>(0, 1, 2, 0);
     ModeP mode3 = make_shared<Mode>(0, 3, 4, 0);
@@ -284,15 +251,14 @@ TEST(layout_mirrorDisplays, noCommon) {
 
     DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
     displ1->desiredActive(true);
-    displs.push_back(displ1);
 
     DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode3, mode4}), ModeP(), ModeP(), PosP(), EdidP());
     displ2->desiredActive(true);
-    displs.push_back(displ2);
 
     DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, list<ModeP>({mode1, mode4}), ModeP(), ModeP(), PosP(), EdidP());
     displ3->desiredActive(true);
-    displs.push_back(displ3);
 
-    EXPECT_THROW(mirrorDispls(displs), runtime_error);
+    Layout layout = Layout({displ1, displ2, displ3});
+
+    EXPECT_THROW(layout.mirrorDispls(), runtime_error);
 }
