@@ -10,6 +10,25 @@
 
 #define DEFAULT_DPI 96
 
+class Displ;
+
+typedef std::shared_ptr<Displ> DisplP;
+
+// reorder displs putting those whose names match order at the front, case insensitive
+void orderDispls(std::list<DisplP> &displs, const std::list<std::string> &order);
+
+// mark displays that should be activated and set the one and only primary
+void activateDispls(std::list<DisplP> &displs, const std::string &primary);
+
+// arrange desiredActive displays left to right at optimal mode; will mutate contents
+void ltrDispls(std::list<DisplP> &displs);
+
+// arrange desiredActive displays so that they all mirror at lowest common mode; will mutate contents
+// throws runtime_error if no common mode found
+void mirrorDispls(std::list<DisplP> &displs);
+
+std::string calculateDpi(std::list<DisplP> &displs);
+
 // a single Xrandr display
 class Displ {
 public:
@@ -23,8 +42,8 @@ public:
     //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode,
-          const PosP &currentPos, const EdidP edid);
+    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
+          const ModeP &preferredMode, const PosP &currentPos, const EdidP edid);
 
     virtual ~Displ() {
     }
@@ -60,21 +79,5 @@ private:
     bool _desiredActive = false;
 };
 
-typedef std::shared_ptr<Displ> DisplP;
-
-// reorder displs putting those whose names match order at the front, case insensitive
-void orderDispls(std::list<DisplP> &displs, const std::list<std::string> &order);
-
-// mark displays that should be activated and set the one and only primary
-void activateDispls(std::list<DisplP> &displs, const std::string &primary);
-
-// arrange desiredActive displays left to right at optimal mode; will mutate contents
-void ltrDispls(std::list<DisplP> &displs);
-
-// arrange desiredActive displays so that they all mirror at lowest common mode; will mutate contents
-// throws runtime_error if no common mode found
-void mirrorDispls(std::list<DisplP> &displs);
-
-std::string calculateDpi(std::list<DisplP> &displs);
 
 #endif //XLAYOUTDISPLAYS_DISPL_H
