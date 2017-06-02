@@ -17,7 +17,7 @@ using namespace std;
 #define SETTINGS_FILE_KEY_PRIMARY "primary"
 #define SETTINGS_FILE_KEY_QUIET "quiet"
 
-Settings::Settings(const int argc, char *const *argv) {
+Settings::Settings(int argc, char **argv) {
 
     // load persistent settings from ~/.xLayoutDisplays
     loadUserSettings(resolveTildePath("~/.xLayoutDisplays"));
@@ -64,7 +64,8 @@ void usage(char *progPath) {
     exit(EXIT_FAILURE);
 }
 
-void Settings::loadCliSettings(const int argc, char *const *argv) {
+// no, this does not get any tests
+void Settings::loadCliSettings(int argc, char **argv) {
 
     // load command line settings
     int opt;

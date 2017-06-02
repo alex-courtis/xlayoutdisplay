@@ -9,7 +9,7 @@ class Settings {
 public:
 
     // construct settings with user provided arguments, overriding with ~/.xLayoutDisplays
-    Settings(const int argc, char *const *argv);
+    Settings(int argc, char **argv);
 
     bool dryRun = false;
     bool help = false;
@@ -23,11 +23,11 @@ private:
     // unit testing constructor
     Settings() {};
 
-    // load the user settings from the path provided
+    // load the user settings from the absolute path provided
     void loadUserSettings(const std::string settingsFilePath);
 
     // load settings via getopts
-    void loadCliSettings(const int argc, char *const *argv);
+    void loadCliSettings(int argc, char **argv);
 
     // for unit testing
     friend class Settings_loadUserSettings;
