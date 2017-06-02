@@ -19,6 +19,8 @@ set(SOURCE_FILES
         src/Displ.h
         src/Laptop.cpp
         src/Laptop.h
+        src/Layout.cpp
+        src/Layout.h
         src/Mode.cpp
         src/Mode.h
         src/Pos.h

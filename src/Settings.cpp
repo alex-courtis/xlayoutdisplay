@@ -1,10 +1,8 @@
 #include "Settings.h"
 #include "Laptop.h"
-
-#include <stdexcept>
+#include "util.h"
 
 #include <string.h>
-#include <limits.h>
 #include <getopt.h>
 
 using namespace std;
@@ -18,6 +16,15 @@ using namespace std;
 #define SETTINGS_FILE_KEY_ORDER "order"
 #define SETTINGS_FILE_KEY_PRIMARY "primary"
 #define SETTINGS_FILE_KEY_QUIET "quiet"
+
+Settings::Settings(const int argc, char *const *argv) {
+
+    // load persistent settings from ~/.xLayoutDisplays
+    loadUserSettings(resolveTildePath("~/.xLayoutDisplays"));
+
+    // override with CLI settings
+    loadCliSettings(argc, argv);
+}
 
 // display help and exit with success
 void printHelp(char *progPath) {
@@ -57,23 +64,7 @@ void usage(char *progPath) {
     exit(EXIT_FAILURE);
 }
 
-Settings *Settings::singletonInstance = NULL;
-
-Settings *Settings::instance() {
-    if (!singletonInstance)
-        singletonInstance = new Settings();
-    return singletonInstance;
-}
-
-void Settings::loadUserSettings() {
-
-    // load from ~/.xLayoutDisplays
-    char settingsFilePath[PATH_MAX];
-    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv("HOME"), ".xLayoutDisplays");
-    loadUserSettings(settingsFilePath);
-}
-
-void Settings::loadCliSettings(int argc, char **argv) {
+void Settings::loadCliSettings(const int argc, char *const *argv) {
 
     // load command line settings
     int opt;
@@ -111,12 +102,12 @@ void Settings::loadCliSettings(int argc, char **argv) {
         printHelp(argv[0]);
 }
 
-void Settings::loadUserSettings(const char *settingsFilePath) {
+void Settings::loadUserSettings(const string settingsFilePath) {
     char line[SETTINGS_FILE_LINE_MAX];
     char *key, *val;
 
     // read settings file, if it exists
-    FILE *settingsFile = fopen(settingsFilePath, "r");
+    FILE *settingsFile = fopen(settingsFilePath.c_str(), "r");
     if (settingsFile) {
 
         // read each line
@@ -131,7 +122,8 @@ void Settings::loadUserSettings(const char *settingsFilePath) {
                 // value
                 val = strtok(NULL, SETTINGS_FILE_SEPS);
                 if (val == NULL)
-                    throw invalid_argument(string() + "missing value for key '" + key + "' in '" + settingsFilePath + "'");
+                    throw invalid_argument(
+                            string() + "missing value for key '" + key + "' in '" + settingsFilePath + "'");
 
                 if (strcasecmp(key, SETTINGS_FILE_KEY_MIRROR) == 0) {
                     mirror = strcasecmp(val, "true") == 0;

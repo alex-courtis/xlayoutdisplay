@@ -4,18 +4,12 @@
 #include <list>
 #include <string>
 
-// singleton representing settings of this utility
+// user provided settings for this utility
 class Settings {
-
 public:
-    // singleton accessor
-    static Settings *instance();
 
-    // load user settings from ~/.xLayoutDisplays
-    void loadUserSettings();
-
-    // load settings via getopts
-    void loadCliSettings(int argc, char **argv);
+    // construct settings with user provided arguments, overriding with ~/.xLayoutDisplays
+    Settings(const int argc, char *const *argv);
 
     bool dryRun = false;
     bool help = false;
@@ -26,11 +20,14 @@ public:
     bool verbose = true;
 
 private:
-    Settings() {}
+    // unit testing constructor
+    Settings() {};
 
-    void loadUserSettings(const char *settingsFilePath);
+    // load the user settings from the path provided
+    void loadUserSettings(const std::string settingsFilePath);
 
-    static Settings *singletonInstance;
+    // load settings via getopts
+    void loadCliSettings(const int argc, char *const *argv);
 
     // for unit testing
     friend class Settings_loadUserSettings;
