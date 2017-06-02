@@ -1,5 +1,5 @@
-#include "Layout.h"
-#include "xrandrrutil.h"
+#include "layout.h"
+#include "Laptop.h"
 
 #include <string.h>
 #include <iostream>
@@ -7,12 +7,10 @@
 
 using namespace std;
 
-Layout::Layout(const list<DisplP> &displs) : displs(displs) {}
-
-void Layout::orderDispls(const list<string> &order) {
+void orderDispls(list <DisplP> &displs, const list <string> &order) {
 
     // stack all the preferred, available displays
-    list<DisplP> preferredDispls;
+    list <DisplP> preferredDispls;
     for (const auto name : order) {
         for (const auto displ : displs) {
             if (strcasecmp(name.c_str(), displ->name.c_str()) == 0) {
@@ -28,7 +26,7 @@ void Layout::orderDispls(const list<string> &order) {
     }
 }
 
-void Layout::activateDispls(const string &primary) {
+void activateDispls(std::list<DisplP> &displs, const string &primary) {
     Laptop *laptop = Laptop::instance();
     for (const auto displ : displs) {
 
@@ -53,7 +51,7 @@ void Layout::activateDispls(const string &primary) {
     }
 }
 
-void Layout::ltrDispls() {
+void ltrDispls(list <DisplP> &displs) {
     int xpos = 0;
     int ypos = 0;
     for (const auto displ : displs) {
@@ -72,7 +70,7 @@ void Layout::ltrDispls() {
     }
 }
 
-void Layout::mirrorDispls() {
+void mirrorDispls(list <DisplP> &displs) {
 
     // find the first active display
     DisplP firstDispl;
@@ -125,30 +123,25 @@ void Layout::mirrorDispls() {
     throw runtime_error("unable to find common width/height for mirror");
 }
 
-string Layout::calculateDpi() {
+// todo: document and test this; refactor needed
+string calculateDpi(std::list<DisplP> &displs) {
     stringstream verbose;
     if (!Displ::desiredPrimary) {
         verbose << "DPI defaulting to " << Displ::desiredDpi << "; no primary display has been set set";
     } else if (!Displ::desiredPrimary->edid) {
-        verbose << "DPI defaulting to " << Displ::desiredDpi << "; EDID information not available for primary display "
-                << Displ::desiredPrimary->name;
+        verbose << "DPI defaulting to " << Displ::desiredDpi << "; EDID information not available for primary display " << Displ::desiredPrimary->name;
     } else if (!Displ::desiredPrimary->desiredMode()) {
-        verbose << "DPI defaulting to " << Displ::desiredDpi << "; desiredMode not available for primary display "
-                << Displ::desiredPrimary->name;
+        verbose << "DPI defaulting to " << Displ::desiredDpi << "; desiredMode not available for primary display " << Displ::desiredPrimary->name;
     } else {
-        const unsigned int desiredDpi = Displ::desiredPrimary->edid->closestDpiForMode(
-                Displ::desiredPrimary->desiredMode());
+        const unsigned int desiredDpi = Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode());
         if (desiredDpi == 0) {
-            verbose << "DPI defaulting to " << Displ::desiredDpi << "; no display size EDID information available for "
-                    << Displ::desiredPrimary->name;
+            verbose << "DPI defaulting to " << Displ::desiredDpi << "; no display size EDID information available for " << Displ::desiredPrimary->name;
         } else {
             Displ::desiredDpi = desiredDpi;
-            verbose << "DPI rounded to " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name
-                    << " with DPI: "
+            verbose << "DPI rounded to " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name << " with DPI: "
                     << Displ::desiredPrimary->edid->dpiForMode(Displ::desiredPrimary->desiredMode());
         }
     }
 
     return verbose.str();
 }
-
