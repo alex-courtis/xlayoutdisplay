@@ -17,8 +17,8 @@ set(SOURCE_FILES
         src/Edid.h
         src/Displ.cpp
         src/Displ.h
-        src/Laptop.cpp
-        src/Laptop.h
+        src/Monitors.cpp
+        src/Monitors.h
         src/Layout.cpp
         src/Layout.h
         src/Mode.cpp
@@ -35,7 +35,7 @@ set(TEST_FILES
         test/main.cpp
         test/test-Edid.cpp
         test/test-Displ.cpp
-        test/test-Laptop.cpp
+        test/test-Monitors.cpp
         test/test-Mode.cpp
         test/test-Settings.cpp
         test/test-xrandrutil.cpp

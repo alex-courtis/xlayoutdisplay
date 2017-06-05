@@ -146,7 +146,7 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     DisplP displ4 = make_shared<Displ>(LAPTOP_DISPLAY_PREFIX + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
     displs.push_back(displ4);
 
-    activateDispls(displs, "three", Laptop(true));
+    activateDispls(displs, "three", Monitors(true));
 
     EXPECT_TRUE(displ1->desiredActive());
     EXPECT_FALSE(displ2->desiredActive());
@@ -169,7 +169,7 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, EdidP());
     displs.push_back(displ3);
 
-    activateDispls(displs, "noprimary", Laptop(true));
+    activateDispls(displs, "noprimary", Monitors(true));
 
     EXPECT_FALSE(displ1->desiredActive());
     EXPECT_TRUE(displ2->desiredActive());

@@ -1,17 +1,17 @@
-#include "Laptop.h"
+#include "Monitors.h"
 
 #include <string.h>
 #include <dirent.h>
 
-Laptop::Laptop() : lidClosed(calculateLidClosed(LAPTOP_LID_ROOT_PATH)) {}
+Monitors::Monitors() : laptopLidClosed(calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)) {}
 
-Laptop::Laptop(const bool lidClosed) : lidClosed(lidClosed) {}
+Monitors::Monitors(const bool laptopLidClosed) : laptopLidClosed(laptopLidClosed) {}
 
-const bool Laptop::shouldDisableDisplay(const std::string name) const {
-    return lidClosed && strncasecmp(LAPTOP_DISPLAY_PREFIX, name.c_str(), strlen(LAPTOP_DISPLAY_PREFIX)) == 0;
+const bool Monitors::shouldDisableDisplay(const std::string name) const {
+    return laptopLidClosed && strncasecmp(LAPTOP_DISPLAY_PREFIX, name.c_str(), strlen(LAPTOP_DISPLAY_PREFIX)) == 0;
 }
 
-const bool calculateLidClosed(const char *laptopLidRootPath) {
+const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     static char lidFileName[PATH_MAX];
     static char line[512];
 

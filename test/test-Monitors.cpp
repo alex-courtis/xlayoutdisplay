@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "../src/Laptop.h"
+#include "../src/Monitors.h"
 
 using namespace std;
 
-class Laptop_calculateLidClosed : public ::testing::Test {
+class Monitors_calculateLaptopLidClosed : public ::testing::Test {
 public:
     void createStateFile(const char *contents) {
         ASSERT_EQ(0, mkdir("./lid", 0755));
@@ -24,29 +24,29 @@ protected:
     }
 };
 
-TEST_F(Laptop_calculateLidClosed, notClosedMissingFile) {
-    EXPECT_FALSE(calculateLidClosed("./nonexistent"));
+TEST_F(Monitors_calculateLaptopLidClosed, notClosedMissingFile) {
+    EXPECT_FALSE(calculateLaptopLidClosed("./nonexistent"));
 }
 
-TEST_F(Laptop_calculateLidClosed, open) {
+TEST_F(Monitors_calculateLaptopLidClosed, open) {
     createStateFile("something OpEn something something\n");
-    EXPECT_FALSE(calculateLidClosed("./lid"));
+    EXPECT_FALSE(calculateLaptopLidClosed("./lid"));
 }
 
-TEST_F(Laptop_calculateLidClosed, closed) {
+TEST_F(Monitors_calculateLaptopLidClosed, closed) {
     createStateFile("something ClOsEd something something\n");
-    EXPECT_TRUE(calculateLidClosed("./lid"));
+    EXPECT_TRUE(calculateLaptopLidClosed("./lid"));
 }
 
 
 TEST(Laptop_shouldDisableDisplay, matchLidClosed) {
-    EXPECT_TRUE(Laptop(true).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
+    EXPECT_TRUE(Monitors(true).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
 }
 
 TEST(Laptop_shouldDisableDisplay, noMatchLidClosed) {
-    EXPECT_FALSE(Laptop(true).shouldDisableDisplay("blargh"));
+    EXPECT_FALSE(Monitors(true).shouldDisableDisplay("blargh"));
 }
 
 TEST(Laptop_shouldDisableDisplay, matchLidOpen) {
-    EXPECT_FALSE(Laptop(false).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
+    EXPECT_FALSE(Monitors(false).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
 }

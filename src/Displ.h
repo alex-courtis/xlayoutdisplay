@@ -4,7 +4,7 @@
 #include "Mode.h"
 #include "Pos.h"
 #include "Edid.h"
-#include "Laptop.h"
+#include "Monitors.h"
 
 #include <memory>
 #include <list>
@@ -19,7 +19,7 @@ typedef std::shared_ptr<Displ> DisplP;
 void orderDispls(std::list<DisplP> &displs, const std::list<std::string> &order);
 
 // mark displays that should be activated and set the one and only primary
-void activateDispls(std::list<DisplP> &displs, const std::string &primary, const Laptop &laptop);
+void activateDispls(std::list<DisplP> &displs, const std::string &primary, const Monitors &monitors);
 
 // arrange desiredActive displays left to right at optimal mode; will mutate contents
 void ltrDispls(std::list<DisplP> &displs);

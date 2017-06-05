@@ -106,11 +106,11 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
     }
 }
 
-void activateDispls(std::list<DisplP> &displs, const string &primary, const Laptop &laptop) {
+void activateDispls(std::list<DisplP> &displs, const string &primary, const Monitors &monitors) {
     for (const auto displ : displs) {
 
-        // don't use any laptop displays if the lid is closed
-        if (laptop.shouldDisableDisplay(displ->name))
+        // don't display any monitors that shouldn't
+        if (monitors.shouldDisableDisplay(displ->name))
             continue;
 
         // only activate currently active or connected displays
