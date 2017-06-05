@@ -20,7 +20,7 @@ using namespace std;
 Settings::Settings(int argc, char **argv) {
 
     // load persistent settings from ~/.xLayoutDisplays
-    loadUserSettings(resolveTildePath("~/.xLayoutDisplays"));
+    loadUserSettings(resolveTildePath(".xLayoutDisplays"));
 
     // override with CLI settings
     loadCliSettings(argc, argv);

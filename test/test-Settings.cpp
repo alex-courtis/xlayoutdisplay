@@ -4,29 +4,16 @@
 
 using namespace std;
 
-class Settings_loadUserSettings : public ::testing::Test {
-protected:
-    virtual void TearDown() {
-        remove(settingsFileName);
-    }
+const char *settingsFileName = "./availableSettings";
+FILE *settingsFile;
 
-    void writeUserSettings(const char *settings) {
-        ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != NULL);
-        fprintf(settingsFile, settings);
-        ASSERT_EQ(0, fclose(settingsFile));
-    }
+void writeUserSettings(const char *settingsFileContents) {
+    ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != NULL);
+    fprintf(settingsFile, settingsFileContents);
+    ASSERT_EQ(0, fclose(settingsFile));
+}
 
-    void loadUserSettings() {
-        settings.loadUserSettings(settingsFileName);
-    }
-
-    Settings settings;
-    const char *settingsFileName = "./availableSettings";
-    FILE *settingsFile;
-};
-
-TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
-
+TEST(Settings_loadUserSettings, AvailableSettingsAndComments) {
     writeUserSettings(""
             "\n"
             "#\n"
@@ -39,7 +26,8 @@ TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
             " OrDeR = one , TwO  \n"
             "prImAry =    blargh");
 
-    loadUserSettings();
+    Settings settings;
+    settings.loadUserSettings(settingsFileName);
 
     // unavailable settings
     EXPECT_FALSE(settings.dryRun);
@@ -53,16 +41,14 @@ TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
     EXPECT_EQ(settings.primary, "blargh");
 }
 
-TEST_F(Settings_loadUserSettings, InvalidKey) {
-
+TEST(Settings_loadUserSettings, InvalidKey) {
     writeUserSettings("bleh=blargh");
 
-    EXPECT_THROW(loadUserSettings(), invalid_argument);
+    EXPECT_THROW(Settings().loadUserSettings(settingsFileName), invalid_argument);
 }
 
-TEST_F(Settings_loadUserSettings, MissingValue) {
+TEST(Settings_loadUserSettings, MissingValue) {
+    writeUserSettings("bleh=");
 
-    writeUserSettings("quiet=");
-
-    EXPECT_THROW(loadUserSettings(), invalid_argument);
+    EXPECT_THROW(Settings().loadUserSettings(settingsFileName), invalid_argument);
 }

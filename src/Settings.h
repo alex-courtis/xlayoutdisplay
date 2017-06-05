@@ -7,8 +7,9 @@
 // user provided settings for this utility
 class Settings {
 public:
+    Settings() {};
 
-    // construct settings from ~/.xLayoutDisplays, overriding with with user provided arguments
+    // default settings, overridden with ~/.xLayoutDisplays then argc/argv
     Settings(int argc, char **argv);
 
     bool dryRun = false;
@@ -19,19 +20,11 @@ public:
     std::string primary;
     bool verbose = true;
 
-private:
-    // unit testing constructor
-    Settings() {};
-
-    // load the user settings from the absolute path provided
-    void loadUserSettings(const std::string settingsFilePath);
-
-    // load settings via getopts
+    // override settings via getopts
     void loadCliSettings(int argc, char **argv);
 
-    // for unit testing
-    // todo: no more friends please
-    friend class Settings_loadUserSettings;
+    // override settings from the absolute path provided
+    void loadUserSettings(const std::string settingsFilePath);
 };
 
 #endif //XLAYOUTDISPLAYS_SETTINGS_H

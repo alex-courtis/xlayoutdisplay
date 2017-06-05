@@ -26,12 +26,10 @@ inline const std::list<std::shared_ptr<T>> reverseSharedPtrList(const std::list<
     return reversed;
 }
 
-// todo: test, you know...
-// todo: use a better string constructor... bikeshedding
-// resolve a UNIX path prefixed with ~ to an absolute path, using the HOME environment variable
-inline const std::string resolveTildePath(const char *path) {
+// return an absolute UNIX path for a relative path in the user env $HOME
+inline const std::string resolveTildePath(const char *homeRelativePath) {
     char settingsFilePath[PATH_MAX];
-    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv("HOME"), path);
+    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv("HOME"), homeRelativePath);
     return std::string(settingsFilePath);
 }
 
