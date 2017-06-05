@@ -30,6 +30,7 @@ private:
     void loadCliSettings(int argc, char **argv);
 
     // for unit testing
+    // todo: no more friends please
     friend class Settings_loadUserSettings;
 };
 

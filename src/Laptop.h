@@ -3,35 +3,26 @@
 
 #include <string>
 
-// return the prefix that will be used to match embedded displays
-const char *embeddedDisplayPrefix();
+#define LAPTOP_DISPLAY_PREFIX "eDP"
+#define LAPTOP_LID_ROOT_PATH "/proc/acpi/button/lid"
 
-// todo: don't use a class for the rest of this; a set of functions will suffice
-// perhaps maybe not... however we can minimise the statefulness and preserve testing
-
-// singleton to access laptop specific information
+// calculates and holds state about laptop specifics
 class Laptop {
 public:
-    // singleton accessor
-    static Laptop *instance();
 
-    // return true if the lid is closed
-    const bool isLidClosed();
+    // construct with lidClosed based on calculateLidClosed(LAPTOP_LID_ROOT_PATH)
+    Laptop();
 
-    // return true if the display should be disabled due to lid state
-    const bool shouldDisableDisplay(const std::string name);
+    Laptop(const bool lidClosed);
 
-private:
-    static Laptop *singletonInstance;
+    // return true if the display should be disabled
+    const bool shouldDisableDisplay(const std::string name) const;
 
-    // set true if we have a "closed" status in the file /proc/acpi/button/lid/.*/state
-    void calculateLidClosed(const char *lidRootPath = "/proc/acpi/button/lid");
-
-    bool lidClosed;
-
-    friend class abstractLayoutTest;
-
-    friend class abstractLaptopTest;
+    // true if the laptop lid is closed
+    const bool lidClosed;
 };
+
+// return true if we have a "closed" status under laptopLidRootPath
+const bool calculateLidClosed(const char *laptopLidRootPath);
 
 #endif //XLAYOUTDISPLAYS_LAPTOP_H

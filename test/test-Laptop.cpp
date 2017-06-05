@@ -1,82 +1,52 @@
 #include <gtest/gtest.h>
+
 #include "../src/Laptop.h"
 
 using namespace std;
 
-class abstractLaptopTest : public ::testing::Test {
+class Laptop_calculateLidClosed : public ::testing::Test {
+public:
+    void createStateFile(const char *contents) {
+        ASSERT_EQ(0, mkdir("./lid", 0755));
+        ASSERT_EQ(0, mkdir("./lid/LIDX", 0755));
+        FILE *lidStateFile = fopen("./lid/LIDX/state", "w");
+        ASSERT_TRUE(lidStateFile != NULL);
+        fprintf(lidStateFile, contents);
+        ASSERT_EQ(0, fclose(lidStateFile));
+    };
 
 protected:
-    virtual void SetUp() {
-        Laptop::singletonInstance = NULL;
+    void TearDown() override {
+        // always try and remove anything from createStateFile
+        remove("./lid/LIDX/state");
+        rmdir("./lid/LIDX");
+        rmdir("./lid");
     }
-
-    void setLidClosed(const bool closed) {
-        Laptop::instance()->lidClosed = closed;
-    }
-
-    void calculateLidClosed(const char *lidRootPath) {
-        Laptop::instance()->calculateLidClosed(lidRootPath);
-    }
-};
-
-void createStateFile(const char *contents) {
-    ASSERT_EQ(0, mkdir("./lid", 0755));
-    ASSERT_EQ(0, mkdir("./lid/LIDX", 0755));
-    FILE *lidStateFile = fopen("./lid/LIDX/state", "w");
-    ASSERT_TRUE(lidStateFile != NULL);
-    fprintf(lidStateFile, contents);
-    ASSERT_EQ(0, fclose(lidStateFile));
-}
-
-// always try and remove
-void removeStateFile() {
-    remove("./lid/LIDX/state");
-    rmdir("./lid/LIDX");
-    rmdir("./lid");
-}
-
-class Laptop_calculateLidClosed : public abstractLaptopTest {
 };
 
 TEST_F(Laptop_calculateLidClosed, notClosedMissingFile) {
-    calculateLidClosed("./nonexistent");
-
-    EXPECT_FALSE(Laptop::instance()->isLidClosed());
+    EXPECT_FALSE(calculateLidClosed("./nonexistent"));
 }
 
 TEST_F(Laptop_calculateLidClosed, open) {
     createStateFile("something OpEn something something\n");
-
-    calculateLidClosed("./lid");
-    EXPECT_FALSE(Laptop::instance()->isLidClosed());
-
-    removeStateFile();
+    EXPECT_FALSE(calculateLidClosed("./lid"));
 }
 
 TEST_F(Laptop_calculateLidClosed, closed) {
     createStateFile("something ClOsEd something something\n");
-
-    calculateLidClosed("./lid");
-    EXPECT_TRUE(Laptop::instance()->isLidClosed());
-
-    removeStateFile();
+    EXPECT_TRUE(calculateLidClosed("./lid"));
 }
 
 
-class Laptop_shouldDisableDisplay : public abstractLaptopTest {
-};
-
-TEST_F(Laptop_shouldDisableDisplay, matchLidClosed) {
-    setLidClosed(true);
-    EXPECT_TRUE(Laptop::instance()->shouldDisableDisplay(string(embeddedDisplayPrefix()) + "blargh"));
+TEST(Laptop_shouldDisableDisplay, matchLidClosed) {
+    EXPECT_TRUE(Laptop(true).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
 }
 
-TEST_F(Laptop_shouldDisableDisplay, noMatchLidClosed) {
-    setLidClosed(true);
-    EXPECT_FALSE(Laptop::instance()->shouldDisableDisplay("blargh"));
+TEST(Laptop_shouldDisableDisplay, noMatchLidClosed) {
+    EXPECT_FALSE(Laptop(true).shouldDisableDisplay("blargh"));
 }
 
-TEST_F(Laptop_shouldDisableDisplay, matchLidOpen) {
-    setLidClosed(false);
-    EXPECT_FALSE(Laptop::instance()->shouldDisableDisplay(string(embeddedDisplayPrefix()) + "blargh"));
+TEST(Laptop_shouldDisableDisplay, matchLidOpen) {
+    EXPECT_FALSE(Laptop(false).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
 }

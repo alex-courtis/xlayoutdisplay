@@ -21,6 +21,8 @@ public:
 private:
     std::list<DisplP> displs;
 
+    const Laptop laptop;
+
     const Settings settings;
 };
 

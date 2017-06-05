@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "../src/Displ.h"
-#include "../src/Laptop.h"
 
 using namespace std;
 
@@ -17,7 +16,6 @@ protected:
     EdidP edid;
     list <ModeP> modes = {mode1, mode2};
 };
-
 
 TEST_F(Displ_constructor, validActive) {
     Displ("validActive", Displ::active, modes, mode1, NULL, pos, edid);
@@ -92,20 +90,6 @@ TEST(Displ_setDesiredActive, missingOptimal) {
     EXPECT_THROW(displ.desiredActive(true), invalid_argument);
 }
 
-class abstractLayoutTest : public ::testing::Test {
-
-protected:
-    virtual void SetUp() {
-        Displ::desiredPrimary.reset();
-        Displ::desiredDpi = DEFAULT_DPI;
-        Laptop::singletonInstance = NULL;
-    }
-
-    void setLidClosed(const bool closed) {
-        Laptop::instance()->lidClosed = closed;
-    }
-};
-
 
 TEST(layout_orderDispls, reposition) {
 
@@ -135,9 +119,13 @@ TEST(layout_orderDispls, reposition) {
 }
 
 
-class layout_activateDispls : public abstractLayoutTest {
-
+class layout_activateDispls : public ::testing::Test {
 protected:
+    virtual void SetUp() {
+        Displ::desiredPrimary.reset();
+        Displ::desiredDpi = DEFAULT_DPI;
+    }
+
     ModeP mode = make_shared<Mode>(0, 0, 0, 0);
     PosP pos = make_shared<Pos>(0, 0);
     list <ModeP> modes = {mode};
@@ -155,12 +143,10 @@ TEST_F(layout_activateDispls, primarySpecifiedAndLaptop) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, pos, EdidP());
     displs.push_back(displ3);
 
-    DisplP displ4 = make_shared<Displ>(embeddedDisplayPrefix() + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
+    DisplP displ4 = make_shared<Displ>(LAPTOP_DISPLAY_PREFIX + string("Four"), Displ::active, modes, mode, mode, pos, EdidP());
     displs.push_back(displ4);
 
-    setLidClosed(true);
-
-    activateDispls(displs, "three");
+    activateDispls(displs, "three", Laptop(true));
 
     EXPECT_TRUE(displ1->desiredActive());
     EXPECT_FALSE(displ2->desiredActive());
@@ -183,9 +169,7 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     DisplP displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, EdidP());
     displs.push_back(displ3);
 
-    activateDispls(displs, "noprimary");
-
-    setLidClosed(false);
+    activateDispls(displs, "noprimary", Laptop(true));
 
     EXPECT_FALSE(displ1->desiredActive());
     EXPECT_TRUE(displ2->desiredActive());
@@ -194,9 +178,6 @@ TEST_F(layout_activateDispls, defaultPrimary) {
     EXPECT_EQ(Displ::desiredPrimary, displ2);
 }
 
-
-class layout_ltrDispls : public abstractLayoutTest {
-};
 
 TEST(layout_ltrDispls, arrange) {
 
@@ -242,9 +223,6 @@ TEST(layout_ltrDispls, arrange) {
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
 
-
-class layout_mirrorDisplays : public abstractLayoutTest {
-};
 
 TEST(layout_mirrorDisplays, noneActive) {
 

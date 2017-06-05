@@ -12,8 +12,7 @@ const int Layout::apply() {
 
     // output verbose information
     if (settings.verbose || settings.info)
-        printf("%s\n\nlid %s\n",
-               renderUserInfo(displs).c_str(), Laptop::instance()->isLidClosed() ? "closed" : "open or not present");
+        printf("%s\n\nlid %s\n", renderUserInfo(displs).c_str(), laptop.lidClosed ? "closed" : "open or not present");
 
     // current info is all output, we're done
     if (settings.info)
@@ -21,7 +20,7 @@ const int Layout::apply() {
 
     // determine desired state
     orderDispls(displs, settings.order);
-    activateDispls(displs, settings.primary);
+    activateDispls(displs, settings.primary, laptop);
 
     // arrange mirrored or left to right
     if (settings.mirror)

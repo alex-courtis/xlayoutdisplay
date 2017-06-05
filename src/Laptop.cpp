@@ -3,50 +3,32 @@
 #include <string.h>
 #include <dirent.h>
 
-#define EMBEDDED_DISPLAY_PREFIX "eDP"
+Laptop::Laptop() : lidClosed(calculateLidClosed(LAPTOP_LID_ROOT_PATH)) {}
 
-const char *embeddedDisplayPrefix() {
-    return EMBEDDED_DISPLAY_PREFIX;
+Laptop::Laptop(const bool lidClosed) : lidClosed(lidClosed) {}
+
+const bool Laptop::shouldDisableDisplay(const std::string name) const {
+    return lidClosed && strncasecmp(LAPTOP_DISPLAY_PREFIX, name.c_str(), strlen(LAPTOP_DISPLAY_PREFIX)) == 0;
 }
 
-Laptop *Laptop::singletonInstance = NULL;
-
-Laptop *Laptop::instance() {
-    if (!singletonInstance) {
-        singletonInstance = new Laptop();
-        singletonInstance->calculateLidClosed();
-    }
-    return singletonInstance;
-}
-
-const bool Laptop::isLidClosed() {
-    return lidClosed;
-}
-
-const bool Laptop::shouldDisableDisplay(const std::string name) {
-    return lidClosed && strncasecmp(EMBEDDED_DISPLAY_PREFIX, name.c_str(), strlen(EMBEDDED_DISPLAY_PREFIX)) == 0;
-}
-
-void Laptop::calculateLidClosed(const char *lidRootPath) {
-    lidClosed = false;
-
+const bool calculateLidClosed(const char *laptopLidRootPath) {
     static char lidFileName[PATH_MAX];
     static char line[512];
 
     // find the lid state directory
-    DIR *dir = opendir(lidRootPath);
+    DIR *dir = opendir(laptopLidRootPath);
     if (dir) {
         struct dirent *dirent;
         while ((dirent = readdir(dir)) != NULL) {
             if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
 
                 // read the lid state file
-                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", lidRootPath, dirent->d_name, "state");
+                snprintf(lidFileName, PATH_MAX, "%s/%s/%s", laptopLidRootPath, dirent->d_name, "state");
                 FILE *lidFile = fopen(lidFileName, "r");
                 if (lidFile != NULL) {
                     if (fgets(line, 512, lidFile))
                         if (strcasestr(line, "closed"))
-                            lidClosed = true;
+                            return true;
                     fclose(lidFile);
                 }
 
@@ -56,4 +38,6 @@ void Laptop::calculateLidClosed(const char *lidRootPath) {
         }
         closedir(dir);
     }
+    return false;
 }
+
