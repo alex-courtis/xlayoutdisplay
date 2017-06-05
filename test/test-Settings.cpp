@@ -6,14 +6,14 @@ using namespace std;
 
 class Settings_loadUserSettings : public ::testing::Test {
 protected:
-    virtual void SetUp() {
-        // open the file for write; test must close before read
-        ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != NULL);
+    virtual void TearDown() {
+        remove(settingsFileName);
     }
 
-    virtual void TearDown() {
-        // always remove the file
-        ASSERT_EQ(0, remove(settingsFileName));
+    void writeUserSettings(const char *settings) {
+        ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != NULL);
+        fprintf(settingsFile, settings);
+        ASSERT_EQ(0, fclose(settingsFile));
     }
 
     void loadUserSettings() {
@@ -27,7 +27,7 @@ protected:
 
 TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
 
-    fprintf(settingsFile, ""
+    writeUserSettings(""
             "\n"
             "#\n"
             " #\n"
@@ -38,7 +38,6 @@ TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
             "quiet=true\n"
             " OrDeR = one , TwO  \n"
             "prImAry =    blargh");
-    ASSERT_EQ(0, fclose(settingsFile));
 
     loadUserSettings();
 
@@ -56,16 +55,14 @@ TEST_F(Settings_loadUserSettings, AvailableSettingsAndComments) {
 
 TEST_F(Settings_loadUserSettings, InvalidKey) {
 
-    fprintf(settingsFile, "bleh=blargh");
-    ASSERT_EQ(0, fclose(settingsFile));
+    writeUserSettings("bleh=blargh");
 
     EXPECT_THROW(loadUserSettings(), invalid_argument);
 }
 
 TEST_F(Settings_loadUserSettings, MissingValue) {
 
-    fprintf(settingsFile, "quiet=");
-    ASSERT_EQ(0, fclose(settingsFile));
+    writeUserSettings("quiet=");
 
     EXPECT_THROW(loadUserSettings(), invalid_argument);
 }
