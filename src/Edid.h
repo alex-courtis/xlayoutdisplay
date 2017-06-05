@@ -8,6 +8,7 @@
 
 class Edid {
 public:
+    Edid() {};
 
     // throws invalid_argument:
     //   length > EDID_MIN_LENGTH
@@ -25,10 +26,6 @@ public:
 
 private:
     unsigned char *edid;
-
-    Edid() {};
-
-    friend class MockEdid;
 };
 
 typedef std::shared_ptr<Edid> EdidP;
