@@ -6,9 +6,6 @@ using namespace std;
 
 class Displ_constructor : public ::testing::Test {
 protected:
-    virtual void SetUp() {
-    }
-
     ModeP mode1 = make_shared<Mode>(0, 1, 2, 3);
     ModeP mode2 = make_shared<Mode>(4, 5, 6, 7);
 

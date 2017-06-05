@@ -5,7 +5,14 @@
 using namespace std;
 
 class Monitors_calculateLaptopLidClosed : public ::testing::Test {
-public:
+protected:
+    void TearDown() override {
+        // always try and remove anything from createStateFile
+        remove("./lid/LIDX/state");
+        rmdir("./lid/LIDX");
+        rmdir("./lid");
+    }
+
     void createStateFile(const char *contents) {
         ASSERT_EQ(0, mkdir("./lid", 0755));
         ASSERT_EQ(0, mkdir("./lid/LIDX", 0755));
@@ -14,14 +21,6 @@ public:
         fprintf(lidStateFile, contents);
         ASSERT_EQ(0, fclose(lidStateFile));
     };
-
-protected:
-    void TearDown() override {
-        // always try and remove anything from createStateFile
-        remove("./lid/LIDX/state");
-        rmdir("./lid/LIDX");
-        rmdir("./lid");
-    }
 };
 
 TEST_F(Monitors_calculateLaptopLidClosed, notClosedMissingFile) {
