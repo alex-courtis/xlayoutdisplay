@@ -10,9 +10,6 @@ public:
             x(x), y(y) {
     }
 
-    virtual ~Pos() {
-    }
-
     const int x = 0;
     const int y = 0;
 };

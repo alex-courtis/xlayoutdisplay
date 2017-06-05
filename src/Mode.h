@@ -11,9 +11,6 @@ public:
             rrMode(rrMode), width(width), height(height), refresh(refresh) {
     }
 
-    virtual ~Mode() {
-    }
-
     // throws invalid_argument:
     //   null resources
     //   id not found in resources

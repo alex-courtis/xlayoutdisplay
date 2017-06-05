@@ -46,9 +46,6 @@ public:
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
           const ModeP &preferredMode, const PosP &currentPos, const EdidP edid);
 
-    virtual ~Displ() {
-    }
-
     const std::string name;
     const State state;
     const std::list<ModeP> modes;
