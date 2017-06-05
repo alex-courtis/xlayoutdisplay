@@ -5,6 +5,8 @@
 #include "Mode.h"
 
 #define EDID_MIN_LENGTH 128
+#define EDID_BYTE_MAX_CM_HORIZ 0x15
+#define EDID_BYTE_MAX_CM_VERT 0x16
 
 class Edid {
 public:
@@ -28,9 +30,5 @@ private:
 };
 
 typedef std::shared_ptr<Edid> EdidP;
-
-
-#define EDID_MAX_CM_HORIZ 0x15
-#define EDID_MAX_CM_VERT 0x16
 
 #endif //XLAYOUTDISPLAYS_EDID_H

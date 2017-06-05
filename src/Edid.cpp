@@ -20,11 +20,11 @@ Edid::~Edid() {
 }
 
 const int Edid::maxCmHoriz() const {
-    return edid[EDID_MAX_CM_HORIZ];
+    return edid[EDID_BYTE_MAX_CM_HORIZ];
 }
 
 const int Edid::maxCmVert() const {
-    return edid[EDID_MAX_CM_VERT];
+    return edid[EDID_BYTE_MAX_CM_VERT];
 }
 
 const double Edid::dpiForMode(const ModeP &mode) const {

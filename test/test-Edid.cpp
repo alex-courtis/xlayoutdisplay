@@ -24,8 +24,8 @@ TEST(Edid_maxCmHorizVert, valid) {
     const size_t len = EDID_MIN_LENGTH;
     unsigned char val[len];
     memset(val, 1, len);
-    val[EDID_MAX_CM_HORIZ] = 2;
-    val[EDID_MAX_CM_VERT] = 3;
+    val[EDID_BYTE_MAX_CM_HORIZ] = 2;
+    val[EDID_BYTE_MAX_CM_VERT] = 3;
 
     Edid edid = Edid(val, len, "blargh");
 
