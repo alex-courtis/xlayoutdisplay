@@ -7,7 +7,7 @@ find_package(X11 REQUIRED)
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
 
-# need to discover how to link just to exe... sounds like multiple cmake files would be the way
+# todo: need to discover how to link just to exe... sounds like multiple cmake files would be the way
 link_libraries(gtest)
 link_libraries(gmock)
 link_libraries(pthread) # used for gmock

@@ -11,6 +11,8 @@
 
 #define DEFAULT_DPI 96
 
+// todo: move all the "stateless" methods into Layout and make them truly stateless, then test them
+
 class Displ;
 
 typedef std::shared_ptr<Displ> DisplP;
