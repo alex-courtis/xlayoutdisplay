@@ -8,14 +8,14 @@ using ::testing::Return;
 
 class MockEdid : public Edid {
 public:
-    MOCK_CONST_METHOD0(maxCmHoriz, int());
+    MOCK_CONST_METHOD0(maxCmHoriz, const int());
 
-    MOCK_CONST_METHOD0(maxCmVert, int());
+    MOCK_CONST_METHOD0(maxCmVert, const int());
 
-    MOCK_CONST_METHOD1(dpiForMode, double(
+    MOCK_CONST_METHOD1(dpiForMode, const double(
             const ModeP &mode));
 
-    MOCK_CONST_METHOD1(closestDpiForMode, unsigned int(
+    MOCK_CONST_METHOD1(closestDpiForMode, const unsigned int(
             const ModeP &mode));
 };
 
