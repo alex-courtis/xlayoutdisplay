@@ -12,10 +12,7 @@ public:
 
     MOCK_CONST_METHOD0(maxCmVert, const int());
 
-    MOCK_CONST_METHOD1(dpiForMode, const double(
-            const ModeP &mode));
-
-    MOCK_CONST_METHOD1(closestDpiForMode, const unsigned int(
+    MOCK_CONST_METHOD1(dpiForMode, const long(
             const ModeP &mode));
 };
 

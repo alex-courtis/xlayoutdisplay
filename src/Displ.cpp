@@ -13,7 +13,7 @@ ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode)
 // one and only primary
 DisplP Displ::desiredPrimary;
 
-unsigned int Displ::desiredDpi = DEFAULT_DPI;
+long Displ::desiredDpi = DEFAULT_DPI;
 
 Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode, const PosP &currentPos,
              const EdidP edid) :
@@ -212,13 +212,12 @@ string calculateDpi(std::list<DisplP> &displs) {
     } else if (!Displ::desiredPrimary->desiredMode()) {
         verbose << "DPI defaulting to " << Displ::desiredDpi << "; desiredMode not available for primary display " << Displ::desiredPrimary->name;
     } else {
-        const unsigned int desiredDpi = Displ::desiredPrimary->edid->closestDpiForMode(Displ::desiredPrimary->desiredMode());
+        const long desiredDpi = Displ::desiredPrimary->edid->dpiForMode(Displ::desiredPrimary->desiredMode());
         if (desiredDpi == 0) {
             verbose << "DPI defaulting to " << Displ::desiredDpi << "; no display size EDID information available for " << Displ::desiredPrimary->name;
         } else {
             Displ::desiredDpi = desiredDpi;
-            verbose << "DPI rounded to " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name << " with DPI: "
-                    << Displ::desiredPrimary->edid->dpiForMode(Displ::desiredPrimary->desiredMode());
+            verbose << "DPI " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name;
         }
     }
 

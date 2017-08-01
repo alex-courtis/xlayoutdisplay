@@ -62,7 +62,7 @@ public:
     static std::shared_ptr<Displ> desiredPrimary;
 
     // defaults to DEFAULT_DPI
-    static unsigned int desiredDpi;
+    static long desiredDpi;
 
     // desiredMode must be in modes
     void desiredMode(const ModeP &desiredMode);

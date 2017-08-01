@@ -21,9 +21,7 @@ public:
 
     virtual const int maxCmVert() const;
 
-    virtual const double dpiForMode(const ModeP &mode) const;
-
-    virtual const unsigned int closestDpiForMode(const ModeP &mode) const;
+    virtual const long dpiForMode(const ModeP &mode) const;
 
 private:
     unsigned char *edid;
