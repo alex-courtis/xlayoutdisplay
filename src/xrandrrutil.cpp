@@ -28,7 +28,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     return (unsigned int) (rate + 0.5);
 }
 
-const string renderCmd(const list <DisplP> &displs) {
+const string renderXrandrCmd(const list<DisplP> &displs) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << Displ::desiredDpi;
     for (const auto displ : displs) {

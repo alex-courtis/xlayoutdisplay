@@ -29,6 +29,8 @@ set(SOURCE_FILES
         src/util.h
         src/xrandrrutil.cpp
         src/xrandrrutil.h
+        src/xrdbutil.h
+        src/xrdbutil.cpp
         )
 
 set(TEST_FILES
@@ -39,6 +41,7 @@ set(TEST_FILES
         test/test-Mode.cpp
         test/test-Settings.cpp
         test/test-xrandrutil.cpp
+        test/test-xrdbutil.cpp
         )
 
 add_executable(gtests ${SOURCE_FILES} ${TEST_FILES})

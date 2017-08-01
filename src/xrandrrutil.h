@@ -43,7 +43,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
 // will activate only if desiredActive, desiredMode, desiredPos are set
 // desiredPrimary is only set if activated
 // DPI will be set to that of the desiredPrimary which specifies it, otherwise 96
-const std::string renderCmd(const std::list<DisplP> &displs);
+const std::string renderXrandrCmd(const std::list<DisplP> &displs);
 
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list<DisplP> &displs);

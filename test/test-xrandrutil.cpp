@@ -63,7 +63,7 @@ TEST(xrandrutil_renderCmd, renderAll) {
     expected << " --output Four --off \\\n";
     expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
-    EXPECT_EQ(expected.str(), renderCmd(displs));
+    EXPECT_EQ(expected.str(), renderXrandrCmd(displs));
 }
 
 TEST(xrandrutil_renderUserInfo, renderAll) {
