@@ -88,6 +88,8 @@ Clone and cmake
 
 ## TODO
 
+Don't round to nearest 24... be free with the exact DPI
+
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
 Adjust cursor size; `Xcursor.size` has no units and behaves eratically; on some instances (168) it behaves well without settings, on other instances (216) it goes back to default 96dpi size
