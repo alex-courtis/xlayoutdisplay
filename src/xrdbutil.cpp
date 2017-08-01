@@ -8,8 +8,8 @@ using namespace std;
 
 const std::string renderXrdbCmd() {
     stringstream ss;
-    ss << "xrdb -merge <(echo \"Xft.dpi: "
+    ss << "echo \"Xft.dpi: "
        << Displ::desiredDpi
-       << "\")";
+       << "\" | xrdb -merge";
     return ss.str();
 }
