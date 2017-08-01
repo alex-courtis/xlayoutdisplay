@@ -41,10 +41,18 @@ const int Layout::apply() {
     if (settings.verbose || settings.dryRun)
         printf("\n\n%s\n%s\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str(), settings.after.c_str());
 
-    // execute commands or exit
+    // exit after dry run
     if (settings.dryRun)
         return EXIT_SUCCESS;
-    else
-        return system(xrandrCmd.c_str()) || system(xrdbCmd.c_str()) || system(settings.after.c_str());
-}
 
+    // execute
+    int rc = system(xrandrCmd.c_str());
+    if (rc != 0)
+        return rc;
+    rc = system(xrdbCmd.c_str());
+    if (rc != 0)
+        return rc;
+    rc = system(settings.after.c_str());
+    if (rc != 0)
+        return rc;
+}

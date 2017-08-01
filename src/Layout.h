@@ -15,7 +15,7 @@ public:
 
     // arranges displays (if not in info mode) and applies this arrangement (if not in dry-run mode)
     // prints out information during the process, if we're in info or verbose mode
-    // returns an appropriate error code for the process
+    // returns 0 or failure code from system
     const int apply();
 
 private:
