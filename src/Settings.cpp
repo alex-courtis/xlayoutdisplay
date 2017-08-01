@@ -7,9 +7,9 @@
 
 using namespace std;
 
-// todo: use a library for this stuff
+// todo: use a library for this stuff, seriously, need double dash options
 
-#define USAGE "Usage: %s [-a after] [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
+#define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
 #define SETTINGS_FILE_COMMENT_CHAR '#'
 #define SETTINGS_FILE_SEPS " =\n,"
@@ -42,7 +42,6 @@ void printHelp(char *progPath) {
     );
     printf(USAGE, progName);
     printf(""
-                   "  -a  invoke a command after arranging\n"
                    "  -h  display this help text and exit\n"
                    "  -i  display information about current displays and exit\n"
                    "  -m  mirror displays using the lowest common resolution\n"
@@ -52,10 +51,9 @@ void printHelp(char *progPath) {
                    "  -q  suppress output\n"
     );
     printf("\n"
-                   "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0 -a \"xmonad --restart\"\n"
+                   "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"
                    "  arranges DP-0 left, HDMI-0 right, with any remaining displays further right\n"
                    "  HDMI-0 set as primary\n"
-                   "  will invoke \"xmonad --restart\" after successful arrangement\n"
                    "", progName
     );
     exit(EXIT_SUCCESS);
@@ -74,11 +72,8 @@ void Settings::loadCliSettings(int argc, char **argv) {
 
     // load command line settings
     int opt;
-    while ((opt = getopt(argc, argv, "a:himno:p:q")) != -1) {
+    while ((opt = getopt(argc, argv, "himno:p:q")) != -1) {
         switch (opt) {
-            case 'a':
-                after = optarg;
-                break;
             case 'h':
                 help = true;
                 break;

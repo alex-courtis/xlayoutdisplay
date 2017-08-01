@@ -12,7 +12,6 @@ public:
     // default settings, overridden with ~/.xLayoutDisplays then argc/argv
     Settings(int argc, char **argv);
 
-    std::string after;
     bool dryRun = false;
     bool help = false;
     bool info = false;

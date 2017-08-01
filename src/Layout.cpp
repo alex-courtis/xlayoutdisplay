@@ -39,20 +39,16 @@ const int Layout::apply() {
     const string xrandrCmd = renderXrandrCmd(displs);
     const string xrdbCmd = renderXrdbCmd();
     if (settings.verbose || settings.dryRun)
-        printf("\n\n%s\n%s\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str(), settings.after.c_str());
-
-    // exit after dry run
-    if (settings.dryRun)
-        return EXIT_SUCCESS;
+        printf("\n\n%s\n\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str());
 
     // execute
-    int rc = system(xrandrCmd.c_str());
-    if (rc != 0)
-        return rc;
-    rc = system(xrdbCmd.c_str());
-    if (rc != 0)
-        return rc;
-    rc = system(settings.after.c_str());
-    if (rc != 0)
-        return rc;
+    if (!settings.dryRun) {
+        int rc = system(xrandrCmd.c_str());
+        if (rc != 0)
+            return rc;
+        rc = system(xrdbCmd.c_str());
+        if (rc != 0)
+            return rc;
+    }
+    return EXIT_SUCCESS;
 }
