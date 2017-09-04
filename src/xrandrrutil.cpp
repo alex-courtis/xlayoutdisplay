@@ -11,21 +11,22 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     double rate;
     double vTotal = modeInfo.vTotal;
 
-    /* doublescan doubles the number of lines */
     if (modeInfo.modeFlags & RR_DoubleScan)
+        /* doublescan doubles the number of lines */
         vTotal *= 2;
 
-    /* interlace splits the frame into two fields */
-    /* the field rate is what is typically reported by monitors */
     if (modeInfo.modeFlags & RR_Interlace)
+        /* interlace splits the frame into two fields */
+        /* the field rate is what is typically reported by monitors */
         vTotal /= 2;
 
     if (modeInfo.hTotal && vTotal)
-        rate = ((double) modeInfo.dotClock / (modeInfo.hTotal * vTotal));
+        rate = ((double) modeInfo.dotClock /
+                ((double) modeInfo.hTotal * vTotal));
     else
         rate = 0;
 
-    // round up, as xrandr uses the greatest rate less than passed
+    // round up
     return static_cast<const unsigned int>(round(rate));
 }
 
@@ -49,7 +50,7 @@ const string renderXrandrCmd(const list<DisplP> &displs) {
     return ss.str();
 }
 
-const string renderUserInfo(const list <DisplP> &displs) {
+const string renderUserInfo(const list<DisplP> &displs) {
     stringstream ss;
     for (const auto &displ : displs) {
         ss << displ->name;
@@ -86,8 +87,8 @@ const string renderUserInfo(const list <DisplP> &displs) {
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list <DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
-    list <DisplP> displs;
+const list<DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
+    list<DisplP> displs;
 
     // open up X information
     Display *dpy = xrrWrapper->xOpenDisplay(nullptr);
@@ -95,14 +96,15 @@ const list <DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
         throw runtime_error("Failed to open display defined by DISPLAY environment variable");
     int screen = xrrWrapper->defaultScreen(dpy);
     if (screen >= xrrWrapper->screenCount(dpy))
-        throw runtime_error("Invalid screen number " + to_string(screen) + " (display has " + to_string(xrrWrapper->screenCount(dpy)) + ")");
+        throw runtime_error("Invalid screen number " + to_string(screen) + " (display has " +
+                            to_string(xrrWrapper->screenCount(dpy)) + ")");
     Window rootWindow = xrrWrapper->rootWindow(dpy, screen);
     XRRScreenResources *screenResources = xrrWrapper->xrrGetScreenResources(dpy, rootWindow);
 
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         Displ::State state;
-        list <ModeP> modes;
+        list<ModeP> modes;
         ModeP currentMode, preferredMode;
         PosP currentPos;
         EdidP edid;
