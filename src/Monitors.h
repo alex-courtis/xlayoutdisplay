@@ -13,10 +13,10 @@ public:
     // laptopLidClosed = calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)
     Monitors();
 
-    Monitors(const bool laptopLidClosed);
+    explicit Monitors(bool laptopLidClosed);
 
     // return true if the display should be disabled
-    const bool shouldDisableDisplay(const std::string name) const;
+    const bool shouldDisableDisplay(std::string name) const;
 
     // true if the laptop lid is closed
     const bool laptopLidClosed;

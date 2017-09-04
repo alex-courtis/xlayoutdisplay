@@ -5,7 +5,7 @@
 
 class XrrWrapper {
 public:
-    virtual ~XrrWrapper() {};
+    virtual ~XrrWrapper() = default;
 
     virtual Display *xOpenDisplay(_Xconst char *name) const {
         return XOpenDisplay(name);

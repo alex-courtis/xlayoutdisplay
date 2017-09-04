@@ -46,7 +46,7 @@ public:
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
     Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
-          const ModeP &preferredMode, const PosP &currentPos, const EdidP edid);
+          const ModeP &preferredMode, const PosP &currentPos, const EdidP &edid);
 
     const std::string name;
     const State state;
@@ -70,7 +70,7 @@ public:
     const ModeP &desiredMode() const;
 
     // optimalMode must be present
-    void desiredActive(const bool desiredActive);
+    void desiredActive(bool desiredActive);
 
     bool desiredActive() const;
 

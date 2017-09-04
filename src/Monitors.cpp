@@ -1,6 +1,6 @@
 #include "Monitors.h"
 
-#include <string.h>
+#include <cstring>
 #include <dirent.h>
 
 Monitors::Monitors() : laptopLidClosed(calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)) {}
@@ -19,13 +19,13 @@ const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     DIR *dir = opendir(laptopLidRootPath);
     if (dir) {
         struct dirent *dirent;
-        while ((dirent = readdir(dir)) != NULL) {
+        while ((dirent = readdir(dir)) != nullptr) {
             if (dirent->d_type == DT_DIR && strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0) {
 
                 // read the lid state file
                 snprintf(lidFileName, PATH_MAX, "%s/%s/%s", laptopLidRootPath, dirent->d_name, "state");
                 FILE *lidFile = fopen(lidFileName, "r");
-                if (lidFile != NULL) {
+                if (lidFile != nullptr) {
                     if (fgets(line, 512, lidFile))
                         if (strcasestr(line, "closed"))
                             return true;

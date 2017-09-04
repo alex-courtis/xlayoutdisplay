@@ -2,7 +2,7 @@
 #include "Monitors.h"
 #include "util.h"
 
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -87,8 +87,8 @@ void Settings::loadCliSettings(int argc, char **argv) {
                 dryRun = true;
                 break;
             case 'o':
-                for (char *token = strtok(optarg, " ,"); token != NULL; token = strtok(NULL, " ,"))
-                    order.push_back(string(token));
+                for (char *token = strtok(optarg, " ,"); token != nullptr; token = strtok(nullptr, " ,"))
+                    order.emplace_back(token);
                 break;
             case 'p':
                 primary = optarg;
@@ -121,11 +121,11 @@ void Settings::loadUserSettings(const string settingsFilePath) {
             key = strtok(line, SETTINGS_FILE_SEPS);
 
             // skip comments
-            if (key != NULL && key[0] != SETTINGS_FILE_COMMENT_CHAR) {
+            if (key != nullptr && key[0] != SETTINGS_FILE_COMMENT_CHAR) {
 
                 // value
-                val = strtok(NULL, SETTINGS_FILE_SEPS);
-                if (val == NULL)
+                val = strtok(nullptr, SETTINGS_FILE_SEPS);
+                if (val == nullptr)
                     throw invalid_argument(
                             string() + "missing value for key '" + key + "' in '" + settingsFilePath + "'");
 
@@ -133,8 +133,8 @@ void Settings::loadUserSettings(const string settingsFilePath) {
                     mirror = strcasecmp(val, "true") == 0;
                 } else if (strcasecmp(key, SETTINGS_FILE_KEY_ORDER) == 0) {
                     while (val) {
-                        order.push_back(string(val));
-                        val = strtok(NULL, SETTINGS_FILE_SEPS);
+                        order.emplace_back(val);
+                        val = strtok(nullptr, SETTINGS_FILE_SEPS);
                     }
                 } else if (strcasecmp(key, SETTINGS_FILE_KEY_PRIMARY) == 0) {
                     primary = val;

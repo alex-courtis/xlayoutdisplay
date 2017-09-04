@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 
@@ -16,7 +16,7 @@ DisplP Displ::desiredPrimary;
 long Displ::desiredDpi = DEFAULT_DPI;
 
 Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode, const PosP &currentPos,
-             const EdidP edid) :
+             const EdidP &edid) :
         name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode), preferredMode(preferredMode),
         optimalMode(generateOptimalMode(this->modes, preferredMode)), currentPos(currentPos), edid(edid) {
 
@@ -77,7 +77,7 @@ ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode)
 
         // override with highest refresh of preferred
         if (preferredMode)
-            for (const ModeP mode : modes)
+            for (const ModeP &mode : modes)
                 if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
                     optimalMode = mode;
                     break;
@@ -91,8 +91,8 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
 
     // stack all the preferred, available displays
     list <DisplP> preferredDispls;
-    for (const auto name : order) {
-        for (const auto displ : displs) {
+    for (const auto &name : order) {
+        for (const auto &displ : displs) {
             if (strcasecmp(name.c_str(), displ->name.c_str()) == 0) {
                 preferredDispls.push_front(displ);
             }
@@ -100,14 +100,14 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
     }
 
     // move preferred to the front
-    for (const auto preferredDispl : preferredDispls) {
+    for (const auto &preferredDispl : preferredDispls) {
         displs.remove(preferredDispl);
         displs.push_front(preferredDispl);
     }
 }
 
 void activateDispls(std::list<DisplP> &displs, const string &primary, const Monitors &monitors) {
-    for (const auto displ : displs) {
+    for (const auto &displ : displs) {
 
         // don't display any monitors that shouldn't
         if (monitors.shouldDisableDisplay(displ->name))
@@ -133,7 +133,7 @@ void activateDispls(std::list<DisplP> &displs, const string &primary, const Moni
 void ltrDispls(list <DisplP> &displs) {
     int xpos = 0;
     int ypos = 0;
-    for (const auto displ : displs) {
+    for (const auto &displ : displs) {
 
         if (displ->desiredActive()) {
 
@@ -153,7 +153,7 @@ void mirrorDispls(list <DisplP> &displs) {
 
     // find the first active display
     DisplP firstDispl;
-    for (const auto displ : displs) {
+    for (const auto &displ : displs) {
         if (displ->desiredActive()) {
             firstDispl = displ;
             break;
@@ -163,11 +163,11 @@ void mirrorDispls(list <DisplP> &displs) {
         return;
 
     // iterate through first active display's modes
-    for (const auto possibleMode : firstDispl->modes) {
+    for (const auto &possibleMode : firstDispl->modes) {
         bool matched = true;
 
         // attempt to match mode to each active displ
-        for (const auto displ : displs) {
+        for (const auto &displ : displs) {
             if (!displ->desiredActive())
                 continue;
 
@@ -175,7 +175,7 @@ void mirrorDispls(list <DisplP> &displs) {
             ModeP desiredMode;
 
             // match height and width only
-            for (const auto mode : displ->modes) {
+            for (const auto &mode : displ->modes) {
                 if (mode->width == possibleMode->width && mode->height == possibleMode->height) {
 
                     // set mode and pos

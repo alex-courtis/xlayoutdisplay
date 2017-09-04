@@ -1,6 +1,6 @@
 #include "Edid.h"
 
-#include <string.h>
+#include <cstring>
 #include <cmath>
 
 using namespace std;

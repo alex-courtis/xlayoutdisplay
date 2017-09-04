@@ -5,10 +5,10 @@
 using namespace std;
 
 Mode *Mode::fromXRR(const RRMode id, const XRRScreenResources *resources) {
-    if (resources == NULL)
+    if (resources == nullptr)
         throw invalid_argument("cannot construct Mode: NULL XRRScreenResources");
 
-    XRRModeInfo *modeInfo = NULL;
+    XRRModeInfo *modeInfo = nullptr;
     for (int i = 0; i < resources->nmode; i++) {
         if (id == resources->modes[i].id) {
             modeInfo = &(resources->modes[i]);
@@ -16,7 +16,7 @@ Mode *Mode::fromXRR(const RRMode id, const XRRScreenResources *resources) {
         }
     }
 
-    if (modeInfo == NULL)
+    if (modeInfo == nullptr)
         throw invalid_argument("cannot construct Mode: cannot retrieve RRMode '" + to_string(id) + "'");
 
     return new Mode(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(*modeInfo));

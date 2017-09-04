@@ -10,10 +10,10 @@
 
 class Edid {
 public:
-    Edid() {};
+    Edid() = default;
 
     // throws invalid_argument when length > EDID_MIN_LENGTH
-    Edid(const unsigned char *edid, const size_t length, const char *name);
+    Edid(const unsigned char *edid, size_t length, const char *name);
 
     virtual ~Edid();
 
@@ -24,7 +24,7 @@ public:
     virtual const long dpiForMode(const ModeP &mode) const;
 
 private:
-    unsigned char *edid;
+    unsigned char *edid = nullptr;
 };
 
 typedef std::shared_ptr<Edid> EdidP;

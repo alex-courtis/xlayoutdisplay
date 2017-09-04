@@ -2,7 +2,7 @@
 #define XLAYOUTDISPLAYS_STDUTIL_H
 
 #include <memory>
-#include <limits.h>
+#include <climits>
 
 // sorting function for shared pointers... this must be in STL somewhere...
 template<typename T>

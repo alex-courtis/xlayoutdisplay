@@ -14,7 +14,7 @@ public:
     // throws invalid_argument:
     //   null resources
     //   id not found in resources
-    static Mode *fromXRR(const RRMode id, const XRRScreenResources *resources);
+    static Mode *fromXRR(RRMode id, const XRRScreenResources *resources);
 
     // order by width, height, refresh
     const bool operator<(const Mode &o) const;

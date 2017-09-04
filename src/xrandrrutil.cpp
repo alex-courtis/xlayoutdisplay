@@ -1,7 +1,7 @@
 #include "xrandrrutil.h"
 
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 
@@ -31,7 +31,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
 const string renderXrandrCmd(const list<DisplP> &displs) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << Displ::desiredDpi;
-    for (const auto displ : displs) {
+    for (const auto &displ : displs) {
         ss << " \\\n --output " << displ->name;
         if (displ->desiredActive() && displ->desiredMode() && displ->desiredPos) {
             ss << " --mode " << displ->desiredMode()->width << "x" << displ->desiredMode()->height;
@@ -50,7 +50,7 @@ const string renderXrandrCmd(const list<DisplP> &displs) {
 
 const string renderUserInfo(const list <DisplP> &displs) {
     stringstream ss;
-    for (const auto displ : displs) {
+    for (const auto &displ : displs) {
         ss << displ->name;
         switch (displ->state) {
             case Displ::active:
@@ -72,7 +72,7 @@ const string renderUserInfo(const list <DisplP> &displs) {
             ss << ' ' << displ->currentMode->refresh << "Hz";
         }
         ss << endl;
-        for (const auto mode : displ->modes) {
+        for (const auto &mode : displ->modes) {
             ss << (mode == displ->currentMode ? '*' : ' ');
             ss << (mode == displ->preferredMode ? '+' : ' ');
             ss << (mode == displ->optimalMode ? '!' : ' ');
@@ -89,8 +89,8 @@ const list <DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
     list <DisplP> displs;
 
     // open up X information
-    Display *dpy = xrrWrapper->xOpenDisplay(NULL);
-    if (dpy == NULL)
+    Display *dpy = xrrWrapper->xOpenDisplay(nullptr);
+    if (dpy == nullptr)
         throw runtime_error("Failed to open display defined by DISPLAY environment variable");
     int screen = xrrWrapper->defaultScreen(dpy);
     if (screen >= xrrWrapper->screenCount(dpy))
