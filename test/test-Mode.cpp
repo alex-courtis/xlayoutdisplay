@@ -27,7 +27,7 @@ TEST_F(Mode_constructor, modeNotPresent) {
 }
 
 TEST_F(Mode_constructor, resourcesNotPresent) {
-    EXPECT_THROW(Mode::fromXRR(11, NULL), invalid_argument);
+    EXPECT_THROW(Mode::fromXRR(11, nullptr), invalid_argument);
 }
 
 

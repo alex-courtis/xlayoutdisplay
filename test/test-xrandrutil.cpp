@@ -138,7 +138,7 @@ protected:
 TEST_F(xrandrutil_discoverDispls, cannotOpenDisplay) {
     MockXrrWrapper xrrWrapper;
 
-    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL));
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(nullptr));
 
     EXPECT_THROW(discoverDispls(&xrrWrapper), runtime_error);
 }
@@ -146,7 +146,7 @@ TEST_F(xrandrutil_discoverDispls, cannotOpenDisplay) {
 TEST_F(xrandrutil_discoverDispls, excessScreens) {
     MockXrrWrapper xrrWrapper;
 
-    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(nullptr)).WillOnce(Return(dpy));
     EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));
     EXPECT_CALL(xrrWrapper, screenCount(dpy)).Times(2).WillRepeatedly(Return(1));
 
@@ -156,7 +156,7 @@ TEST_F(xrandrutil_discoverDispls, excessScreens) {
 TEST_F(xrandrutil_discoverDispls, noDisplays) {
     MockXrrWrapper xrrWrapper;
 
-    EXPECT_CALL(xrrWrapper, xOpenDisplay(NULL)).WillOnce(Return(dpy));
+    EXPECT_CALL(xrrWrapper, xOpenDisplay(nullptr)).WillOnce(Return(dpy));
     EXPECT_CALL(xrrWrapper, defaultScreen(dpy)).WillOnce(Return(screen));
     EXPECT_CALL(xrrWrapper, screenCount(dpy)).WillOnce(Return(3));
     EXPECT_CALL(xrrWrapper, rootWindow(dpy, screen)).WillOnce(Return(rootWindow));

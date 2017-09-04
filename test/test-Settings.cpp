@@ -8,7 +8,7 @@ const char *settingsFileName = "./availableSettings";
 FILE *settingsFile;
 
 void writeUserSettings(const char *settingsFileContents) {
-    ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != NULL);
+    ASSERT_TRUE((settingsFile = fopen(settingsFileName, "w")) != nullptr);
     fprintf(settingsFile, settingsFileContents);
     ASSERT_EQ(0, fclose(settingsFile));
 }
