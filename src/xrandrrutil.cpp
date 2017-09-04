@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
         rate = 0;
 
     // round up, as xrandr uses the greatest rate less than passed
-    return (unsigned int) (rate + 0.5);
+    return static_cast<const unsigned int>(round(rate));
 }
 
 const string renderXrandrCmd(const list<DisplP> &displs) {
