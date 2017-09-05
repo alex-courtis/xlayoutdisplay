@@ -185,4 +185,4 @@ TEST_F(xrandrutil_discoverDispls, noDisplays) {
     EXPECT_TRUE(displs.empty());
 }
 
-// todo: fully test discoverDispls
+// TODO: fully test discoverDispls

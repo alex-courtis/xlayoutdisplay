@@ -17,6 +17,8 @@ public:
             refresh(refresh) {
     }
 
+    // TODO: make this a function
+
     // throws invalid_argument:
     //   null resources
     //   id not found in resources

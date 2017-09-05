@@ -7,7 +7,7 @@
 
 using namespace std;
 
-// todo: use a library for this stuff, seriously, need double dash options
+// TODO: use a library for this stuff, seriously, need double dash options
 
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 

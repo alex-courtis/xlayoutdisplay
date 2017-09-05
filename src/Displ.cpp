@@ -212,7 +212,7 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
     throw runtime_error("unable to find common width/height for mirror");
 }
 
-// todo: document and test this; refactor needed
+// TODO: document and test this; refactor needed
 string calculateDpi(std::list<shared_ptr<Displ>> &displs) {
     stringstream verbose;
     if (!Displ::desiredPrimary) {

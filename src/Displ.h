@@ -11,7 +11,7 @@
 
 #define DEFAULT_DPI 96
 
-// todo: move all the "stateless" methods into Layout and make them truly stateless, then test them
+// TODO: move all the following functions into a new file (Arrangement?)
 
 class Displ;
 
@@ -62,8 +62,10 @@ public:
 
     std::shared_ptr<Pos> desiredPos;
 
+    // TODO: make this a member of Layout
     static std::shared_ptr<Displ> desiredPrimary;
 
+    // TODO: what is this about? remove
     // defaults to DEFAULT_DPI
     static long desiredDpi;
 
