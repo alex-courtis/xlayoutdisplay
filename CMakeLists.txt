@@ -1,18 +1,15 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.8)
+
 project(xLayoutDisplays)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(X11 REQUIRED)
+
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
 
-# todo: need to discover how to link just to exe... sounds like multiple cmake files would be the way
-link_libraries(gtest)
-link_libraries(gmock)
-link_libraries(pthread) # used for gmock
-
-set(SOURCE_FILES
+set(SRC_FILES
         src/Edid.cpp
         src/Edid.h
         src/Displ.cpp
@@ -33,8 +30,9 @@ set(SOURCE_FILES
         src/xrdbutil.cpp
         )
 
+add_executable(xLayoutDisplays src/main.cpp ${SRC_FILES})
+
 set(TEST_FILES
-        test/main.cpp
         test/test-Edid.cpp
         test/test-Displ.cpp
         test/test-Monitors.cpp
@@ -44,6 +42,8 @@ set(TEST_FILES
         test/test-xrdbutil.cpp
         )
 
-add_executable(gtests ${SOURCE_FILES} ${TEST_FILES})
+add_executable(Tests test/main.cpp ${SRC_FILES} ${TEST_FILES})
 
-add_executable(xLayoutDisplays src/main.cpp ${SOURCE_FILES})
+target_link_libraries(Tests gtest)
+target_link_libraries(Tests gmock)
+target_link_libraries(Tests pthread)
