@@ -25,6 +25,4 @@ public:
     const unsigned int refresh;
 };
 
-typedef std::shared_ptr<Mode> ModeP;
-
 #endif //XLAYOUTDISPLAYS_MODE_H

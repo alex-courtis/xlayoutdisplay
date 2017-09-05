@@ -14,6 +14,4 @@ public:
     const int y = 0;
 };
 
-typedef std::shared_ptr<Pos> PosP;
-
 #endif //XLAYOUTDISPLAYS_POS_H

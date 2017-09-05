@@ -104,9 +104,9 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         Displ::State state;
-        list<ModeP> modes;
-        ModeP currentMode, preferredMode;
-        PosP currentPos;
+        list<std::shared_ptr<Mode>> modes;
+        std::shared_ptr<Mode> currentMode, preferredMode;
+        shared_ptr<Pos> currentPos;
         shared_ptr<Edid> edid;
 
         // current state

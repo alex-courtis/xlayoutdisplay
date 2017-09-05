@@ -21,7 +21,7 @@ public:
 
     virtual const int maxCmVert() const;
 
-    virtual const long dpiForMode(const ModeP &mode) const;
+    virtual const long dpiForMode(const std::shared_ptr<Mode> &mode) const;
 
 private:
     unsigned char *edid = nullptr;

@@ -43,19 +43,20 @@ public:
     //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    Displ(const std::string &name, const State &state, const std::list<ModeP> &modes, const ModeP &currentMode,
-          const ModeP &preferredMode, const PosP &currentPos, const std::shared_ptr<Edid> &edid);
+    Displ(const std::string &name, const State &state, const std::list<std::shared_ptr<Mode>> &modes,
+          const std::shared_ptr<Mode> &currentMode, const std::shared_ptr<Mode> &preferredMode,
+          const std::shared_ptr<Pos> &currentPos, const std::shared_ptr<Edid> &edid);
 
     const std::string name;
     const State state;
-    const std::list<ModeP> modes;
-    const ModeP currentMode;
-    const ModeP preferredMode;
-    const ModeP optimalMode;
-    const PosP currentPos;
+    const std::list<std::shared_ptr<Mode>> modes;
+    const std::shared_ptr<Mode> currentMode;
+    const std::shared_ptr<Mode> preferredMode;
+    const std::shared_ptr<Mode> optimalMode;
+    const std::shared_ptr<Pos> currentPos;
     const std::shared_ptr<Edid> edid;
 
-    PosP desiredPos;
+    std::shared_ptr<Pos> desiredPos;
 
     static std::shared_ptr<Displ> desiredPrimary;
 
@@ -63,9 +64,9 @@ public:
     static long desiredDpi;
 
     // desiredMode must be in modes
-    void desiredMode(const ModeP &desiredMode);
+    void desiredMode(const std::shared_ptr<Mode> &desiredMode);
 
-    const ModeP &desiredMode() const;
+    const std::shared_ptr<Mode> &desiredMode() const;
 
     // optimalMode must be present
     void desiredActive(bool desiredActive);
@@ -73,7 +74,7 @@ public:
     bool desiredActive() const;
 
 private:
-    ModeP _desiredMode;
+    std::shared_ptr<Mode> _desiredMode;
     bool _desiredActive = false;
 };
 

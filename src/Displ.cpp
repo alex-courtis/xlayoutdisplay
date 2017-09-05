@@ -16,7 +16,8 @@ shared_ptr<Displ> Displ::desiredPrimary;
 long Displ::desiredDpi = DEFAULT_DPI;
 
 Displ::Displ(const string &name, const State &state, const list<shared_ptr<Mode>> &modes,
-             const shared_ptr<Mode> &currentMode, const shared_ptr<Mode> &preferredMode, const PosP &currentPos,
+             const shared_ptr<Mode> &currentMode, const shared_ptr<Mode> &preferredMode,
+             const shared_ptr<Pos> &currentPos,
              const shared_ptr<Edid> &edid) :
         name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode),
         preferredMode(preferredMode), optimalMode(generateOptimalMode(this->modes, preferredMode)),
