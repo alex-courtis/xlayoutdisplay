@@ -8,17 +8,19 @@
 using namespace std;
 
 // generate an optimal mode from a sorted list of modes and preferredMode
-ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode);
+shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode);
 
 // one and only primary
-DisplP Displ::desiredPrimary;
+shared_ptr<Displ> Displ::desiredPrimary;
 
 long Displ::desiredDpi = DEFAULT_DPI;
 
-Displ::Displ(const string &name, const State &state, const list <ModeP> &modes, const ModeP &currentMode, const ModeP &preferredMode, const PosP &currentPos,
-             const EdidP &edid) :
-        name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode), preferredMode(preferredMode),
-        optimalMode(generateOptimalMode(this->modes, preferredMode)), currentPos(currentPos), edid(edid) {
+Displ::Displ(const string &name, const State &state, const list<shared_ptr<Mode>> &modes,
+             const shared_ptr<Mode> &currentMode, const shared_ptr<Mode> &preferredMode, const PosP &currentPos,
+             const shared_ptr<Edid> &edid) :
+        name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode),
+        preferredMode(preferredMode), optimalMode(generateOptimalMode(this->modes, preferredMode)),
+        currentPos(currentPos), edid(edid) {
 
     switch (state) {
         case active:
@@ -56,18 +58,18 @@ void Displ::desiredActive(const bool desiredActive) {
     _desiredActive = desiredActive;
 }
 
-const ModeP &Displ::desiredMode() const {
+const shared_ptr<Mode> &Displ::desiredMode() const {
     return _desiredMode;
 }
 
-void Displ::desiredMode(const ModeP &desiredMode) {
+void Displ::desiredMode(const shared_ptr<Mode> &desiredMode) {
     if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
         throw invalid_argument("Displ '" + name + "' cannot set desiredMode which is not present in modes");
     this->_desiredMode = desiredMode;
 }
 
-ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode) {
-    ModeP optimalMode;
+shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
+    shared_ptr<Mode> optimalMode;
 
     // default optimal mode is empty
     if (!modes.empty()) {
@@ -77,7 +79,7 @@ ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode)
 
         // override with highest refresh of preferred
         if (preferredMode)
-            for (const ModeP &mode : modes)
+            for (auto &mode : modes)
                 if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
                     optimalMode = mode;
                     break;
@@ -87,10 +89,10 @@ ModeP generateOptimalMode(const list <ModeP> &modes, const ModeP &preferredMode)
     return optimalMode;
 }
 
-void orderDispls(list <DisplP> &displs, const list <string> &order) {
+void orderDispls(list<shared_ptr<Displ>> &displs, const list<string> &order) {
 
     // stack all the preferred, available displays
-    list <DisplP> preferredDispls;
+    list<shared_ptr<Displ>> preferredDispls;
     for (const auto &name : order) {
         for (const auto &displ : displs) {
             if (strcasecmp(name.c_str(), displ->name.c_str()) == 0) {
@@ -106,7 +108,7 @@ void orderDispls(list <DisplP> &displs, const list <string> &order) {
     }
 }
 
-void activateDispls(std::list<DisplP> &displs, const string &primary, const Monitors &monitors) {
+void activateDispls(std::list<shared_ptr<Displ>> &displs, const string &primary, const Monitors &monitors) {
     for (const auto &displ : displs) {
 
         // don't display any monitors that shouldn't
@@ -130,7 +132,7 @@ void activateDispls(std::list<DisplP> &displs, const string &primary, const Moni
     }
 }
 
-void ltrDispls(list <DisplP> &displs) {
+void ltrDispls(list<shared_ptr<Displ>> &displs) {
     int xpos = 0;
     int ypos = 0;
     for (const auto &displ : displs) {
@@ -149,10 +151,10 @@ void ltrDispls(list <DisplP> &displs) {
     }
 }
 
-void mirrorDispls(list <DisplP> &displs) {
+void mirrorDispls(list<shared_ptr<Displ>> &displs) {
 
     // find the first active display
-    DisplP firstDispl;
+    shared_ptr<Displ> firstDispl;
     for (const auto &displ : displs) {
         if (displ->desiredActive()) {
             firstDispl = displ;
@@ -172,7 +174,7 @@ void mirrorDispls(list <DisplP> &displs) {
                 continue;
 
             // reset failed matches
-            ModeP desiredMode;
+            shared_ptr<Mode> desiredMode;
 
             // match height and width only
             for (const auto &mode : displ->modes) {
@@ -203,7 +205,7 @@ void mirrorDispls(list <DisplP> &displs) {
 }
 
 // todo: document and test this; refactor needed
-string calculateDpi(std::list<DisplP> &displs) {
+string calculateDpi(std::list<shared_ptr<Displ>> &displs) {
     stringstream verbose;
     if (!Displ::desiredPrimary) {
         verbose << "DPI defaulting to " << Displ::desiredDpi << "; no primary display has been set set";

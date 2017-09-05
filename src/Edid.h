@@ -27,6 +27,4 @@ private:
     unsigned char *edid = nullptr;
 };
 
-typedef std::shared_ptr<Edid> EdidP;
-
 #endif //XLAYOUTDISPLAYS_EDID_H

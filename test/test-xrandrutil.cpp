@@ -17,33 +17,38 @@ public:
 };
 
 TEST(xrandrutil_renderCmd, renderAll) {
-    list <DisplP> displs;
+    list<shared_ptr<Displ>> displs;
     list <ModeP> modes = {make_shared<Mode>(0, 0, 0, 0)};
 
-    DisplP displ1 = make_shared<Displ>("One", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, modes, ModeP(), ModeP(), PosP(),
+                                                  shared_ptr<Edid>());
     displs.push_back(displ1);
 
     shared_ptr<MockEdid> edid2 = make_shared<MockEdid>();
     ModeP mode2 = make_shared<Mode>(0, 1, 2, 3);
-    DisplP displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode2}), ModeP(), ModeP(), PosP(), edid2);
+    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, list<ModeP>({mode2}), ModeP(), ModeP(),
+                                                  PosP(), edid2);
     displ2->desiredActive(true);
     displ2->desiredMode(mode2);
     displ2->desiredPos = make_shared<Pos>(5, 6);
     displs.push_back(displ2);
 
-    DisplP displ3 = make_shared<Displ>("Three", Displ::disconnected, modes, ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected, modes, ModeP(), ModeP(), PosP(),
+                                                  shared_ptr<Edid>());
     displ3->desiredActive(true);
     displ3->desiredPos = make_shared<Pos>(13, 14);
     displs.push_back(displ3);
 
     ModeP mode4 = make_shared<Mode>(15, 16, 17, 18);
-    DisplP displ4 = make_shared<Displ>("Four", Displ::disconnected, list<ModeP>({mode4}), ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<Displ> displ4 = make_shared<Displ>("Four", Displ::disconnected, list<ModeP>({mode4}), ModeP(), ModeP(),
+                                                  PosP(), shared_ptr<Edid>());
     displ4->desiredActive(true);
     displ4->desiredMode(mode4);
     displs.push_back(displ4);
 
     ModeP mode5 = make_shared<Mode>(7, 8, 9, 10);
-    DisplP displ5 = make_shared<Displ>("Five", Displ::disconnected, list<ModeP>({mode5}), ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<Displ> displ5 = make_shared<Displ>("Five", Displ::disconnected, list<ModeP>({mode5}), ModeP(), ModeP(),
+                                                  PosP(), shared_ptr<Edid>());
     displ5->desiredActive(true);
     displ5->desiredMode(mode5);
     displ5->desiredPos = make_shared<Pos>(11, 12);
@@ -75,15 +80,18 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     EXPECT_CALL(*edid3, maxCmHoriz()).WillOnce(Return(17));
     EXPECT_CALL(*edid3, maxCmVert()).WillOnce(Return(18));
 
-    list <DisplP> displs;
+    list<shared_ptr<Displ>> displs;
 
-    DisplP dis = make_shared<Displ>("dis", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(), edid1);
+    shared_ptr<Displ> dis = make_shared<Displ>("dis", Displ::disconnected, list<ModeP>(), ModeP(), ModeP(), PosP(),
+                                               edid1);
     displs.push_back(dis);
 
-    DisplP con = make_shared<Displ>("con", Displ::connected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(), PosP(), EdidP());
+    shared_ptr<Displ> con = make_shared<Displ>("con", Displ::connected, list<ModeP>({mode1, mode2}), ModeP(), ModeP(),
+                                               PosP(), shared_ptr<Edid>());
     displs.push_back(con);
 
-    DisplP act = make_shared<Displ>("act", Displ::active, list<ModeP>({mode3, mode2, mode1}), mode2, mode3, pos, edid3);
+    shared_ptr<Displ> act = make_shared<Displ>("act", Displ::active, list<ModeP>({mode3, mode2, mode1}), mode2, mode3,
+                                               pos, edid3);
     displs.push_back(act);
 
     const string expected = ""
@@ -164,7 +172,7 @@ TEST_F(xrandrutil_discoverDispls, noDisplays) {
 
     screenResources.noutput = 0;
 
-    const list <DisplP> displs = discoverDispls(&xrrWrapper);
+    const list<shared_ptr<Displ>> displs = discoverDispls(&xrrWrapper);
 
     EXPECT_TRUE(displs.empty());
 }

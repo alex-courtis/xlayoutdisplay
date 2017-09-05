@@ -43,12 +43,12 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
 // will activate only if desiredActive, desiredMode, desiredPos are set
 // desiredPrimary is only set if activated
 // DPI will be set to that of the desiredPrimary which specifies it, otherwise 96
-const std::string renderXrandrCmd(const std::list<DisplP> &displs);
+const std::string renderXrandrCmd(const std::list<std::shared_ptr<Displ>> &displs);
 
 // render a user readable string explaining the current state of displs
-const std::string renderUserInfo(const std::list<DisplP> &displs);
+const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs);
 
 // build a list of Displ based on the current and possible state of the world; override xrrWrapper only for testing
-const std::list<DisplP> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapper());
+const std::list<std::shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapper());
 
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H

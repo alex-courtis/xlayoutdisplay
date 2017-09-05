@@ -30,7 +30,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     return static_cast<const unsigned int>(round(rate));
 }
 
-const string renderXrandrCmd(const list<DisplP> &displs) {
+const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << Displ::desiredDpi;
     for (const auto &displ : displs) {
@@ -50,7 +50,7 @@ const string renderXrandrCmd(const list<DisplP> &displs) {
     return ss.str();
 }
 
-const string renderUserInfo(const list<DisplP> &displs) {
+const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
     stringstream ss;
     for (const auto &displ : displs) {
         ss << displ->name;
@@ -87,8 +87,8 @@ const string renderUserInfo(const list<DisplP> &displs) {
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list<DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
-    list<DisplP> displs;
+const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
+    list<shared_ptr<Displ>> displs;
 
     // open up X information
     Display *dpy = xrrWrapper->xOpenDisplay(nullptr);
@@ -107,7 +107,7 @@ const list<DisplP> discoverDispls(const XrrWrapper *xrrWrapper) {
         list<ModeP> modes;
         ModeP currentMode, preferredMode;
         PosP currentPos;
-        EdidP edid;
+        shared_ptr<Edid> edid;
 
         // current state
         const RROutput rrOutput = screenResources->outputs[i];

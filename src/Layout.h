@@ -19,7 +19,7 @@ public:
     const int apply();
 
 private:
-    std::list<DisplP> displs;
+    std::list<std::shared_ptr<Displ>> displs;
 
     const Monitors monitors;
 
