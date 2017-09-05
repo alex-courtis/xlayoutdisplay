@@ -7,8 +7,14 @@
 // a mode that may be used by an Xrandr display
 class Mode {
 public:
-    Mode(const RRMode &rrMode, const unsigned int &width, const unsigned int &height, const unsigned int &refresh) :
-            rrMode(rrMode), width(width), height(height), refresh(refresh) {
+    Mode(const RRMode &rrMode,
+         const unsigned int &width,
+         const unsigned int &height,
+         const unsigned int &refresh) :
+            rrMode(rrMode),
+            width(width),
+            height(height),
+            refresh(refresh) {
     }
 
     // throws invalid_argument:

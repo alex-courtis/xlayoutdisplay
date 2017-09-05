@@ -9,7 +9,8 @@ using namespace std;
 
 Edid::Edid(const unsigned char *edid, const size_t length, const char *name) {
     if (length < EDID_MIN_LENGTH)
-        throw invalid_argument(string(name) + " has Edid size " + to_string(length) + ", expected at least " + to_string(EDID_MIN_LENGTH));
+        throw invalid_argument(string(name) + " has Edid size " + to_string(length) + ", expected at least " +
+                               to_string(EDID_MIN_LENGTH));
 
     this->edid = (unsigned char *) malloc(length);
     memcpy(this->edid, edid, length);

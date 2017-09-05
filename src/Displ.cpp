@@ -15,14 +15,21 @@ shared_ptr<Displ> Displ::desiredPrimary;
 
 long Displ::desiredDpi = DEFAULT_DPI;
 
-Displ::Displ(const string &name, const State &state, const list<shared_ptr<Mode>> &modes,
-             const shared_ptr<Mode> &currentMode, const shared_ptr<Mode> &preferredMode,
+Displ::Displ(const string &name,
+             const State &state,
+             const list<shared_ptr<Mode>> &modes,
+             const shared_ptr<Mode> &currentMode,
+             const shared_ptr<Mode> &preferredMode,
              const shared_ptr<Pos> &currentPos,
              const shared_ptr<Edid> &edid) :
-        name(name), state(state), modes(reverseSharedPtrList(sortSharedPtrList(modes))), currentMode(currentMode),
-        preferredMode(preferredMode), optimalMode(generateOptimalMode(this->modes, preferredMode)),
-        currentPos(currentPos), edid(edid) {
-
+        name(name),
+        state(state),
+        modes(reverseSharedPtrList(sortSharedPtrList(modes))),
+        currentMode(currentMode),
+        preferredMode(preferredMode),
+        optimalMode(generateOptimalMode(this->modes, preferredMode)),
+        currentPos(currentPos),
+        edid(edid) {
     switch (state) {
         case active:
             if (!currentMode) throw invalid_argument("active Displ '" + name + "' has no currentMode");
@@ -209,18 +216,32 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
 string calculateDpi(std::list<shared_ptr<Displ>> &displs) {
     stringstream verbose;
     if (!Displ::desiredPrimary) {
-        verbose << "DPI defaulting to " << Displ::desiredDpi << "; no primary display has been set set";
+        verbose << "DPI defaulting to "
+                << Displ::desiredDpi
+                << "; no primary display has been set set";
     } else if (!Displ::desiredPrimary->edid) {
-        verbose << "DPI defaulting to " << Displ::desiredDpi << "; EDID information not available for primary display " << Displ::desiredPrimary->name;
+        verbose << "DPI defaulting to "
+                << Displ::desiredDpi
+                << "; EDID information not available for primary display "
+                << Displ::desiredPrimary->name;
     } else if (!Displ::desiredPrimary->desiredMode()) {
-        verbose << "DPI defaulting to " << Displ::desiredDpi << "; desiredMode not available for primary display " << Displ::desiredPrimary->name;
+        verbose << "DPI defaulting to "
+                << Displ::desiredDpi
+                << "; desiredMode not available for primary display "
+                << Displ::desiredPrimary->name;
     } else {
         const long desiredDpi = Displ::desiredPrimary->edid->dpiForMode(Displ::desiredPrimary->desiredMode());
         if (desiredDpi == 0) {
-            verbose << "DPI defaulting to " << Displ::desiredDpi << "; no display size EDID information available for " << Displ::desiredPrimary->name;
+            verbose << "DPI defaulting to "
+                    << Displ::desiredDpi
+                    << "; no display size EDID information available for "
+                    << Displ::desiredPrimary->name;
         } else {
             Displ::desiredDpi = desiredDpi;
-            verbose << "DPI " << Displ::desiredDpi << " for primary display " << Displ::desiredPrimary->name;
+            verbose << "DPI "
+                    << Displ::desiredDpi
+                    << " for primary display "
+                    << Displ::desiredPrimary->name;
         }
     }
 

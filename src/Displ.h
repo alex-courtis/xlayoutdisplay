@@ -43,9 +43,13 @@ public:
     //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    Displ(const std::string &name, const State &state, const std::list<std::shared_ptr<Mode>> &modes,
-          const std::shared_ptr<Mode> &currentMode, const std::shared_ptr<Mode> &preferredMode,
-          const std::shared_ptr<Pos> &currentPos, const std::shared_ptr<Edid> &edid);
+    Displ(const std::string &name,
+          const State &state,
+          const std::list<std::shared_ptr<Mode>> &modes,
+          const std::shared_ptr<Mode> &currentMode,
+          const std::shared_ptr<Mode> &preferredMode,
+          const std::shared_ptr<Pos> &currentPos,
+          const std::shared_ptr<Edid> &edid);
 
     const std::string name;
     const State state;
