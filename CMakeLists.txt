@@ -9,41 +9,12 @@ find_package(X11 REQUIRED)
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
 
-set(SRC_FILES
-        src/Edid.cpp
-        src/Edid.h
-        src/Displ.cpp
-        src/Displ.h
-        src/Monitors.cpp
-        src/Monitors.h
-        src/Layout.cpp
-        src/Layout.h
-        src/Mode.cpp
-        src/Mode.h
-        src/Pos.h
-        src/Settings.cpp
-        src/Settings.h
-        src/util.h
-        src/xrandrrutil.cpp
-        src/xrandrrutil.h
-        src/xrdbutil.h
-        src/xrdbutil.cpp
-        )
+file(GLOB SRC_FILES "src/*")
 
-add_executable(xLayoutDisplays src/main.cpp ${SRC_FILES})
+add_executable(xLayoutDisplays main.cpp ${SRC_FILES})
 
-set(TEST_FILES
-        test/test-Edid.cpp
-        test/test-Displ.cpp
-        test/test-Monitors.cpp
-        test/test-Mode.cpp
-        test/test-Settings.cpp
-        test/test-xrandrutil.cpp
-        test/test-xrdbutil.cpp
-        )
+file(GLOB TEST_FILES "test/*")
 
-add_executable(Tests test/main.cpp ${SRC_FILES} ${TEST_FILES})
+add_executable(Tests ${SRC_FILES} ${TEST_FILES})
 
-target_link_libraries(Tests gtest)
-target_link_libraries(Tests gmock)
-target_link_libraries(Tests pthread)
+target_link_libraries(Tests gtest gmock gmock_main pthread)
