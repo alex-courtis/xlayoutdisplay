@@ -24,6 +24,9 @@ public:
     void loadCliSettings(int argc, char **argv);
 
     // override settings from the absolute path provided
+    // throws invalid_argument:
+    //   invalid key
+    //   key missing a value
     void loadUserSettings(std::string settingsFilePath);
 };
 

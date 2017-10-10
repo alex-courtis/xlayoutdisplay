@@ -15,7 +15,8 @@ const std::shared_ptr<Displ> activateDispls(std::list<std::shared_ptr<Displ>> &d
 void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 
 // arrange desiredActive displays so that they all mirror at lowest common mode; will mutate contents
-// throws runtime_error if no common mode found
+// throws runtime_error:
+//   no common mode found
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
 // TODO: document and test this; refactor needed

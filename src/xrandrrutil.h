@@ -56,6 +56,9 @@ Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources);
 class XrrWrapper;
 
 // build a list of Displ based on the current and possible state of the world; override xrrWrapper only for testing
+// throws runtime_error:
+//   failed to open display defined by DISPLAY environment variable
+//   default X screen is outside the X screen count
 const std::list<std::shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapper());
 
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H

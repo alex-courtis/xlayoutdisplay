@@ -12,7 +12,8 @@ class Edid {
 public:
     Edid() = default;
 
-    // throws invalid_argument when length > EDID_MIN_LENGTH
+    // throws invalid_argument:
+    //   when length > EDID_MIN_LENGTH
     Edid(const unsigned char *edid, size_t length, const char *name);
 
     virtual ~Edid();
