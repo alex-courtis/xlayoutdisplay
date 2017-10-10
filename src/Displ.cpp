@@ -1,13 +1,10 @@
 #include "Displ.h"
 #include "util.h"
+#include "calculations.h"
 
 #include <algorithm>
 
 using namespace std;
-
-// TODO: move to arrangement
-// generate an optimal mode from a sorted list of modes and preferredMode
-shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode);
 
 // one and only primary
 shared_ptr<Displ> Displ::desiredPrimary;
@@ -74,25 +71,3 @@ void Displ::desiredMode(const shared_ptr<Mode> &desiredMode) {
         throw invalid_argument("Displ '" + name + "' cannot set desiredMode which is not present in modes");
     this->_desiredMode = desiredMode;
 }
-
-shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
-    shared_ptr<Mode> optimalMode;
-
-    // default optimal mode is empty
-    if (!modes.empty()) {
-
-        // use highest mode for optimal
-        optimalMode = modes.front();
-
-        // override with highest refresh of preferred
-        if (preferredMode)
-            for (auto &mode : modes)
-                if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
-                    optimalMode = mode;
-                    break;
-                }
-    }
-
-    return optimalMode;
-}
-

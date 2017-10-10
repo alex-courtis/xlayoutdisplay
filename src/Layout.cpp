@@ -1,7 +1,7 @@
 #include "Layout.h"
 #include "xrandrrutil.h"
 #include "xrdbutil.h"
-#include "arrangement.h"
+#include "calculations.h"
 
 using namespace std;
 

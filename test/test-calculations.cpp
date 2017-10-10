@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "../src/arrangement.h"
+#include "../src/calculations.h"
 
 using namespace std;
 
-TEST(arrangement_orderDispls, reposition) {
+TEST(calculations_orderDispls, reposition) {
 
     list<shared_ptr<Displ>> displs;
     shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, list<std::shared_ptr<Mode>>(),
@@ -42,7 +42,7 @@ TEST(arrangement_orderDispls, reposition) {
 }
 
 
-class arrangement_activateDispls : public ::testing::Test {
+class calculations_activateDispls : public ::testing::Test {
 protected:
     virtual void SetUp() {
         Displ::desiredPrimary.reset();
@@ -54,7 +54,7 @@ protected:
     list<std::shared_ptr<Mode>> modes = {mode};
 };
 
-TEST_F(arrangement_activateDispls, primarySpecifiedAndLaptop) {
+TEST_F(calculations_activateDispls, primarySpecifiedAndLaptop) {
     list<shared_ptr<Displ>> displs;
 
     shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
@@ -82,7 +82,7 @@ TEST_F(arrangement_activateDispls, primarySpecifiedAndLaptop) {
     EXPECT_EQ(Displ::desiredPrimary, displ3);
 }
 
-TEST_F(arrangement_activateDispls, defaultPrimary) {
+TEST_F(calculations_activateDispls, defaultPrimary) {
 
     list<shared_ptr<Displ>> displs;
 
@@ -106,7 +106,7 @@ TEST_F(arrangement_activateDispls, defaultPrimary) {
 }
 
 
-TEST(arrangement_ltrDispls, arrange) {
+TEST(calculations_ltrDispls, arrange) {
 
     list<shared_ptr<Displ>> displs;
     list<std::shared_ptr<Mode>> modes;
@@ -157,7 +157,7 @@ TEST(arrangement_ltrDispls, arrange) {
 }
 
 
-TEST(arrangement_mirrorDisplays, noneActive) {
+TEST(calculations_mirrorDisplays, noneActive) {
 
     list<shared_ptr<Displ>> displs;
 
@@ -180,7 +180,7 @@ TEST(arrangement_mirrorDisplays, noneActive) {
     EXPECT_FALSE(displ2->desiredPos);
 }
 
-TEST(arrangement_mirrorDisplays, oneActive) {
+TEST(calculations_mirrorDisplays, oneActive) {
 
     list<shared_ptr<Displ>> displs;
 
@@ -208,7 +208,7 @@ TEST(arrangement_mirrorDisplays, oneActive) {
     EXPECT_FALSE(displ2->desiredPos);
 }
 
-TEST(arrangement_mirrorDisplays, someActive) {
+TEST(calculations_mirrorDisplays, someActive) {
 
     list<shared_ptr<Displ>> displs;
 
@@ -251,7 +251,7 @@ TEST(arrangement_mirrorDisplays, someActive) {
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
 
-TEST(arrangement_mirrorDisplays, manyActive) {
+TEST(calculations_mirrorDisplays, manyActive) {
 
     list<shared_ptr<Displ>> displs;
 
@@ -294,7 +294,7 @@ TEST(arrangement_mirrorDisplays, manyActive) {
     EXPECT_EQ(0, displ3->desiredPos->y);
 }
 
-TEST(arrangement_mirrorDisplays, noCommon) {
+TEST(calculations_mirrorDisplays, noCommon) {
 
     list<shared_ptr<Displ>> displs;
 

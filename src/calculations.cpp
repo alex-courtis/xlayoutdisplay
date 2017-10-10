@@ -1,4 +1,4 @@
-#include "arrangement.h"
+#include "calculations.h"
 
 #include <sstream>
 #include <cstring>
@@ -154,4 +154,25 @@ string calculateDpi(std::list<shared_ptr<Displ>> &displs) {
     }
 
     return verbose.str();
+}
+
+shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
+    shared_ptr<Mode> optimalMode;
+
+    // default optimal mode is empty
+    if (!modes.empty()) {
+
+        // use highest mode for optimal
+        optimalMode = modes.front();
+
+        // override with highest refresh of preferred
+        if (preferredMode)
+            for (auto &mode : modes)
+                if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
+                    optimalMode = mode;
+                    break;
+                }
+    }
+
+    return optimalMode;
 }

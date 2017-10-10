@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_ARRANGEMENT_H
-#define XLAYOUTDISPLAYS_ARRANGEMENT_H
+#ifndef XLAYOUTDISPLAYS_CALCULATIONS_H
+#define XLAYOUTDISPLAYS_CALCULATIONS_H
 
 #include "Displ.h"
 
@@ -16,6 +16,12 @@ void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 // throws runtime_error if no common mode found
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
+// TODO: test
 std::string calculateDpi(std::list<std::shared_ptr<Displ>> &displs);
 
-#endif //XLAYOUTDISPLAYS_ARRANGEMENT_H
+// TODO: test
+// generate an optimal mode from a sorted list of modes and preferredMode
+std::shared_ptr<Mode>
+generateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes, const std::shared_ptr<Mode> &preferredMode);
+
+#endif //XLAYOUTDISPLAYS_CALCULATIONS_H
