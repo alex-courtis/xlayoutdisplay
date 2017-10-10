@@ -44,9 +44,6 @@ public:
 
     std::shared_ptr<Pos> desiredPos;
 
-    // TODO: make this a member of Layout
-    static std::shared_ptr<Displ> desiredPrimary;
-
     // TODO: what is this about? remove
     // defaults to DEFAULT_DPI
     static long desiredDpi;

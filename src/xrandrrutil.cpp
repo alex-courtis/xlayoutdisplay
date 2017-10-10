@@ -30,7 +30,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     return static_cast<const unsigned int>(round(rate));
 }
 
-const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs) {
+const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << Displ::desiredDpi;
     for (const auto &displ : displs) {
@@ -40,7 +40,7 @@ const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs) {
             ss << " --rate " << displ->desiredMode()->refresh;
             ss << " --pos ";
             ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
-            if (displ == Displ::desiredPrimary) {
+            if (displ == primary) {
                 ss << " --primary";
             }
         } else {

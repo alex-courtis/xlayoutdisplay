@@ -6,9 +6,6 @@
 
 using namespace std;
 
-// one and only primary
-shared_ptr<Displ> Displ::desiredPrimary;
-
 long Displ::desiredDpi = DEFAULT_DPI;
 
 Displ::Displ(const string &name,

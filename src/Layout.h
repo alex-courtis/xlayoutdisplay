@@ -21,6 +21,8 @@ public:
 private:
     std::list<std::shared_ptr<Displ>> displs;
 
+    std::shared_ptr<Displ> primary;
+
     const Monitors monitors;
 
     const Settings settings;

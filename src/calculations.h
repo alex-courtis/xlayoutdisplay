@@ -6,8 +6,8 @@
 // reorder displs putting those whose names match order at the front, case insensitive
 void orderDispls(std::list<std::shared_ptr<Displ>> &displs, const std::list<std::string> &order);
 
-// mark displays that should be activated and set the one and only primary
-void activateDispls(std::list<std::shared_ptr<Displ>> &displs, const std::string &primary, const Monitors &monitors);
+// mark displays that should be activated and return the one and only primary
+const std::shared_ptr<Displ> activateDispls(std::list<std::shared_ptr<Displ>> &displs, const std::string &desiredPrimary, const Monitors &monitors);
 
 // arrange desiredActive displays left to right at optimal mode; will mutate contents
 void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
@@ -17,7 +17,7 @@ void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
 // TODO: test
-std::string calculateDpi(std::list<std::shared_ptr<Displ>> &displs);
+std::string calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary);
 
 // TODO: test
 // generate an optimal mode from a sorted list of modes and preferredMode

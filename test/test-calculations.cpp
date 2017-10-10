@@ -45,7 +45,6 @@ TEST(calculations_orderDispls, reposition) {
 class calculations_activateDispls : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        Displ::desiredPrimary.reset();
         Displ::desiredDpi = DEFAULT_DPI;
     }
 
@@ -72,14 +71,14 @@ TEST_F(calculations_activateDispls, primarySpecifiedAndLaptop) {
                                                   mode, pos, shared_ptr<Edid>());
     displs.push_back(displ4);
 
-    activateDispls(displs, "three", Monitors(true));
+    const shared_ptr<Displ> primary = activateDispls(displs, "three", Monitors(true));
 
     EXPECT_TRUE(displ1->desiredActive());
     EXPECT_FALSE(displ2->desiredActive());
     EXPECT_TRUE(displ3->desiredActive());
     EXPECT_FALSE(displ4->desiredActive());
 
-    EXPECT_EQ(Displ::desiredPrimary, displ3);
+    EXPECT_EQ(primary, displ3);
 }
 
 TEST_F(calculations_activateDispls, defaultPrimary) {
@@ -96,13 +95,13 @@ TEST_F(calculations_activateDispls, defaultPrimary) {
     shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
     displs.push_back(displ3);
 
-    activateDispls(displs, "noprimary", Monitors(true));
+    const shared_ptr<Displ> primary = activateDispls(displs, "noprimary", Monitors(true));
 
     EXPECT_FALSE(displ1->desiredActive());
     EXPECT_TRUE(displ2->desiredActive());
     EXPECT_TRUE(displ3->desiredActive());
 
-    EXPECT_EQ(Displ::desiredPrimary, displ2);
+    EXPECT_EQ(primary, displ2);
 }
 
 

@@ -59,7 +59,7 @@ TEST(xrandrutil_renderCmd, renderAll) {
     displ5->desiredPos = make_shared<Pos>(11, 12);
     displs.push_back(displ5);
 
-    Displ::desiredPrimary = displ2;
+    const shared_ptr<Displ> primary = displ2;
 
     stringstream expected;
     expected << "xrandr \\\n";
@@ -70,7 +70,7 @@ TEST(xrandrutil_renderCmd, renderAll) {
     expected << " --output Four --off \\\n";
     expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
-    EXPECT_EQ(expected.str(), renderXrandrCmd(displs));
+    EXPECT_EQ(expected.str(), renderXrandrCmd(displs, primary));
 }
 
 TEST(xrandrutil_renderUserInfo, renderAll) {

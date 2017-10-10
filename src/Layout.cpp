@@ -23,7 +23,7 @@ const int Layout::apply() {
 
     // determine desired state
     orderDispls(displs, settings.order);
-    activateDispls(displs, settings.primary, monitors);
+    primary = activateDispls(displs, settings.primary, monitors);
 
     // arrange mirrored or left to right
     if (settings.mirror)
@@ -32,12 +32,12 @@ const int Layout::apply() {
         ltrDispls(displs);
 
     // determine DPI for all displays
-    string dpiExplaination = calculateDpi(displs);
+    string dpiExplaination = calculateDpi(displs, primary);
     if (settings.verbose)
         printf("\n%s\n", dpiExplaination.c_str());
 
     // render desired commands
-    const string xrandrCmd = renderXrandrCmd(displs);
+    const string xrandrCmd = renderXrandrCmd(displs, primary);
     const string xrdbCmd = renderXrdbCmd();
     if (settings.verbose || settings.dryRun)
         printf("\n\n%s\n\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str());
