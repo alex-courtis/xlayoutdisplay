@@ -21,8 +21,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
         vTotal /= 2;
 
     if (modeInfo.hTotal && vTotal)
-        rate = ((double) modeInfo.dotClock /
-                ((double) modeInfo.hTotal * vTotal));
+        rate = ((double) modeInfo.dotClock / ((double) modeInfo.hTotal * vTotal));
     else
         rate = 0;
 
