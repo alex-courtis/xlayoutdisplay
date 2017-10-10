@@ -42,14 +42,20 @@ public:
 
     std::shared_ptr<Pos> desiredPos;
 
-    // desiredMode must be in modes
+    // set desiredMode
+    // throws invalid_argument:
+    //   desiredMode not in modes
     void desiredMode(const std::shared_ptr<Mode> &desiredMode);
 
+    // get desiredMode
     const std::shared_ptr<Mode> &desiredMode() const;
 
-    // optimalMode must be present
+    // set desiredActive
+    // throws invalid_argument:
+    //   optimalMode not present
     void desiredActive(bool desiredActive);
 
+    // get desiredActive
     bool desiredActive() const;
 
 private:

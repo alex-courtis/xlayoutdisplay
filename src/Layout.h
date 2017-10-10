@@ -5,6 +5,8 @@
 #include "Monitors.h"
 #include "Settings.h"
 
+#define DEFAULT_DPI 96
+
 // encapsulates everything necessary to layout displays
 class Layout {
 public:
@@ -17,8 +19,6 @@ public:
     // prints out information during the process, if we're in info or verbose mode
     // returns 0 or failure code from system
     const int apply();
-
-    const static long DEFAULT_DPI = 96;
 
 private:
     std::list<std::shared_ptr<Displ>> displs;
