@@ -49,7 +49,7 @@ const shared_ptr<Displ> activateDispls(std::list<shared_ptr<Displ>> &displs, con
             primary = displ;
     }
 
-    // TODO: fail if nothing found here
+    // TODO: fail if primary not found here
 
     return primary;
 }
@@ -126,7 +126,8 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
     throw runtime_error("unable to find common width/height for mirror");
 }
 
-string calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary, long &dpi) {
+const long calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary, string &explaination) {
+    long dpi = DEFAULT_DPI;
     stringstream verbose;
     if (!primary) {
         verbose << "DPI defaulting to "
@@ -158,7 +159,8 @@ string calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr
         }
     }
 
-    return verbose.str();
+    explaination = verbose.str();
+    return dpi;
 }
 
 shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {

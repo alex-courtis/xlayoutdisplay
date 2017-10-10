@@ -5,8 +5,6 @@
 #include "Monitors.h"
 #include "Settings.h"
 
-#define DEFAULT_DPI 96
-
 // encapsulates everything necessary to layout displays
 class Layout {
 public:
@@ -26,7 +24,7 @@ private:
     // TODO: remove the next two as members; they can be local to apply unless we split it
     std::shared_ptr<Displ> primary;
 
-    long dpi = DEFAULT_DPI;
+    long dpi;
 
     const Monitors monitors;
 

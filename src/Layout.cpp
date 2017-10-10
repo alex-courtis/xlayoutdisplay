@@ -32,7 +32,8 @@ const int Layout::apply() {
         ltrDispls(displs);
 
     // determine DPI for all displays
-    string dpiExplaination = calculateDpi(displs, primary, dpi);
+    string dpiExplaination;
+    dpi = calculateDpi(displs, primary, dpiExplaination);
     if (settings.verbose)
         printf("\n%s\n", dpiExplaination.c_str());
 

@@ -3,6 +3,8 @@
 
 #include "Displ.h"
 
+#define DEFAULT_DPI 96
+
 // reorder displs putting those whose names match order at the front, case insensitive
 void orderDispls(std::list<std::shared_ptr<Displ>> &displs, const std::list<std::string> &order);
 
@@ -17,12 +19,10 @@ void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
 // TODO: document and test this; refactor needed
-// TODO: swap dpi and return
-std::string calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, long &dpi);
+const long calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, std::string &explaination);
 
 // TODO: test
 // generate an optimal mode from a sorted list of modes and preferredMode
-std::shared_ptr<Mode>
-generateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes, const std::shared_ptr<Mode> &preferredMode);
+std::shared_ptr<Mode> generateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes, const std::shared_ptr<Mode> &preferredMode);
 
 #endif //XLAYOUTDISPLAYS_CALCULATIONS_H
