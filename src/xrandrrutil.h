@@ -48,6 +48,13 @@ const std::string renderXrandrCmd(const std::list<std::shared_ptr<Displ>> &displ
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs);
 
+// throws invalid_argument:
+//   null resources
+//   id not found in resources
+Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources);
+
+class XrrWrapper;
+
 // build a list of Displ based on the current and possible state of the world; override xrrWrapper only for testing
 const std::list<std::shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapper());
 

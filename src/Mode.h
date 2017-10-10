@@ -1,7 +1,6 @@
 #ifndef XLAYOUTDISPLAYS_MODE_H
 #define XLAYOUTDISPLAYS_MODE_H
 
-#include <memory>
 #include <X11/extensions/Xrandr.h>
 
 // a mode that may be used by an Xrandr display
@@ -16,13 +15,6 @@ public:
             height(height),
             refresh(refresh) {
     }
-
-    // TODO: make this a function
-
-    // throws invalid_argument:
-    //   null resources
-    //   id not found in resources
-    static Mode *fromXRR(RRMode id, const XRRScreenResources *resources);
 
     // order by width, height, refresh
     const bool operator<(const Mode &o) const;

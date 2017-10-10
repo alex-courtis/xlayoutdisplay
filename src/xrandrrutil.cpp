@@ -86,6 +86,24 @@ const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
     return ss.str();
 }
 
+Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
+    if (resources == nullptr)
+        throw invalid_argument("cannot construct Mode: NULL XRRScreenResources");
+
+    XRRModeInfo *modeInfo = nullptr;
+    for (int i = 0; i < resources->nmode; i++) {
+        if (id == resources->modes[i].id) {
+            modeInfo = &(resources->modes[i]);
+            break;
+        }
+    }
+
+    if (modeInfo == nullptr)
+        throw invalid_argument("cannot construct Mode: cannot retrieve RRMode '" + to_string(id) + "'");
+
+    return new Mode(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(*modeInfo));
+}
+
 // build a list of Displ based on the current and possible state of the world
 const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
     list<shared_ptr<Displ>> displs;
@@ -122,7 +140,7 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
             XRRCrtcInfo *crtcInfo = xrrWrapper->xrrGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
             rrMode = crtcInfo->mode;
-            currentMode = shared_ptr<Mode>(Mode::fromXRR(rrMode, screenResources));
+            currentMode = shared_ptr<Mode>(modeFromXRR(rrMode, screenResources));
 
             if (outputInfo->nmode == 0) {
                 // display is active but has been disconnected
@@ -167,7 +185,7 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
         for (int j = 0; j < outputInfo->nmode; j++) {
 
             // add to modes
-            const auto mode = shared_ptr<Mode>(Mode::fromXRR(outputInfo->modes[j], screenResources));
+            const auto mode = shared_ptr<Mode>(modeFromXRR(outputInfo->modes[j], screenResources));
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1
