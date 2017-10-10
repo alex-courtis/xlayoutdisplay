@@ -10,6 +10,7 @@
 class Monitors {
 public:
 
+    // TODO: better constructor; perhaps move calculateLaptopLidClosed to calculations or laptop and make this a simple true/false
     // laptopLidClosed = calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)
     Monitors();
 
