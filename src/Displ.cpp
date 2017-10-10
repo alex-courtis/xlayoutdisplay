@@ -6,8 +6,6 @@
 
 using namespace std;
 
-long Displ::desiredDpi = DEFAULT_DPI;
-
 Displ::Displ(const string &name,
              const State &state,
              const list<shared_ptr<Mode>> &modes,

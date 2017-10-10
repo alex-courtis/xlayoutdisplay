@@ -44,10 +44,6 @@ TEST(calculations_orderDispls, reposition) {
 
 class calculations_activateDispls : public ::testing::Test {
 protected:
-    virtual void SetUp() {
-        Displ::desiredDpi = DEFAULT_DPI;
-    }
-
     std::shared_ptr<Mode> mode = make_shared<Mode>(0, 0, 0, 0);
     shared_ptr<Pos> pos = make_shared<Pos>(0, 0);
     list<std::shared_ptr<Mode>> modes = {mode};

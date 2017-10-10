@@ -4,6 +4,6 @@
 #include <string>
 
 // render an xrdb command to set "Xft.dpi"
-const std::string renderXrdbCmd();
+const std::string renderXrdbCmd(const long &dpi);
 
 #endif //XLAYOUTDISPLAYS_XRDBUTIL_H

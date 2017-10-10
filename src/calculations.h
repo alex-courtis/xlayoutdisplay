@@ -16,8 +16,9 @@ void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 // throws runtime_error if no common mode found
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
-// TODO: test
-std::string calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary);
+// TODO: document and test this; refactor needed
+// TODO: swap dpi and return
+std::string calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, long &dpi);
 
 // TODO: test
 // generate an optimal mode from a sorted list of modes and preferredMode

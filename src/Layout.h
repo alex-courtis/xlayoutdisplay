@@ -18,10 +18,15 @@ public:
     // returns 0 or failure code from system
     const int apply();
 
+    const static long DEFAULT_DPI = 96;
+
 private:
     std::list<std::shared_ptr<Displ>> displs;
 
+    // TODO: remove the next two as members; they can be local to apply unless we split it
     std::shared_ptr<Displ> primary;
+
+    long dpi = DEFAULT_DPI;
 
     const Monitors monitors;
 

@@ -126,34 +126,33 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
     throw runtime_error("unable to find common width/height for mirror");
 }
 
-// TODO: document and test this; refactor needed
-string calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary) {
+string calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary, long &dpi) {
     stringstream verbose;
     if (!primary) {
         verbose << "DPI defaulting to "
-                << Displ::desiredDpi
+                << dpi
                 << "; no primary display has been set set";
     } else if (!primary->edid) {
         verbose << "DPI defaulting to "
-                << Displ::desiredDpi
+                << dpi
                 << "; EDID information not available for primary display "
                 << primary->name;
     } else if (!primary->desiredMode()) {
         verbose << "DPI defaulting to "
-                << Displ::desiredDpi
+                << dpi
                 << "; desiredMode not available for primary display "
                 << primary->name;
     } else {
-        const long desiredDpi = primary->edid->dpiForMode(primary->desiredMode());
-        if (desiredDpi == 0) {
+        const long caldulatedDpi = primary->edid->dpiForMode(primary->desiredMode());
+        if (caldulatedDpi == 0) {
             verbose << "DPI defaulting to "
-                    << Displ::desiredDpi
+                    << dpi
                     << "; no display size EDID information available for "
                     << primary->name;
         } else {
-            Displ::desiredDpi = desiredDpi;
+            dpi = caldulatedDpi;
             verbose << "DPI "
-                    << Displ::desiredDpi
+                    << dpi
                     << " for primary display "
                     << primary->name;
         }

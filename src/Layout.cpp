@@ -32,13 +32,13 @@ const int Layout::apply() {
         ltrDispls(displs);
 
     // determine DPI for all displays
-    string dpiExplaination = calculateDpi(displs, primary);
+    string dpiExplaination = calculateDpi(displs, primary, dpi);
     if (settings.verbose)
         printf("\n%s\n", dpiExplaination.c_str());
 
     // render desired commands
-    const string xrandrCmd = renderXrandrCmd(displs, primary);
-    const string xrdbCmd = renderXrdbCmd();
+    const string xrandrCmd = renderXrandrCmd(displs, primary, dpi);
+    const string xrdbCmd = renderXrdbCmd(dpi);
     if (settings.verbose || settings.dryRun)
         printf("\n\n%s\n\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str());
 

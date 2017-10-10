@@ -16,7 +16,7 @@ public:
             const std::shared_ptr<Mode> &mode));
 };
 
-TEST(xrandrutil_renderCmd, renderAll) {
+TEST(xrandrutil_renderXrandrCmd, renderAll) {
     list<shared_ptr<Displ>> displs;
     list<std::shared_ptr<Mode>> modes = {make_shared<Mode>(0, 0, 0, 0)};
 
@@ -63,14 +63,14 @@ TEST(xrandrutil_renderCmd, renderAll) {
 
     stringstream expected;
     expected << "xrandr \\\n";
-    expected << " --dpi " << DEFAULT_DPI << " \\\n";
+    expected << " --dpi 123 \\\n";
     expected << " --output One --off \\\n";
     expected << " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n";
     expected << " --output Three --off \\\n";
     expected << " --output Four --off \\\n";
     expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
-    EXPECT_EQ(expected.str(), renderXrandrCmd(displs, primary));
+    EXPECT_EQ(expected.str(), renderXrandrCmd(displs, primary, 123));
 }
 
 TEST(xrandrutil_renderUserInfo, renderAll) {

@@ -6,10 +6,10 @@
 
 using namespace std;
 
-const std::string renderXrdbCmd() {
+const std::string renderXrdbCmd(const long &dpi) {
     stringstream ss;
     ss << "echo \"Xft.dpi: "
-       << Displ::desiredDpi
+       << dpi
        << "\" | xrdb -merge";
     return ss.str();
 }

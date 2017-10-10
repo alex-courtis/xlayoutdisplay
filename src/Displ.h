@@ -9,8 +9,6 @@
 #include <memory>
 #include <list>
 
-#define DEFAULT_DPI 96
-
 // a single Xrandr display
 class Displ {
 public:
@@ -43,10 +41,6 @@ public:
     const std::shared_ptr<Edid> edid;
 
     std::shared_ptr<Pos> desiredPos;
-
-    // TODO: what is this about? remove
-    // defaults to DEFAULT_DPI
-    static long desiredDpi;
 
     // desiredMode must be in modes
     void desiredMode(const std::shared_ptr<Mode> &desiredMode);
