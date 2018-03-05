@@ -25,8 +25,9 @@ const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs
 // TODO: document and test this; refactor needed
 const long calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, std::string &explaination);
 
-// TODO: test
-// generate an optimal mode from a sorted list of modes and preferredMode
-std::shared_ptr<Mode> generateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes, const std::shared_ptr<Mode> &preferredMode);
+// TODO: rename to calculateOptimalMode
+// retrieve the highest resolution/refresh mode from a list of modes, using the highest refresh rate of preferredMode, if available
+const std::shared_ptr<Mode> calculateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes,
+                                                 const std::shared_ptr<Mode> &preferredMode);
 
 #endif //XLAYOUTDISPLAYS_CALCULATIONS_H

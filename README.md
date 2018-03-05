@@ -90,6 +90,10 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
+Really sort out consts
+
+Use a proper library for CLI
+
 Reset the root window's pointer to reflect the new size.
 It doesn't appear to be possible to retrieve the current root cursor, as CWCursor seems to be push only.
 Perhaps just reset it to default e.g. 

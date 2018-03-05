@@ -15,10 +15,12 @@ Displ::Displ(const string &name,
              const shared_ptr<Edid> &edid) :
         name(name),
         state(state),
+        // TODO don't do this; calculations shouldn't assume anything
         modes(reverseSharedPtrList(sortSharedPtrList(modes))),
         currentMode(currentMode),
         preferredMode(preferredMode),
-        optimalMode(generateOptimalMode(this->modes, preferredMode)),
+        // TODO have the caller pass this in
+        optimalMode(calculateOptimalMode(modes, preferredMode)),
         currentPos(currentPos),
         edid(edid) {
     switch (state) {

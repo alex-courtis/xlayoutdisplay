@@ -22,7 +22,6 @@ public:
     //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    // TODO: maybe a builder pattern
     Displ(const std::string &name,
           const State &state,
           const std::list<std::shared_ptr<Mode>> &modes,

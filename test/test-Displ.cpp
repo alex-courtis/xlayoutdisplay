@@ -49,29 +49,6 @@ TEST_F(Displ_test, connectedEmptyModes) {
             invalid_argument);
 }
 
-TEST_F(Displ_test, optimalMissing) {
-    Displ displ = Displ("optimalMissing", Displ::disconnected, list<std::shared_ptr<Mode>>(), nullptr, nullptr, nullptr,
-                        edid);
-    EXPECT_FALSE(displ.optimalMode);
-}
-
-TEST_F(Displ_test, optimalFirst) {
-    Displ displ = Displ("optimalFirst", Displ::disconnected, modes, nullptr, nullptr, nullptr, edid);
-    EXPECT_EQ(mode2, displ.optimalMode);
-}
-
-TEST_F(Displ_test, optimalPreferred) {
-    Displ displ = Displ("optimalPreferred", Displ::disconnected, modes, nullptr, mode1, nullptr, edid);
-    EXPECT_EQ(mode1, displ.optimalMode);
-}
-
-TEST_F(Displ_test, optimalPreferredHigherRefresh) {
-    std::shared_ptr<Mode> mode3 = modeInexistent;
-    modes.push_front(mode3);
-    Displ displ = Displ("optimalPreferredHigherRefresh", Displ::disconnected, modes, nullptr, mode2, nullptr, edid);
-    EXPECT_EQ(mode3, displ.optimalMode);
-}
-
 TEST_F(Displ_test, activePreferredNotInModes) {
     EXPECT_THROW(Displ("activePreferredNotInModes", Displ::active, modes, nullptr, modeInexistent, nullptr, edid),
                  invalid_argument);

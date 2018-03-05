@@ -7,8 +7,6 @@
 
 using namespace std;
 
-// TODO: use a library for this stuff, seriously, need double dash options
-
 #define USAGE "Usage: %s [-h] [-i] [-n] [-o order] [-p primary] [-q]\n"
 
 #define SETTINGS_FILE_COMMENT_CHAR '#'

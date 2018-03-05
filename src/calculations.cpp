@@ -1,4 +1,5 @@
 #include "calculations.h"
+#include "util.h"
 
 #include <sstream>
 #include <cstring>
@@ -197,18 +198,19 @@ const long calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared
     return dpi;
 }
 
-shared_ptr<Mode> generateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
+const shared_ptr<Mode> calculateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
     shared_ptr<Mode> optimalMode;
 
     // default optimal mode is empty
     if (!modes.empty()) {
 
-        // use highest mode for optimal
-        optimalMode = modes.front();
+        // use highest resolution/refresh for optimal
+        const list<shared_ptr<Mode>> reverseOrderedModes = reverseSharedPtrList(sortSharedPtrList(modes));
+        optimalMode = reverseOrderedModes.front();
 
-        // override with highest refresh of preferred
+        // override with highest refresh of preferred resolution, if available
         if (preferredMode)
-            for (auto &mode : modes)
+            for (auto &mode : reverseOrderedModes)
                 if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
                     optimalMode = mode;
                     break;

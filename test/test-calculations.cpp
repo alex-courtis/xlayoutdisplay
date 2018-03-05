@@ -367,3 +367,24 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     EXPECT_EQ(expected, renderUserInfo(displs));
 
 }
+
+class calculations_calculateOptimalMode : public ::testing::Test {
+protected:
+    std::shared_ptr<Mode> mode1 = make_shared<Mode>(1, 2, 3, 4);
+    std::shared_ptr<Mode> mode21 = make_shared<Mode>(5, 6, 7, 8);
+    std::shared_ptr<Mode> mode22 = make_shared<Mode>(5, 6, 7, 9);
+    std::shared_ptr<Mode> mode3 = make_shared<Mode>(9, 10, 11, 12);
+    list<std::shared_ptr<Mode>> modes = {mode1, mode21, mode22, mode3};
+};
+
+TEST_F(calculations_calculateOptimalMode, highestRes) {
+    EXPECT_EQ(mode3, calculateOptimalMode(modes, nullptr));
+}
+
+TEST_F(calculations_calculateOptimalMode, highestPreferredRefresh) {
+    EXPECT_EQ(mode22, calculateOptimalMode(modes, mode21));
+}
+
+TEST_F(calculations_calculateOptimalMode, noModes) {
+    EXPECT_EQ(nullptr, calculateOptimalMode({}, mode21));
+}
