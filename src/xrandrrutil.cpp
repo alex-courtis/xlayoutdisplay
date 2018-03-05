@@ -113,8 +113,7 @@ const list<shared_ptr<Displ>> discoverDispls() {
             state = Displ::disconnected;
         }
 
-        // iterate all properties
-        // TODO use XRRQueryOutputProperty
+        // iterate all properties to find EDID; XRRQueryOutputProperty fails when queried with XInternAtom
         int nprop;
         Atom *atoms = XRRListOutputProperties(dpy, rrOutput, &nprop);
         for (int j = 0; j < nprop; j++) {
