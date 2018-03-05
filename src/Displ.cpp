@@ -17,7 +17,6 @@ Displ::Displ(const string &name,
         modes(modes),
         currentMode(currentMode),
         preferredMode(preferredMode),
-        // TODO have the caller pass this in
         optimalMode(calculateOptimalMode(modes, preferredMode)),
         currentPos(currentPos),
         edid(edid) {

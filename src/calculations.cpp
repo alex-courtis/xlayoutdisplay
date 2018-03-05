@@ -25,7 +25,9 @@ void orderDispls(list<shared_ptr<Displ>> &displs, const list<string> &order) {
     }
 }
 
-const shared_ptr<Displ> activateDispls(std::list<shared_ptr<Displ>> &displs, const string &desiredPrimary, const Monitors &monitors) {
+const shared_ptr<Displ> activateDispls(const list<shared_ptr<Displ>> &displs, const string &desiredPrimary, const Monitors &monitors) {
+    if (displs.empty()) throw invalid_argument("activateDispls received empty displs");
+
     shared_ptr<Displ> primary;
 
     for (const auto &displ : displs) {
@@ -49,6 +51,8 @@ const shared_ptr<Displ> activateDispls(std::list<shared_ptr<Displ>> &displs, con
         if (!desiredPrimary.empty() && strcasecmp(desiredPrimary.c_str(), displ->name.c_str()) == 0)
             primary = displ;
     }
+
+    if (!primary) throw runtime_error("no active or connected displays found");
 
     return primary;
 }
@@ -161,36 +165,35 @@ const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
     return ss.str();
 }
 
-const long calculateDpi(const std::list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary, string &explaination) {
+const long calculateDpi(const shared_ptr<Displ> &displ, string &explaination) {
+    if (!displ) throw invalid_argument("calculateDpi received empty displ");
+
     long dpi = DEFAULT_DPI;
     stringstream verbose;
-    if (!primary) {
+    if (!displ->edid) {
         verbose << "DPI defaulting to "
                 << dpi
-                << "; no primary display has been set set";
-    } else if (!primary->edid) {
+                << "; EDID information not available for display "
+                << displ->name;
+    } else if (!displ->desiredMode()) {
+        // TODO is this a realistic case?
         verbose << "DPI defaulting to "
                 << dpi
-                << "; EDID information not available for primary display "
-                << primary->name;
-    } else if (!primary->desiredMode()) {
-        verbose << "DPI defaulting to "
-                << dpi
-                << "; desiredMode not available for primary display "
-                << primary->name;
+                << "; desiredMode not available for display "
+                << displ->name;
     } else {
-        const long caldulatedDpi = primary->edid->dpiForMode(primary->desiredMode());
+        const long caldulatedDpi = displ->edid->dpiForMode(displ->desiredMode());
         if (caldulatedDpi == 0) {
             verbose << "DPI defaulting to "
                     << dpi
                     << "; no display size EDID information available for "
-                    << primary->name;
+                    << displ->name;
         } else {
             dpi = caldulatedDpi;
-            verbose << "DPI "
+            verbose << "calculated DPI "
                     << dpi
-                    << " for primary display "
-                    << primary->name;
+                    << " for display "
+                    << displ->name;
         }
     }
 

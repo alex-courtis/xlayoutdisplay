@@ -28,6 +28,7 @@ const int Edid::maxCmVert() const {
     return edid[EDID_BYTE_MAX_CM_VERT];
 }
 
+// TODO test
 const long Edid::dpiForMode(const std::shared_ptr<Mode> &mode) const {
     if (maxCmVert() == 0 || maxCmHoriz() == 0) {
         return 0;

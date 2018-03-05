@@ -95,13 +95,23 @@ TEST_F(calculations_activateDispls, defaultPrimary) {
     shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
     displs.push_back(displ3);
 
-    const shared_ptr<Displ> primary = activateDispls(displs, "noprimary", Monitors(true));
+    const shared_ptr<Displ> primary = activateDispls(displs, "nouserprimary", Monitors(true));
 
     EXPECT_FALSE(displ1->desiredActive());
     EXPECT_TRUE(displ2->desiredActive());
     EXPECT_TRUE(displ3->desiredActive());
 
     EXPECT_EQ(primary, displ2);
+}
+
+TEST_F(calculations_activateDispls, noDispls) {
+    EXPECT_THROW(activateDispls({}, "ouch", Monitors(true)), invalid_argument);
+}
+
+TEST_F(calculations_activateDispls, noActiveOrConnected) {
+    EXPECT_THROW(
+            activateDispls({make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, pos, shared_ptr<Edid>())},
+                           "ouch", Monitors(true)), runtime_error);
 }
 
 

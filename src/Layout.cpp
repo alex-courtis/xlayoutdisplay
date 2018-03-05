@@ -8,6 +8,7 @@ using namespace std;
 Layout::Layout(int argc, char **argv) :
         displs(discoverDispls()),
         settings(Settings(argc, argv)) {
+    // TODO throw if displs is empty
 }
 
 const int Layout::apply() {
@@ -31,17 +32,17 @@ const int Layout::apply() {
     else
         ltrDispls(displs);
 
-    // determine DPI for all displays
+    // determine DPI from the primary
     string dpiExplaination;
-    dpi = calculateDpi(displs, primary, dpiExplaination);
+    dpi = calculateDpi(primary, dpiExplaination);
     if (settings.verbose)
-        printf("\n%s\n", dpiExplaination.c_str());
+        printf("\n\n%s\n", dpiExplaination.c_str());
 
     // render desired commands
     const string xrandrCmd = renderXrandrCmd(displs, primary, dpi);
     const string xrdbCmd = renderXrdbCmd(dpi);
     if (settings.verbose || settings.dryRun)
-        printf("\n\n%s\n\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str());
+        printf("\n%s\n\n%s\n", xrandrCmd.c_str(), xrdbCmd.c_str());
 
     // execute
     if (!settings.dryRun) {
