@@ -10,20 +10,13 @@ inline bool sortSharedPtr(const std::shared_ptr<T> &l, const std::shared_ptr<T> 
     return (*l) < (*r);
 }
 
-// copy list of shared_ptr, sort it, return it as const
+// copy list of shared_ptr, reverse sort it, return it as const
 template<typename T>
-inline const std::list<std::shared_ptr<T>> sortSharedPtrList(const std::list<std::shared_ptr<T>> &list) {
+inline const std::list<std::shared_ptr<T>> reverseSort(const std::list<std::shared_ptr<T>> &list) {
     std::list<std::shared_ptr<T>> sorted = list;
     sorted.sort(sortSharedPtr<T>);
+    sorted.reverse();
     return sorted;
-}
-
-// copy list of shared_ptr, reverse it, return it as const
-template<typename T>
-inline const std::list<std::shared_ptr<T>> reverseSharedPtrList(const std::list<std::shared_ptr<T>> &list) {
-    std::list<std::shared_ptr<T>> reversed = list;
-    reversed.reverse();
-    return reversed;
 }
 
 // return an absolute UNIX path for a relative path in the user env $HOME

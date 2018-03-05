@@ -16,7 +16,7 @@ Displ::Displ(const string &name,
         name(name),
         state(state),
         // TODO don't do this; calculations shouldn't assume anything
-        modes(reverseSharedPtrList(sortSharedPtrList(modes))),
+        modes(reverseSort(modes)),
         currentMode(currentMode),
         preferredMode(preferredMode),
         // TODO have the caller pass this in

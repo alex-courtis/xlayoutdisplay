@@ -11,10 +11,10 @@ void orderDispls(std::list<std::shared_ptr<Displ>> &displs, const std::list<std:
 // mark displays that should be activated and return the one and only primary
 const std::shared_ptr<Displ> activateDispls(std::list<std::shared_ptr<Displ>> &displs, const std::string &desiredPrimary, const Monitors &monitors);
 
-// arrange desiredActive displays left to right at optimal mode; will mutate contents
+// arrange displays left to right at optimal mode; will mutate contents
 void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 
-// arrange desiredActive displays so that they all mirror at lowest common mode; will mutate contents
+// arrange displays so that they all mirror at highest common mode; will mutate contents
 // throws runtime_error:
 //   no common mode found
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
@@ -25,7 +25,6 @@ const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs
 // TODO: document and test this; refactor needed
 const long calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, std::string &explaination);
 
-// TODO: rename to calculateOptimalMode
 // retrieve the highest resolution/refresh mode from a list of modes, using the highest refresh rate of preferredMode, if available
 const std::shared_ptr<Mode> calculateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes,
                                                  const std::shared_ptr<Mode> &preferredMode);

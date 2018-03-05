@@ -86,7 +86,7 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
         return;
 
     // iterate through first active display's modes
-    for (const auto &possibleMode : firstDispl->modes) {
+    for (const auto &possibleMode : reverseSort(firstDispl->modes)) {
         bool matched = true;
 
         // attempt to match mode to each active displ
@@ -97,11 +97,11 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
             // reset failed matches
             shared_ptr<Mode> desiredMode;
 
-            // match height and width only
-            for (const auto &mode : displ->modes) {
+            // match height and width
+            for (const auto &mode : reverseSort(displ->modes)) {
                 if (mode->width == possibleMode->width && mode->height == possibleMode->height) {
 
-                    // set mode and pos
+                    // select best refresh
                     desiredMode = mode;
                     break;
                 }
@@ -205,7 +205,7 @@ const shared_ptr<Mode> calculateOptimalMode(const list<shared_ptr<Mode>> &modes,
     if (!modes.empty()) {
 
         // use highest resolution/refresh for optimal
-        const list<shared_ptr<Mode>> reverseOrderedModes = reverseSharedPtrList(sortSharedPtrList(modes));
+        const list<shared_ptr<Mode>> reverseOrderedModes = reverseSort(modes);
         optimalMode = reverseOrderedModes.front();
 
         // override with highest refresh of preferred resolution, if available
