@@ -3,39 +3,6 @@
 
 #include "Displ.h"
 
-class XrrWrapper {
-public:
-    virtual ~XrrWrapper() = default;
-
-    virtual Display *xOpenDisplay(_Xconst char *name) const {
-        return XOpenDisplay(name);
-    }
-
-    virtual int defaultScreen(Display *dpy) const {
-        return DefaultScreen(dpy);
-    }
-
-    virtual int screenCount(Display *dpy) const {
-        return ScreenCount(dpy);
-    }
-
-    virtual Window rootWindow(Display *dpy, int scr) const {
-        return RootWindow(dpy, scr);
-    }
-
-    virtual XRRScreenResources *xrrGetScreenResources(Display *dpy, Window window) const {
-        return XRRGetScreenResources(dpy, window);
-    }
-
-    virtual XRROutputInfo *xrrGetOutputInfo(Display *dpy, XRRScreenResources *resources, RROutput output) const {
-        return XRRGetOutputInfo(dpy, resources, output);
-    }
-
-    virtual XRRCrtcInfo *xrrGetCrtcInfo(Display *dpy, XRRScreenResources *resources, RRCrtc crtc) const {
-        return XRRGetCrtcInfo(dpy, resources, crtc);
-    }
-};
-
 // v refresh frequency in even Hz, zero if modeInfo is NULL
 const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
 
@@ -53,12 +20,10 @@ const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs
 //   id not found in resources
 Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources);
 
-class XrrWrapper;
-
-// build a list of Displ based on the current and possible state of the world; override xrrWrapper only for testing
+// build a list of Displ based on the current and possible state of the world
 // throws runtime_error:
 //   failed to open display defined by DISPLAY environment variable
 //   default X screen is outside the X screen count
-const std::list<std::shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper = new XrrWrapper());
+const std::list<std::shared_ptr<Displ>> discoverDispls();
 
 #endif //XLAYOUTDISPLAYS_XRANDRUTIL_H

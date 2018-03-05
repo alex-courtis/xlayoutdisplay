@@ -104,19 +104,16 @@ Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
 }
 
 // build a list of Displ based on the current and possible state of the world
-const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
+const list<shared_ptr<Displ>> discoverDispls() {
     list<shared_ptr<Displ>> displs;
 
-    // open up X information
-    Display *dpy = xrrWrapper->xOpenDisplay(nullptr);
-    if (dpy == nullptr)
-        throw runtime_error("Failed to open display defined by DISPLAY environment variable");
-    int screen = xrrWrapper->defaultScreen(dpy);
-    if (screen >= xrrWrapper->screenCount(dpy))
-        throw runtime_error("Invalid screen number " + to_string(screen) + " (display has " +
-                            to_string(xrrWrapper->screenCount(dpy)) + ")");
-    Window rootWindow = xrrWrapper->rootWindow(dpy, screen);
-    XRRScreenResources *screenResources = xrrWrapper->xrrGetScreenResources(dpy, rootWindow);
+    // get the display and root window
+    Display *dpy = XOpenDisplay(nullptr);
+    int screen = DefaultScreen(dpy);
+    Window rootWindow = RootWindow(dpy, screen);
+
+    // get RandR resources
+    XRRScreenResources *screenResources = XRRGetScreenResources(dpy, rootWindow);
 
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
@@ -128,7 +125,7 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
 
         // current state
         const RROutput rrOutput = screenResources->outputs[i];
-        const XRROutputInfo *outputInfo = xrrWrapper->xrrGetOutputInfo(dpy, screenResources, rrOutput);
+        const XRROutputInfo *outputInfo = XRRGetOutputInfo(dpy, screenResources, rrOutput);
         const char *name = outputInfo->name;
         RRMode rrMode = 0;
         if (outputInfo->crtc != 0) {
@@ -136,7 +133,7 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
             state = Displ::active;
 
             // current position and mode
-            XRRCrtcInfo *crtcInfo = xrrWrapper->xrrGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
+            XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
             currentPos = make_shared<Pos>(crtcInfo->x, crtcInfo->y);
             rrMode = crtcInfo->mode;
             currentMode = shared_ptr<Mode>(modeFromXRR(rrMode, screenResources));
@@ -153,6 +150,7 @@ const list<shared_ptr<Displ>> discoverDispls(const XrrWrapper *xrrWrapper) {
         }
 
         // iterate all properties
+        // TODO use XRRQueryOutputProperty
         int nprop;
         Atom *atoms = XRRListOutputProperties(dpy, rrOutput, &nprop);
         for (int j = 0; j < nprop; j++) {

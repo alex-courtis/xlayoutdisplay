@@ -9,6 +9,8 @@ find_package(X11 REQUIRED)
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
 
+# TODO specify files explicitly with set
+# glob is a bad idea as cmake doesn't know when a file has moved etc. and needs a cmake rebuild
 file(GLOB SRC_FILES "src/*")
 
 add_executable(xLayoutDisplays main.cpp ${SRC_FILES})

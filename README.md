@@ -90,5 +90,19 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
-Adjust cursor size; `Xcursor.size` has no units and behaves eratically; on some instances (168) it behaves well without settings, on other instances (216) it goes back to default 96dpi size
-A means of setting cursor size in DPI which obeys everything must be determined
+Reset the root window's pointer to reflect the new size.
+It doesn't appear to be possible to retrieve the current root cursor, as CWCursor seems to be push only.
+Perhaps just reset it to default e.g. 
+
+default X
+```
+    XUndefineCursor(dpy, root)
+```
+or left_ptr
+ ```
+    Font fid = XLoadFont (dpy, "cursor");
+    int i = XmuCursorNameToIndex("left_ptr"); // 0 for x, 1 for left_ptr
+    XColor fg, bg; // can be empty
+    Cursor cursor = XCreateGlyphCursor(dpy, fid, fid, i, i+1, &fg, &bg);
+ ```
+Note that new windows will correctly reflect the new size.
