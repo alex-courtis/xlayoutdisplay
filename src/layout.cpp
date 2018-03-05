@@ -52,9 +52,20 @@ const int layout(int argc, char **argv) {
 
     // execute
     if (!settings.dryRun) {
+        // xrandr
         int rc = system(xrandrCmd.c_str());
         if (rc != 0)
             return rc;
+
+        // TODO: extract function as below or do something different :shrug:
+        // clear root pointer to refresh
+        Display *dpy = XOpenDisplay(nullptr);
+        int screen = DefaultScreen(dpy);
+        Window root = RootWindow(dpy, screen);
+        XUndefineCursor(dpy, root);
+        XCloseDisplay(dpy);
+
+        // xrdb
         rc = system(xrdbCmd.c_str());
         if (rc != 0)
             return rc;
