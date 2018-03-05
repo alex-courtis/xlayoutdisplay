@@ -324,7 +324,7 @@ TEST(calculations_mirrorDisplays, noCommon) {
 }
 
 
-TEST(xrandrutil_renderUserInfo, renderAll) {
+TEST(calculations_renderUserInfo, renderAll) {
     std::shared_ptr<Mode> mode1 = make_shared<Mode>(1, 2, 3, 4);
     std::shared_ptr<Mode> mode2 = make_shared<Mode>(5, 6, 7, 8);
     std::shared_ptr<Mode> mode3 = make_shared<Mode>(9, 10, 11, 12);
@@ -356,8 +356,8 @@ TEST(xrandrutil_renderUserInfo, renderAll) {
     const string expected = ""
             "dis disconnected 15cm/16cm\n"
             "con connected\n"
-            "  !6x7 8Hz\n"
             "   2x3 4Hz\n"
+            "  !6x7 8Hz\n"
             "act active 17cm/18cm 6x7+13+14 8Hz\n"
             " +!10x11 12Hz\n"
             "*  6x7 8Hz\n"

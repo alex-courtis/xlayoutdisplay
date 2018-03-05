@@ -1,5 +1,4 @@
 #include "Displ.h"
-#include "util.h"
 #include "calculations.h"
 
 #include <algorithm>
@@ -15,8 +14,7 @@ Displ::Displ(const string &name,
              const shared_ptr<Edid> &edid) :
         name(name),
         state(state),
-        // TODO don't do this; calculations shouldn't assume anything
-        modes(reverseSort(modes)),
+        modes(modes),
         currentMode(currentMode),
         preferredMode(preferredMode),
         // TODO have the caller pass this in
