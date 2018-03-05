@@ -5,6 +5,7 @@
 #include "Monitors.h"
 #include "Settings.h"
 
+// TODO should not be a class; a single apply method is fine
 // encapsulates everything necessary to layout displays
 class Layout {
 public:
@@ -19,13 +20,6 @@ public:
     const int apply();
 
 private:
-    std::list<std::shared_ptr<Displ>> displs;
-
-    // TODO: remove the next two as members; they can be local to apply unless we split it
-    std::shared_ptr<Displ> primary;
-
-    long dpi;
-
     const Monitors monitors;
 
     const Settings settings;

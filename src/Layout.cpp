@@ -6,12 +6,13 @@
 using namespace std;
 
 Layout::Layout(int argc, char **argv) :
-        displs(discoverDispls()),
         settings(Settings(argc, argv)) {
-    // TODO throw if displs is empty
 }
 
 const int Layout::apply() {
+
+    // TODO throw if displs is empty
+    std::list<std::shared_ptr<Displ>> displs = discoverDispls();
 
     // output verbose information
     if (settings.verbose || settings.info)
@@ -24,7 +25,7 @@ const int Layout::apply() {
 
     // determine desired state
     orderDispls(displs, settings.order);
-    primary = activateDispls(displs, settings.primary, monitors);
+    const shared_ptr<Displ> primary = activateDispls(displs, settings.primary, monitors);
 
     // arrange mirrored or left to right
     if (settings.mirror)
@@ -34,7 +35,7 @@ const int Layout::apply() {
 
     // determine DPI from the primary
     string dpiExplaination;
-    dpi = calculateDpi(primary, dpiExplaination);
+    long dpi = calculateDpi(primary, dpiExplaination);
     if (settings.verbose)
         printf("\n\n%s\n", dpiExplaination.c_str());
 

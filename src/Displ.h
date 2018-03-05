@@ -49,6 +49,7 @@ public:
     // get desiredMode
     const std::shared_ptr<Mode> &desiredMode() const;
 
+    // TODO this should be a list returned by activateDispls
     // set desiredActive
     // throws invalid_argument:
     //   optimalMode not present
