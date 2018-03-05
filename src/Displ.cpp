@@ -34,15 +34,8 @@ Displ::Displ(const string &name,
             break;
     }
 
-    // active / connected must have NULL or valid modes
+    // active / connected must have NULL or valid preferred mode
     if (state == active || state == connected) {
-
-        // TODO this turns out not to be the case for some external monitors; maybe just free it?
-        // currentMode must be in modes
-        if (currentMode && find(this->modes.begin(), this->modes.end(), currentMode) == this->modes.end())
-            throw invalid_argument("Displ '" + name + "' has currentMode not present in modes");
-
-        // preferredMode must be in modes
         if (preferredMode && find(this->modes.begin(), this->modes.end(), preferredMode) == this->modes.end())
             throw invalid_argument("Displ '" + name + "' has preferredMode not present in modes");
     }

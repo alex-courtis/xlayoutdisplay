@@ -49,8 +49,6 @@ const shared_ptr<Displ> activateDispls(std::list<shared_ptr<Displ>> &displs, con
             primary = displ;
     }
 
-    // TODO: fail if primary not found here
-
     return primary;
 }
 
