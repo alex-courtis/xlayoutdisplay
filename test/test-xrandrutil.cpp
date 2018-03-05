@@ -3,18 +3,10 @@
 
 #include "../src/xrandrrutil.h"
 
+#include "test-MockEdid.h"
+
 using namespace std;
 using ::testing::Return;
-
-class MockEdid : public Edid {
-public:
-    MOCK_CONST_METHOD0(maxCmHoriz, const int());
-
-    MOCK_CONST_METHOD0(maxCmVert, const int());
-
-    MOCK_CONST_METHOD1(dpiForMode, const long(
-            const std::shared_ptr<Mode> &mode));
-};
 
 TEST(xrandrutil_renderXrandrCmd, renderAll) {
     list<shared_ptr<Displ>> displs;
@@ -71,50 +63,6 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
     EXPECT_EQ(expected.str(), renderXrandrCmd(displs, primary, 123));
-}
-
-TEST(xrandrutil_renderUserInfo, renderAll) {
-    std::shared_ptr<Mode> mode1 = make_shared<Mode>(1, 2, 3, 4);
-    std::shared_ptr<Mode> mode2 = make_shared<Mode>(5, 6, 7, 8);
-    std::shared_ptr<Mode> mode3 = make_shared<Mode>(9, 10, 11, 12);
-    shared_ptr<Pos> pos = make_shared<Pos>(13, 14);
-    shared_ptr<MockEdid> edid1 = make_shared<MockEdid>();
-    EXPECT_CALL(*edid1, maxCmHoriz()).WillOnce(Return(15));
-    EXPECT_CALL(*edid1, maxCmVert()).WillOnce(Return(16));
-    shared_ptr<MockEdid> edid3 = make_shared<MockEdid>();
-    EXPECT_CALL(*edid3, maxCmHoriz()).WillOnce(Return(17));
-    EXPECT_CALL(*edid3, maxCmVert()).WillOnce(Return(18));
-
-    list<shared_ptr<Displ>> displs;
-
-    shared_ptr<Displ> dis = make_shared<Displ>("dis", Displ::disconnected, list<std::shared_ptr<Mode>>(),
-                                               std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
-                                               edid1);
-    displs.push_back(dis);
-
-    shared_ptr<Displ> con = make_shared<Displ>("con", Displ::connected, list<std::shared_ptr<Mode>>({mode1, mode2}),
-                                               std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
-                                               shared_ptr<Pos>(), shared_ptr<Edid>());
-    displs.push_back(con);
-
-    shared_ptr<Displ> act = make_shared<Displ>("act", Displ::active, list<std::shared_ptr<Mode>>({mode3, mode2, mode1}),
-                                               mode2, mode3,
-                                               pos, edid3);
-    displs.push_back(act);
-
-    const string expected = ""
-            "dis disconnected 15cm/16cm\n"
-            "con connected\n"
-            "  !6x7 8Hz\n"
-            "   2x3 4Hz\n"
-            "act active 17cm/18cm 6x7+13+14 8Hz\n"
-            " +!10x11 12Hz\n"
-            "*  6x7 8Hz\n"
-            "   2x3 4Hz\n"
-            "*current +preferred !optimal";
-
-    EXPECT_EQ(expected, renderUserInfo(displs));
-
 }
 
 class xrandrutil_modeFromXRR : public ::testing::Test {

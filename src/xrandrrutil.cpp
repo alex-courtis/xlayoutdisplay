@@ -49,42 +49,6 @@ const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs, const shared
     return ss.str();
 }
 
-const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
-    stringstream ss;
-    for (const auto &displ : displs) {
-        ss << displ->name;
-        switch (displ->state) {
-            case Displ::active:
-                ss << " active";
-                break;
-            case Displ::connected:
-                ss << " connected";
-                break;
-            case Displ::disconnected:
-                ss << " disconnected";
-                break;
-        }
-        if (displ->edid) {
-            ss << ' ' << displ->edid->maxCmHoriz() << "cm/" << displ->edid->maxCmVert() << "cm";
-        }
-        if (displ->currentMode && displ->currentPos) {
-            ss << ' ' << displ->currentMode->width << 'x' << displ->currentMode->height;
-            ss << '+' << displ->currentPos->x << '+' << displ->currentPos->y;
-            ss << ' ' << displ->currentMode->refresh << "Hz";
-        }
-        ss << endl;
-        for (const auto &mode : displ->modes) {
-            ss << (mode == displ->currentMode ? '*' : ' ');
-            ss << (mode == displ->preferredMode ? '+' : ' ');
-            ss << (mode == displ->optimalMode ? '!' : ' ');
-            ss << mode->width << 'x' << mode->height << ' ' << mode->refresh << "Hz";
-            ss << endl;
-        }
-    }
-    ss << "*current +preferred !optimal";
-    return ss.str();
-}
-
 Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
     if (resources == nullptr)
         throw invalid_argument("cannot construct Mode: NULL XRRScreenResources");

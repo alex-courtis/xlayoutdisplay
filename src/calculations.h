@@ -19,6 +19,9 @@ void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
 //   no common mode found
 void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 
+// render a user readable string explaining the current state of displs
+const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs);
+
 // TODO: document and test this; refactor needed
 const long calculateDpi(const std::list<std::shared_ptr<Displ>> &displs, const std::shared_ptr<Displ> &primary, std::string &explaination);
 
