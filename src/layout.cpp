@@ -1,4 +1,4 @@
-#include "Layout.h"
+#include "layout.h"
 #include "xrandrrutil.h"
 #include "xrdbutil.h"
 #include "calculations.h"

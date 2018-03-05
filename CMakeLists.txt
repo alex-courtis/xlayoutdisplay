@@ -20,8 +20,8 @@ set(FILES_SRC
         src/Displ.h
         src/Edid.cpp
         src/Edid.h
-        src/Layout.cpp
-        src/Layout.h
+        src/layout.cpp
+        src/layout.h
         src/Mode.cpp
         src/Mode.h
         src/Monitors.cpp

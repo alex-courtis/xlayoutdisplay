@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <exception>
 
-#include "src/Layout.h"
+#include "src/layout.h"
 
 using namespace std;
 
