@@ -176,7 +176,7 @@ const long calculateDpi(const shared_ptr<Displ> &displ, string &explaination) {
                 << "; EDID information not available for display "
                 << displ->name;
     } else if (!displ->desiredMode()) {
-        // TODO is this a realistic case?
+        // TODO is this a realistic case? no, we need an "ActiveDisplay" subclass of Display
         verbose << "DPI defaulting to "
                 << dpi
                 << "; desiredMode not available for display "

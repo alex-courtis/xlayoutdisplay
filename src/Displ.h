@@ -49,7 +49,7 @@ public:
     // get desiredMode
     const std::shared_ptr<Mode> &desiredMode() const;
 
-    // TODO this should be a list returned by activateDispls
+    // TODO this should be a list returned by activateDispls, of subclass "ActiveDispl"
     // set desiredActive
     // throws invalid_argument:
     //   optimalMode not present
@@ -59,6 +59,7 @@ public:
     bool desiredActive() const;
 
 private:
+    // TODO this should be represented by subclass "ActiveDispl"
     std::shared_ptr<Mode> _desiredMode;
     bool _desiredActive = false;
 };

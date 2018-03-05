@@ -18,9 +18,9 @@ public:
 
     virtual ~Edid();
 
-    virtual const int maxCmHoriz() const;
+    virtual const unsigned int maxCmHoriz() const;
 
-    virtual const int maxCmVert() const;
+    virtual const unsigned int maxCmVert() const;
 
     virtual const long dpiForMode(const std::shared_ptr<Mode> &mode) const;
 
