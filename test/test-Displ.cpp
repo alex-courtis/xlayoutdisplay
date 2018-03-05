@@ -66,7 +66,7 @@ TEST_F(Displ_test, optimalPreferred) {
 }
 
 TEST_F(Displ_test, optimalPreferredHigherRefresh) {
-    std::shared_ptr<Mode> mode3 = make_shared<Mode>(4, 5, 6, 70);
+    std::shared_ptr<Mode> mode3 = modeInexistent;
     modes.push_front(mode3);
     Displ displ = Displ("optimalPreferredHigherRefresh", Displ::disconnected, modes, nullptr, mode2, nullptr, edid);
     EXPECT_EQ(mode3, displ.optimalMode);
