@@ -91,4 +91,4 @@ TEST_F(xrandrutil_modeFromXRR, resourcesNotPresent) {
     EXPECT_THROW(modeFromXRR(11, nullptr), invalid_argument);
 }
 
-// TODO: fully test discoverDispls
+// TODO: fully test discoverDispls - probably not going to happen

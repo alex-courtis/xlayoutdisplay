@@ -6,12 +6,11 @@
 #define LAPTOP_DISPLAY_PREFIX "eDP"
 #define LAPTOP_LID_ROOT_PATH "/proc/acpi/button/lid"
 
+// TODO: just rewrite as a simple static caching function
 // calculates and holds state about attached monitors
 class Monitors {
 public:
 
-    // TODO: better constructor; perhaps move calculateLaptopLidClosed to calculations or laptop and make this a simple true/false
-    // laptopLidClosed = calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)
     Monitors();
 
     explicit Monitors(bool laptopLidClosed);
