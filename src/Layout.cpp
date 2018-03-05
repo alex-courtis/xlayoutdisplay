@@ -2,17 +2,22 @@
 #include "xrandrrutil.h"
 #include "xrdbutil.h"
 #include "calculations.h"
+#include "Settings.h"
 
 using namespace std;
 
-Layout::Layout(int argc, char **argv) :
-        settings(Settings(argc, argv)) {
-}
+const int layout(int argc, char **argv) {
 
-const int Layout::apply() {
+    // load settings
+    const Settings settings = Settings(argc, argv);
 
-    // TODO throw if displs is empty
-    std::list<std::shared_ptr<Displ>> displs = discoverDispls();
+    // discover monitors
+    const Monitors monitors = Monitors();
+
+    // discover displays
+    list<shared_ptr<Displ>> displs = discoverDispls();
+    if (displs.empty())
+        throw runtime_error("no displays found");
 
     // output verbose information
     if (settings.verbose || settings.info)

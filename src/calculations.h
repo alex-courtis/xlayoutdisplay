@@ -24,7 +24,7 @@ void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
 // render a user readable string explaining the current state of displs
 const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs);
 
-// TODO: document and test this; refactor needed
+// TODO: document and test this; refactor needed, assume we have desiredActive following refactor
 // throws invalid_argument:
 //   when displ is empty
 const long calculateDpi(const std::shared_ptr<Displ> &displ, std::string &explaination);
