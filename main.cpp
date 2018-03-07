@@ -8,7 +8,6 @@ using namespace std;
 
 int main(int argc, char **argv) {
     try {
-        layout(argc, argv);
         return WEXITSTATUS(layout(argc, argv));
     } catch (const exception &e) {
         fprintf(stderr, "FAIL: %s, exiting\n", e.what());
