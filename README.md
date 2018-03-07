@@ -1,35 +1,35 @@
-# xLayoutDisplays
+# xLayoutDisplay
 
-Detects and arranges linux displays, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) (for now...) for arrangement.
+Detects and arranges linux outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) (for now...) for arrangement.
 
 ## Usage
 
 ```
-Detects and arranges displays in a left to right manner.
+Detects and arranges outputs in a left to right manner.
 Invokes xrandr to perform arrangement.
-Highest resolution and refresh are used for each display.
-Displays starting with "eDP" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state
-Displays are ordered via Xrandr default.
-The first display will be primary unless -p specified.
+Highest resolution and refresh are used for each output.
+Outputs starting with "eDP" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state
+Outputs are ordered via Xrandr default.
+The first output will be primary unless -p specified.
 
-Usage: xLayoutDisplays [-h] [-i] [-m] [-n] [-o order] [-p primary] [-q]
-  -h  display this help text and exit
-  -i  display information about current displays and exit
-  -m  mirror displays using the lowest common resolution
+Usage: xLayoutDisplay [-h] [-i] [-m] [-n] [-o order] [-p primary] [-q]
+  -h  print this help text and exit
+  -i  print information about current outputs and exit
+  -m  mirror outputs using the lowest common resolution
   -n  perform a trial run and exit
-  -o  order of displays, space/comma delimited
-  -p  primary display
-  -q  suppress output
+  -o  order of outputs, space/comma delimited
+  -p  primary output
+  -q  suppress feedback
 
-e.g.: xLayoutDisplays -o DP-0,HDMI-0 -p HDMI-0
-  arranges DP-0 left, HDMI-0 right, with any remaining displays further right, with HDMI-0 as primary
+e.g.: xLayoutDisplay -o DP-0,HDMI-0 -p HDMI-0
+  arranges DP-0 left, HDMI-0 right, with any remaining outputs further right, with HDMI-0 as primary
 ```
 
 ## Sample Output
 
-DP-0 was the only active (primary) display. HDMI-0 is plugged in.
+DP-0 was the only active (primary) ouput. HDMI-0 is plugged in.
 
-`xLayoutDisplays -o "DP-0 HDMI-0" -p HDMI-0`
+`xLayoutDisplay -o "DP-0 HDMI-0" -p HDMI-0`
 
 After invocation, HDMI-0 is enabled, to the right of DP-0, and HDMI-0 is the new primary.
 

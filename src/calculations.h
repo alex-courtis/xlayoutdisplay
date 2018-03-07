@@ -1,36 +1,37 @@
-#ifndef XLAYOUTDISPLAYS_CALCULATIONS_H
-#define XLAYOUTDISPLAYS_CALCULATIONS_H
+#ifndef XLAYOUTDISPLAY_CALCULATIONS_H
+#define XLAYOUTDISPLAY_CALCULATIONS_H
 
-#include "Displ.h"
+#include "Output.h"
 
 #define DEFAULT_DPI 96
 
-// reorder displs putting those whose names match order at the front, case insensitive
-void orderDispls(std::list<std::shared_ptr<Displ>> &displs, const std::list<std::string> &order);
+// reorder outputs putting those whose names match order at the front, case insensitive
+void orderOutputs(std::list<std::shared_ptr<Output>> &outputs, const std::list<std::string> &order);
 
-// mark displays that should be activated and return the nonempty primary
+// mark outputs that should be activated and return the nonempty primary
 // throws invalid_argument:
-//   when displs is empty
-const std::shared_ptr<Displ> activateDispls(const std::list<std::shared_ptr<Displ>> &displs, const std::string &desiredPrimary, const Monitors &monitors);
+//   when outputs is empty
+const std::shared_ptr<Output> activateOutputs(const std::list<std::shared_ptr<Output>> &outputs,
+                                              const std::string &desiredPrimary, const Monitors &monitors);
 
-// arrange displays left to right at optimal mode; will mutate contents
-void ltrDispls(std::list<std::shared_ptr<Displ>> &displs);
+// arrange outputs left to right at optimal mode; will mutate contents
+void ltrOutputs(std::list<std::shared_ptr<Output>> &outputs);
 
-// arrange displays so that they all mirror at highest common mode; will mutate contents
+// arrange outputs so that they all mirror at highest common mode; will mutate contents
 // throws runtime_error:
 //   no common mode found
-void mirrorDispls(std::list<std::shared_ptr<Displ>> &displs);
+void mirrorOutputs(std::list<std::shared_ptr<Output>> &outputs);
 
-// render a user readable string explaining the current state of displs
-const std::string renderUserInfo(const std::list<std::shared_ptr<Displ>> &displs);
+// render a user readable string explaining the current state of outputs
+const std::string renderUserInfo(const std::list<std::shared_ptr<Output>> &outputs);
 
 // TODO: document and test this; refactor needed, assume we have desiredActive following refactor
 // throws invalid_argument:
-//   when displ is empty
-const long calculateDpi(const std::shared_ptr<Displ> &displ, std::string &explaination);
+//   when outputs is empty
+const long calculateDpi(const std::shared_ptr<Output> &output, std::string &explaination);
 
 // retrieve the highest resolution/refresh mode from a list of modes, using the highest refresh rate of preferredMode, if available
 const std::shared_ptr<Mode> calculateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes,
                                                  const std::shared_ptr<Mode> &preferredMode);
 
-#endif //XLAYOUTDISPLAYS_CALCULATIONS_H
+#endif //XLAYOUTDISPLAY_CALCULATIONS_H

@@ -1,11 +1,11 @@
-#include "Displ.h"
+#include "Output.h"
 #include "calculations.h"
 
 #include <algorithm>
 
 using namespace std;
 
-Displ::Displ(const string &name,
+Output::Output(const string &name,
              const State &state,
              const list<shared_ptr<Mode>> &modes,
              const shared_ptr<Mode> &currentMode,
@@ -22,12 +22,12 @@ Displ::Displ(const string &name,
         edid(edid) {
     switch (state) {
         case active:
-            if (!currentMode) throw invalid_argument("active Displ '" + name + "' has no currentMode");
-            if (!currentPos) throw invalid_argument("active Displ '" + name + "' has no currentPos");
-            if (modes.empty()) throw invalid_argument("active Displ '" + name + "' has no modes");
+            if (!currentMode) throw invalid_argument("active Output '" + name + "' has no currentMode");
+            if (!currentPos) throw invalid_argument("active Output '" + name + "' has no currentPos");
+            if (modes.empty()) throw invalid_argument("active Output '" + name + "' has no modes");
             break;
         case connected:
-            if (modes.empty()) throw invalid_argument("connected Displ '" + name + "' has no modes");
+            if (modes.empty()) throw invalid_argument("connected Output '" + name + "' has no modes");
             break;
         default:
             break;
@@ -36,26 +36,26 @@ Displ::Displ(const string &name,
     // active / connected must have NULL or valid preferred mode
     if (state == active || state == connected) {
         if (preferredMode && find(this->modes.begin(), this->modes.end(), preferredMode) == this->modes.end())
-            throw invalid_argument("Displ '" + name + "' has preferredMode not present in modes");
+            throw invalid_argument("Output '" + name + "' has preferredMode not present in modes");
     }
 }
 
-bool Displ::desiredActive() const {
+bool Output::desiredActive() const {
     return _desiredActive;
 }
 
-void Displ::desiredActive(const bool desiredActive) {
+void Output::desiredActive(const bool desiredActive) {
     if (desiredActive && !optimalMode)
-        throw invalid_argument("Displ '" + name + "' cannot set desiredActive without optimalMode");
+        throw invalid_argument("Output '" + name + "' cannot set desiredActive without optimalMode");
     _desiredActive = desiredActive;
 }
 
-const shared_ptr<Mode> &Displ::desiredMode() const {
+const shared_ptr<Mode> &Output::desiredMode() const {
     return _desiredMode;
 }
 
-void Displ::desiredMode(const shared_ptr<Mode> &desiredMode) {
+void Output::desiredMode(const shared_ptr<Mode> &desiredMode) {
     if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
-        throw invalid_argument("Displ '" + name + "' cannot set desiredMode which is not present in modes");
+        throw invalid_argument("Output '" + name + "' cannot set desiredMode which is not present in modes");
     this->_desiredMode = desiredMode;
 }

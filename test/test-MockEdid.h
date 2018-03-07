@@ -2,8 +2,8 @@
 
 #include "../src/Edid.h"
 
-#ifndef XLAYOUTDISPLAYS_TEST_MOCKEDID_H
-#define XLAYOUTDISPLAYS_TEST_MOCKEDID_H
+#ifndef XLAYOUTDISPLAY_TEST_MOCKEDID_H
+#define XLAYOUTDISPLAY_TEST_MOCKEDID_H
 
 class MockEdid : public Edid {
 public:
@@ -15,4 +15,4 @@ public:
     const std::shared_ptr<Mode> &mode));
 };
 
-#endif //XLAYOUTDISPLAYS_TEST_MOCKEDID_H
+#endif //XLAYOUTDISPLAY_TEST_MOCKEDID_H

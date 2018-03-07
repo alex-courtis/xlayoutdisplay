@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_DISPL_H
-#define XLAYOUTDISPLAYS_DISPL_H
+#ifndef XLAYOUTDISPLAY_DISPL_H
+#define XLAYOUTDISPLAY_DISPL_H
 
 #include "Mode.h"
 #include "Pos.h"
@@ -9,8 +9,8 @@
 #include <memory>
 #include <list>
 
-// a single Xrandr display
-class Displ {
+// a single Xrandr output
+class Output {
 public:
     enum State {
         active, connected, disconnected
@@ -22,7 +22,7 @@ public:
     //   active/connected must have: empty or currentMode/preferredMode in modes
     // modes will be ordered descending
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
-    Displ(const std::string &name,
+    Output(const std::string &name,
           const State &state,
           const std::list<std::shared_ptr<Mode>> &modes,
           const std::shared_ptr<Mode> &currentMode,
@@ -49,7 +49,7 @@ public:
     // get desiredMode
     const std::shared_ptr<Mode> &desiredMode() const;
 
-    // TODO this should be a list returned by activateDispls, of subclass "ActiveDispl"
+    // TODO this should be a list returned by activateOutputs, of subclass "ActiveOutput"
     // set desiredActive
     // throws invalid_argument:
     //   optimalMode not present
@@ -59,10 +59,10 @@ public:
     bool desiredActive() const;
 
 private:
-    // TODO this should be represented by subclass "ActiveDispl"
+    // TODO this should be represented by subclass "ActiveOutput"
     std::shared_ptr<Mode> _desiredMode;
     bool _desiredActive = false;
 };
 
 
-#endif //XLAYOUTDISPLAYS_DISPL_H
+#endif //XLAYOUTDISPLAY_DISPL_H

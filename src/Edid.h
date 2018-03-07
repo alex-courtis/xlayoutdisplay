@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_EDID_H
-#define XLAYOUTDISPLAYS_EDID_H
+#ifndef XLAYOUTDISPLAY_EDID_H
+#define XLAYOUTDISPLAY_EDID_H
 
 #include <memory>
 #include "Mode.h"
@@ -28,4 +28,4 @@ private:
     unsigned char *edid = nullptr;
 };
 
-#endif //XLAYOUTDISPLAYS_EDID_H
+#endif //XLAYOUTDISPLAY_EDID_H

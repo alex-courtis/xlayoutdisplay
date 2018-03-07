@@ -1,6 +1,6 @@
 #include "xrdbutil.h"
 
-#include "Displ.h"
+#include "Output.h"
 
 #include <sstream>
 

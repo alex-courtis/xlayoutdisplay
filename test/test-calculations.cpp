@@ -8,218 +8,219 @@
 using namespace std;
 using ::testing::Return;
 
-TEST(calculations_orderDispls, reposition) {
+TEST(calculations_orderOutputs, reposition) {
 
-    list<shared_ptr<Displ>> displs;
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    list<shared_ptr<Output>> outputs;
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ1);
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    outputs.push_back(output1);
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ2);
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    outputs.push_back(output2);
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ3);
-    shared_ptr<Displ> displ4 = make_shared<Displ>("Four", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    outputs.push_back(output3);
+    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ4);
-    shared_ptr<Displ> displ5 = make_shared<Displ>("Five", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    outputs.push_back(output4);
+    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ5);
+    outputs.push_back(output5);
 
-    orderDispls(displs, {"FOUR", "THREE", "TWO"});
+    orderOutputs(outputs, {"FOUR", "THREE", "TWO"});
 
-    EXPECT_EQ(displ4, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ3, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ2, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ1, displs.front());
-    displs.pop_front();
-    EXPECT_EQ(displ5, displs.front());
+    EXPECT_EQ(output4, outputs.front());
+    outputs.pop_front();
+    EXPECT_EQ(output3, outputs.front());
+    outputs.pop_front();
+    EXPECT_EQ(output2, outputs.front());
+    outputs.pop_front();
+    EXPECT_EQ(output1, outputs.front());
+    outputs.pop_front();
+    EXPECT_EQ(output5, outputs.front());
 }
 
 
-class calculations_activateDispls : public ::testing::Test {
+class calculations_activateOutputs : public ::testing::Test {
 protected:
     std::shared_ptr<Mode> mode = make_shared<Mode>(0, 0, 0, 0);
     shared_ptr<Pos> pos = make_shared<Pos>(0, 0);
     list<std::shared_ptr<Mode>> modes = {mode};
 };
 
-TEST_F(calculations_activateDispls, primarySpecifiedAndLaptop) {
-    list<shared_ptr<Displ>> displs;
+TEST_F(calculations_activateOutputs, primarySpecifiedAndLaptop) {
+    list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
-    displs.push_back(displ1);
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::active, modes, mode, mode, pos, shared_ptr<Edid>());
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, pos,
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, modes, mode, mode, pos,
                                                   shared_ptr<Edid>());
-    displs.push_back(displ2);
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::connected, modes, mode, mode, pos,
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::connected, modes, mode, mode, pos,
                                                   shared_ptr<Edid>());
-    displs.push_back(displ3);
+    outputs.push_back(output3);
 
-    shared_ptr<Displ> displ4 = make_shared<Displ>(LAPTOP_DISPLAY_PREFIX + string("Four"), Displ::active, modes, mode,
+    shared_ptr<Output> output4 = make_shared<Output>(LAPTOP_OUTPUT_PREFIX + string("Four"), Output::active, modes, mode,
                                                   mode, pos, shared_ptr<Edid>());
-    displs.push_back(displ4);
+    outputs.push_back(output4);
 
-    const shared_ptr<Displ> primary = activateDispls(displs, "three", Monitors(true));
+    const shared_ptr<Output> primary = activateOutputs(outputs, "three", Monitors(true));
 
-    EXPECT_TRUE(displ1->desiredActive());
-    EXPECT_FALSE(displ2->desiredActive());
-    EXPECT_TRUE(displ3->desiredActive());
-    EXPECT_FALSE(displ4->desiredActive());
+    EXPECT_TRUE(output1->desiredActive());
+    EXPECT_FALSE(output2->desiredActive());
+    EXPECT_TRUE(output3->desiredActive());
+    EXPECT_FALSE(output4->desiredActive());
 
-    EXPECT_EQ(primary, displ3);
+    EXPECT_EQ(primary, output3);
 }
 
-TEST_F(calculations_activateDispls, defaultPrimary) {
+TEST_F(calculations_activateOutputs, defaultPrimary) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, modes, mode, mode, pos,
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, modes, mode, mode, pos,
                                                   shared_ptr<Edid>());
-    displs.push_back(displ1);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
-    displs.push_back(displ2);
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::active, modes, mode, mode, pos, shared_ptr<Edid>());
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::active, modes, mode, mode, pos, shared_ptr<Edid>());
-    displs.push_back(displ3);
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::active, modes, mode, mode, pos, shared_ptr<Edid>());
+    outputs.push_back(output3);
 
-    const shared_ptr<Displ> primary = activateDispls(displs, "nouserprimary", Monitors(true));
+    const shared_ptr<Output> primary = activateOutputs(outputs, "nouserprimary", Monitors(true));
 
-    EXPECT_FALSE(displ1->desiredActive());
-    EXPECT_TRUE(displ2->desiredActive());
-    EXPECT_TRUE(displ3->desiredActive());
+    EXPECT_FALSE(output1->desiredActive());
+    EXPECT_TRUE(output2->desiredActive());
+    EXPECT_TRUE(output3->desiredActive());
 
-    EXPECT_EQ(primary, displ2);
+    EXPECT_EQ(primary, output2);
 }
 
-TEST_F(calculations_activateDispls, noDispls) {
-    EXPECT_THROW(activateDispls({}, "ouch", Monitors(true)), invalid_argument);
+TEST_F(calculations_activateOutputs, noOutputs) {
+    EXPECT_THROW(activateOutputs({}, "ouch", Monitors(true)), invalid_argument);
 }
 
-TEST_F(calculations_activateDispls, noActiveOrConnected) {
+TEST_F(calculations_activateOutputs, noActiveOrConnected) {
     EXPECT_THROW(
-            activateDispls({make_shared<Displ>("Two", Displ::disconnected, modes, mode, mode, pos, shared_ptr<Edid>())},
-                           "ouch", Monitors(true)), runtime_error);
+            activateOutputs(
+                    {make_shared<Output>("Two", Output::disconnected, modes, mode, mode, pos, shared_ptr<Edid>())},
+                    "ouch", Monitors(true)), runtime_error);
 }
 
 
-TEST(calculations_ltrDispls, arrange) {
+TEST(calculations_ltrOutputs, arrange) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
     list<std::shared_ptr<Mode>> modes;
 
     modes = {make_shared<Mode>(0, 10, 20, 30)};
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::connected, modes, std::shared_ptr<Mode>(),
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::connected, modes, std::shared_ptr<Mode>(),
                                                   modes.front(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ1->desiredActive(true);
-    displs.push_back(displ1);
+    output1->desiredActive(true);
+    outputs.push_back(output1);
 
     modes = {};
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, modes, std::shared_ptr<Mode>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, modes, std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ2);
+    outputs.push_back(output2);
 
     modes = {make_shared<Mode>(0, 50, 60, 70)};
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::connected, modes, std::shared_ptr<Mode>(),
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::connected, modes, std::shared_ptr<Mode>(),
                                                   modes.front(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ3->desiredActive(true);
-    displs.push_back(displ3);
+    output3->desiredActive(true);
+    outputs.push_back(output3);
 
-    ltrDispls(displs);
+    ltrOutputs(outputs);
 
-    EXPECT_TRUE(displ1->desiredActive());
-    EXPECT_TRUE(displ1->desiredMode());
-    EXPECT_EQ(10, displ1->desiredMode()->width);
-    EXPECT_EQ(20, displ1->desiredMode()->height);
-    EXPECT_EQ(30, displ1->desiredMode()->refresh);
-    EXPECT_TRUE(displ1->desiredPos);
-    EXPECT_EQ(0, displ1->desiredPos->x);
-    EXPECT_EQ(0, displ1->desiredPos->y);
+    EXPECT_TRUE(output1->desiredActive());
+    EXPECT_TRUE(output1->desiredMode());
+    EXPECT_EQ(10, output1->desiredMode()->width);
+    EXPECT_EQ(20, output1->desiredMode()->height);
+    EXPECT_EQ(30, output1->desiredMode()->refresh);
+    EXPECT_TRUE(output1->desiredPos);
+    EXPECT_EQ(0, output1->desiredPos->x);
+    EXPECT_EQ(0, output1->desiredPos->y);
 
-    EXPECT_FALSE(displ2->desiredActive());
-    EXPECT_FALSE(displ2->desiredMode());
-    EXPECT_FALSE(displ2->desiredPos);
+    EXPECT_FALSE(output2->desiredActive());
+    EXPECT_FALSE(output2->desiredMode());
+    EXPECT_FALSE(output2->desiredPos);
 
-    EXPECT_TRUE(displ3->desiredActive());
-    EXPECT_TRUE(displ3->desiredMode());
-    EXPECT_EQ(50, displ3->desiredMode()->width);
-    EXPECT_EQ(60, displ3->desiredMode()->height);
-    EXPECT_EQ(70, displ3->desiredMode()->refresh);
-    EXPECT_TRUE(displ3->desiredPos);
-    EXPECT_EQ(10, displ3->desiredPos->x);
-    EXPECT_EQ(0, displ3->desiredPos->y);
+    EXPECT_TRUE(output3->desiredActive());
+    EXPECT_TRUE(output3->desiredMode());
+    EXPECT_EQ(50, output3->desiredMode()->width);
+    EXPECT_EQ(60, output3->desiredMode()->height);
+    EXPECT_EQ(70, output3->desiredMode()->refresh);
+    EXPECT_TRUE(output3->desiredPos);
+    EXPECT_EQ(10, output3->desiredPos->x);
+    EXPECT_EQ(0, output3->desiredPos->y);
 }
 
 
-TEST(calculations_mirrorDisplays, noneActive) {
+TEST(calculations_mirrorOutputs, noneActive) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ1);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ2);
+    outputs.push_back(output2);
 
-    mirrorDispls(displs);
+    mirrorOutputs(outputs);
 
-    EXPECT_FALSE(displ1->desiredMode());
-    EXPECT_FALSE(displ1->desiredPos);
+    EXPECT_FALSE(output1->desiredMode());
+    EXPECT_FALSE(output1->desiredPos);
 
-    EXPECT_FALSE(displ2->desiredMode());
-    EXPECT_FALSE(displ2->desiredPos);
+    EXPECT_FALSE(output2->desiredMode());
+    EXPECT_FALSE(output2->desiredPos);
 }
 
-TEST(calculations_mirrorDisplays, oneActive) {
+TEST(calculations_mirrorOutputs, oneActive) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
     const std::shared_ptr<Mode> mode2 = make_shared<Mode>(0, 5, 6, 0);
     const std::shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected,
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode1, mode2}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ1->desiredActive(true);
-    displs.push_back(displ1);
+    output1->desiredActive(true);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ2);
+    outputs.push_back(output2);
 
-    mirrorDispls(displs);
+    mirrorOutputs(outputs);
 
-    EXPECT_EQ(mode1, displ1->desiredMode());
-    EXPECT_EQ(0, displ1->desiredPos->x);
-    EXPECT_EQ(0, displ1->desiredPos->y);
+    EXPECT_EQ(mode1, output1->desiredMode());
+    EXPECT_EQ(0, output1->desiredPos->x);
+    EXPECT_EQ(0, output1->desiredPos->y);
 
-    EXPECT_FALSE(displ2->desiredMode());
-    EXPECT_FALSE(displ2->desiredPos);
+    EXPECT_FALSE(output2->desiredMode());
+    EXPECT_FALSE(output2->desiredPos);
 }
 
-TEST(calculations_mirrorDisplays, someActive) {
+TEST(calculations_mirrorOutputs, someActive) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
     std::shared_ptr<Mode> mode5 = make_shared<Mode>(0, 1, 2, 0);
     std::shared_ptr<Mode> mode4 = make_shared<Mode>(0, 1, 2, 1);
@@ -227,110 +228,110 @@ TEST(calculations_mirrorDisplays, someActive) {
     std::shared_ptr<Mode> mode2 = make_shared<Mode>(0, 5, 6, 0);
     std::shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected,
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode1, mode2}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displs.push_back(displ1);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected,
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode3, mode5, mode4}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ2->desiredActive(true);
-    displs.push_back(displ2);
+    output2->desiredActive(true);
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected,
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode2, mode5, mode4}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ3->desiredActive(true);
-    displs.push_back(displ3);
+    output3->desiredActive(true);
+    outputs.push_back(output3);
 
-    mirrorDispls(displs);
+    mirrorOutputs(outputs);
 
-    EXPECT_FALSE(displ1->desiredMode());
-    EXPECT_FALSE(displ1->desiredPos);
+    EXPECT_FALSE(output1->desiredMode());
+    EXPECT_FALSE(output1->desiredPos);
 
-    EXPECT_EQ(mode4, displ2->desiredMode());
-    EXPECT_EQ(0, displ2->desiredPos->x);
-    EXPECT_EQ(0, displ2->desiredPos->y);
+    EXPECT_EQ(mode4, output2->desiredMode());
+    EXPECT_EQ(0, output2->desiredPos->x);
+    EXPECT_EQ(0, output2->desiredPos->y);
 
-    EXPECT_EQ(mode4, displ3->desiredMode());
-    EXPECT_EQ(0, displ3->desiredPos->x);
-    EXPECT_EQ(0, displ3->desiredPos->y);
+    EXPECT_EQ(mode4, output3->desiredMode());
+    EXPECT_EQ(0, output3->desiredPos->x);
+    EXPECT_EQ(0, output3->desiredPos->y);
 }
 
-TEST(calculations_mirrorDisplays, manyActive) {
+TEST(calculations_mirrorOutputs, manyActive) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
     std::shared_ptr<Mode> mode4 = make_shared<Mode>(0, 1, 2, 0);
     std::shared_ptr<Mode> mode3 = make_shared<Mode>(0, 3, 4, 0);
     std::shared_ptr<Mode> mode2 = make_shared<Mode>(0, 5, 6, 0);
     std::shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected,
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode1, mode2, mode3}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ1->desiredActive(true);
-    displs.push_back(displ1);
+    output1->desiredActive(true);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected,
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode3, mode4}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ2->desiredActive(true);
-    displs.push_back(displ2);
+    output2->desiredActive(true);
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected,
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode2, mode3}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ3->desiredActive(true);
-    displs.push_back(displ3);
+    output3->desiredActive(true);
+    outputs.push_back(output3);
 
-    mirrorDispls(displs);
+    mirrorOutputs(outputs);
 
-    EXPECT_EQ(mode3, displ1->desiredMode());
-    EXPECT_EQ(0, displ1->desiredPos->x);
-    EXPECT_EQ(0, displ1->desiredPos->y);
+    EXPECT_EQ(mode3, output1->desiredMode());
+    EXPECT_EQ(0, output1->desiredPos->x);
+    EXPECT_EQ(0, output1->desiredPos->y);
 
-    EXPECT_EQ(mode3, displ2->desiredMode());
-    EXPECT_EQ(0, displ2->desiredPos->x);
-    EXPECT_EQ(0, displ2->desiredPos->y);
+    EXPECT_EQ(mode3, output2->desiredMode());
+    EXPECT_EQ(0, output2->desiredPos->x);
+    EXPECT_EQ(0, output2->desiredPos->y);
 
-    EXPECT_EQ(mode3, displ3->desiredMode());
-    EXPECT_EQ(0, displ3->desiredPos->x);
-    EXPECT_EQ(0, displ3->desiredPos->y);
+    EXPECT_EQ(mode3, output3->desiredMode());
+    EXPECT_EQ(0, output3->desiredPos->x);
+    EXPECT_EQ(0, output3->desiredPos->y);
 }
 
-TEST(calculations_mirrorDisplays, noCommon) {
+TEST(calculations_mirrorOutputs, noCommon) {
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
     std::shared_ptr<Mode> mode4 = make_shared<Mode>(0, 1, 2, 0);
     std::shared_ptr<Mode> mode3 = make_shared<Mode>(0, 3, 4, 0);
     std::shared_ptr<Mode> mode2 = make_shared<Mode>(0, 5, 6, 0);
     std::shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected,
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode1, mode2}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ1->desiredActive(true);
-    displs.push_back(displ1);
+    output1->desiredActive(true);
+    outputs.push_back(output1);
 
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected,
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode3, mode4}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ2->desiredActive(true);
-    displs.push_back(displ2);
+    output2->desiredActive(true);
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected,
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
                                                   list<std::shared_ptr<Mode>>({mode1, mode4}), std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ3->desiredActive(true);
-    displs.push_back(displ3);
+    output3->desiredActive(true);
+    outputs.push_back(output3);
 
-    EXPECT_THROW(mirrorDispls(displs), runtime_error);
+    EXPECT_THROW(mirrorOutputs(outputs), runtime_error);
 }
 
 
@@ -346,22 +347,22 @@ TEST(calculations_renderUserInfo, renderAll) {
     EXPECT_CALL(*edid3, maxCmHoriz()).WillOnce(Return(17));
     EXPECT_CALL(*edid3, maxCmVert()).WillOnce(Return(18));
 
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Displ> dis = make_shared<Displ>("dis", Displ::disconnected, list<std::shared_ptr<Mode>>(),
+    shared_ptr<Output> dis = make_shared<Output>("dis", Output::disconnected, list<std::shared_ptr<Mode>>(),
                                                std::shared_ptr<Mode>(), std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                edid1);
-    displs.push_back(dis);
+    outputs.push_back(dis);
 
-    shared_ptr<Displ> con = make_shared<Displ>("con", Displ::connected, list<std::shared_ptr<Mode>>({mode1, mode2}),
+    shared_ptr<Output> con = make_shared<Output>("con", Output::connected, list<std::shared_ptr<Mode>>({mode1, mode2}),
                                                std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                shared_ptr<Pos>(), shared_ptr<Edid>());
-    displs.push_back(con);
+    outputs.push_back(con);
 
-    shared_ptr<Displ> act = make_shared<Displ>("act", Displ::active, list<std::shared_ptr<Mode>>({mode3, mode2, mode1}),
+    shared_ptr<Output> act = make_shared<Output>("act", Output::active, list<std::shared_ptr<Mode>>({mode3, mode2, mode1}),
                                                mode2, mode3,
                                                pos, edid3);
-    displs.push_back(act);
+    outputs.push_back(act);
 
     const string expected = ""
             "dis disconnected 15cm/16cm\n"
@@ -374,7 +375,7 @@ TEST(calculations_renderUserInfo, renderAll) {
             "   2x3 4Hz\n"
             "*current +preferred !optimal";
 
-    EXPECT_EQ(expected, renderUserInfo(displs));
+    EXPECT_EQ(expected, renderUserInfo(outputs));
 
 }
 

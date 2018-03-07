@@ -1,9 +1,9 @@
-#ifndef XLAYOUTDISPLAYS_POS_H
-#define XLAYOUTDISPLAYS_POS_H
+#ifndef XLAYOUTDISPLAY_POS_H
+#define XLAYOUTDISPLAY_POS_H
 
 #include <memory>
 
-// position of a display
+// position of an output
 class Pos {
 public:
     Pos(const int &x, const int &y) :
@@ -14,4 +14,4 @@ public:
     const int y = 0;
 };
 
-#endif //XLAYOUTDISPLAYS_POS_H
+#endif //XLAYOUTDISPLAY_POS_H

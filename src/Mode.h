@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_MODE_H
-#define XLAYOUTDISPLAYS_MODE_H
+#ifndef XLAYOUTDISPLAY_MODE_H
+#define XLAYOUTDISPLAY_MODE_H
 
 #include <X11/extensions/Xrandr.h>
 
@@ -25,4 +25,4 @@ public:
     const unsigned int refresh;
 };
 
-#endif //XLAYOUTDISPLAYS_MODE_H
+#endif //XLAYOUTDISPLAY_MODE_H

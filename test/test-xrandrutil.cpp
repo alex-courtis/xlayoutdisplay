@@ -9,49 +9,49 @@ using namespace std;
 using ::testing::Return;
 
 TEST(xrandrutil_renderXrandrCmd, renderAll) {
-    list<shared_ptr<Displ>> displs;
+    list<shared_ptr<Output>> outputs;
     list<std::shared_ptr<Mode>> modes = {make_shared<Mode>(0, 0, 0, 0)};
 
-    shared_ptr<Displ> displ1 = make_shared<Displ>("One", Displ::disconnected, modes, std::shared_ptr<Mode>(),
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, modes, std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displs.push_back(displ1);
+    outputs.push_back(output1);
 
     shared_ptr<MockEdid> edid2 = make_shared<MockEdid>();
     std::shared_ptr<Mode> mode2 = make_shared<Mode>(0, 1, 2, 3);
-    shared_ptr<Displ> displ2 = make_shared<Displ>("Two", Displ::disconnected, list<std::shared_ptr<Mode>>({mode2}),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<std::shared_ptr<Mode>>({mode2}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), edid2);
-    displ2->desiredActive(true);
-    displ2->desiredMode(mode2);
-    displ2->desiredPos = make_shared<Pos>(5, 6);
-    displs.push_back(displ2);
+    output2->desiredActive(true);
+    output2->desiredMode(mode2);
+    output2->desiredPos = make_shared<Pos>(5, 6);
+    outputs.push_back(output2);
 
-    shared_ptr<Displ> displ3 = make_shared<Displ>("Three", Displ::disconnected, modes, std::shared_ptr<Mode>(),
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected, modes, std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    displ3->desiredActive(true);
-    displ3->desiredPos = make_shared<Pos>(13, 14);
-    displs.push_back(displ3);
+    output3->desiredActive(true);
+    output3->desiredPos = make_shared<Pos>(13, 14);
+    outputs.push_back(output3);
 
     std::shared_ptr<Mode> mode4 = make_shared<Mode>(15, 16, 17, 18);
-    shared_ptr<Displ> displ4 = make_shared<Displ>("Four", Displ::disconnected, list<std::shared_ptr<Mode>>({mode4}),
+    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<std::shared_ptr<Mode>>({mode4}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ4->desiredActive(true);
-    displ4->desiredMode(mode4);
-    displs.push_back(displ4);
+    output4->desiredActive(true);
+    output4->desiredMode(mode4);
+    outputs.push_back(output4);
 
     std::shared_ptr<Mode> mode5 = make_shared<Mode>(7, 8, 9, 10);
-    shared_ptr<Displ> displ5 = make_shared<Displ>("Five", Displ::disconnected, list<std::shared_ptr<Mode>>({mode5}),
+    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<std::shared_ptr<Mode>>({mode5}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), shared_ptr<Edid>());
-    displ5->desiredActive(true);
-    displ5->desiredMode(mode5);
-    displ5->desiredPos = make_shared<Pos>(11, 12);
-    displs.push_back(displ5);
+    output5->desiredActive(true);
+    output5->desiredMode(mode5);
+    output5->desiredPos = make_shared<Pos>(11, 12);
+    outputs.push_back(output5);
 
-    const shared_ptr<Displ> primary = displ2;
+    const shared_ptr<Output> primary = output2;
 
     stringstream expected;
     expected << "xrandr \\\n";
@@ -62,7 +62,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     expected << " --output Four --off \\\n";
     expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
 
-    EXPECT_EQ(expected.str(), renderXrandrCmd(displs, primary, 123));
+    EXPECT_EQ(expected.str(), renderXrandrCmd(outputs, primary, 123));
 }
 
 class xrandrutil_modeFromXRR : public ::testing::Test {
@@ -91,4 +91,4 @@ TEST_F(xrandrutil_modeFromXRR, resourcesNotPresent) {
     EXPECT_THROW(modeFromXRR(11, nullptr), invalid_argument);
 }
 
-// TODO: fully test discoverDispls - probably not going to happen
+// TODO: fully test discoverOutputs - probably not going to happen

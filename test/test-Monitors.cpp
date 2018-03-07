@@ -38,14 +38,14 @@ TEST_F(Monitors_calculateLaptopLidClosed, closed) {
 }
 
 
-TEST(Laptop_shouldDisableDisplay, matchLidClosed) {
-    EXPECT_TRUE(Monitors(true).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
+TEST(Laptop_shouldDisableOutput, matchLidClosed) {
+    EXPECT_TRUE(Monitors(true).shouldDisableOutput(string(LAPTOP_OUTPUT_PREFIX) + "blargh"));
 }
 
-TEST(Laptop_shouldDisableDisplay, noMatchLidClosed) {
-    EXPECT_FALSE(Monitors(true).shouldDisableDisplay("blargh"));
+TEST(Laptop_shouldDisableOutput, noMatchLidClosed) {
+    EXPECT_FALSE(Monitors(true).shouldDisableOutput("blargh"));
 }
 
-TEST(Laptop_shouldDisableDisplay, matchLidOpen) {
-    EXPECT_FALSE(Monitors(false).shouldDisableDisplay(string(LAPTOP_DISPLAY_PREFIX) + "blargh"));
+TEST(Laptop_shouldDisableOutput, matchLidOpen) {
+    EXPECT_FALSE(Monitors(false).shouldDisableOutput(string(LAPTOP_OUTPUT_PREFIX) + "blargh"));
 }

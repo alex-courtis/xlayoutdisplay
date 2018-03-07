@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(xLayoutDisplays)
+project(xLayoutDisplay)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -16,8 +16,8 @@ set(FILES_EXE
 set(FILES_SRC
         src/calculations.cpp
         src/calculations.h
-        src/Displ.cpp
-        src/Displ.h
+        src/Output.cpp
+        src/Output.h
         src/Edid.cpp
         src/Edid.h
         src/layout.cpp
@@ -38,7 +38,7 @@ set(FILES_SRC
 
 set(FILES_TST
         test/test-calculations.cpp
-        test/test-Displ.cpp
+        test/test-Output.cpp
         test/test-Edid.cpp
         test/test-MockEdid.h
         test/test-Mode.cpp
@@ -48,7 +48,7 @@ set(FILES_TST
         test/test-xrdbutil.cpp
         )
 
-add_executable(xLayoutDisplays ${FILES_EXE} ${FILES_SRC})
+add_executable(xLayoutDisplay ${FILES_EXE} ${FILES_SRC})
 
 add_executable(Tests ${FILES_SRC} ${FILES_TST})
 

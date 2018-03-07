@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_SETTINGS_H
-#define XLAYOUTDISPLAYS_SETTINGS_H
+#ifndef XLAYOUTDISPLAY_SETTINGS_H
+#define XLAYOUTDISPLAY_SETTINGS_H
 
 #include <list>
 #include <string>
@@ -9,7 +9,7 @@ class Settings {
 public:
     Settings() = default;
 
-    // default settings, overridden with ~/.xLayoutDisplays then argc/argv
+    // default settings, overridden with ~/.xLayoutDisplay then argc/argv
     Settings(int argc, char **argv);
 
     bool dryRun = false;
@@ -30,4 +30,4 @@ public:
     void loadUserSettings(std::string settingsFilePath);
 };
 
-#endif //XLAYOUTDISPLAYS_SETTINGS_H
+#endif //XLAYOUTDISPLAY_SETTINGS_H

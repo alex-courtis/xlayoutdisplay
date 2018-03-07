@@ -3,14 +3,14 @@
 # all options here will be overridden by command line options
 
 
-# mirror displays using the lowest common resolution
+# mirror outputs using the lowest common resolution
 #mirror=true
 
 # suppress output
 #quiet=true
 
-# order of displays, space/comma delimited
+# order of outputs, space/comma delimited
 #order=DP-0,HDMI-0
 
-# primary display
+# primary output
 #primary=HDMI-0

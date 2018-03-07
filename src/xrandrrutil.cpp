@@ -29,17 +29,17 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     return static_cast<const unsigned int>(round(rate));
 }
 
-const string renderXrandrCmd(const list<shared_ptr<Displ>> &displs, const shared_ptr<Displ> &primary, const long &dpi) {
+const string renderXrandrCmd(const list<shared_ptr<Output>> &outputs, const shared_ptr<Output> &primary, const long &dpi) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << dpi;
-    for (const auto &displ : displs) {
-        ss << " \\\n --output " << displ->name;
-        if (displ->desiredActive() && displ->desiredMode() && displ->desiredPos) {
-            ss << " --mode " << displ->desiredMode()->width << "x" << displ->desiredMode()->height;
-            ss << " --rate " << displ->desiredMode()->refresh;
+    for (const auto &output : outputs) {
+        ss << " \\\n --output " << output->name;
+        if (output->desiredActive() && output->desiredMode() && output->desiredPos) {
+            ss << " --mode " << output->desiredMode()->width << "x" << output->desiredMode()->height;
+            ss << " --rate " << output->desiredMode()->refresh;
             ss << " --pos ";
-            ss << displ->desiredPos->x << "x" << displ->desiredPos->y;
-            if (displ == primary) {
+            ss << output->desiredPos->x << "x" << output->desiredPos->y;
+            if (output == primary) {
                 ss << " --primary";
             }
         } else {
@@ -67,9 +67,9 @@ Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
     return new Mode(id, modeInfo->width, modeInfo->height, refreshFromModeInfo(*modeInfo));
 }
 
-// build a list of Displ based on the current and possible state of the world
-const list<shared_ptr<Displ>> discoverDispls() {
-    list<shared_ptr<Displ>> displs;
+// build a list of Output based on the current and possible state of the world
+const list<shared_ptr<Output>> discoverOutputs() {
+    list<shared_ptr<Output>> outputs;
 
     // get the display and root window
     Display *dpy = XOpenDisplay(nullptr);
@@ -81,7 +81,7 @@ const list<shared_ptr<Displ>> discoverDispls() {
 
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
-        Displ::State state;
+        Output::State state;
         list<std::shared_ptr<Mode>> modes;
         std::shared_ptr<Mode> currentMode, preferredMode;
         shared_ptr<Pos> currentPos;
@@ -93,8 +93,8 @@ const list<shared_ptr<Displ>> discoverDispls() {
         const char *name = outputInfo->name;
         RRMode rrMode = 0;
         if (outputInfo->crtc != 0) {
-            // active displays have CRTC info
-            state = Displ::active;
+            // active outputs have CRTC info
+            state = Output::active;
 
             // current position and mode
             XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(dpy, screenResources, outputInfo->crtc);
@@ -103,14 +103,14 @@ const list<shared_ptr<Displ>> discoverDispls() {
             currentMode = shared_ptr<Mode>(modeFromXRR(rrMode, screenResources));
 
             if (outputInfo->nmode == 0) {
-                // display is active but has been disconnected
-                state = Displ::disconnected;
+                // output is active but has been disconnected
+                state = Output::disconnected;
             }
         } else if (outputInfo->nmode != 0) {
-            // inactive connected displays have modes available
-            state = Displ::connected;
+            // inactive connected outputs have modes available
+            state = Output::connected;
         } else {
-            state = Displ::disconnected;
+            state = Output::disconnected;
         }
 
         // iterate all properties to find EDID; XRRQueryOutputProperty fails when queried with XInternAtom
@@ -157,9 +157,9 @@ const list<shared_ptr<Displ>> discoverDispls() {
                 currentMode = mode;
         }
 
-        // add the displ
-        displs.push_back(make_shared<Displ>(name, state, modes, currentMode, preferredMode, currentPos, edid));
+        // add the output
+        outputs.push_back(make_shared<Output>(name, state, modes, currentMode, preferredMode, currentPos, edid));
     }
 
-    return displs;
+    return outputs;
 }

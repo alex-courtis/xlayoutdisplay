@@ -7,8 +7,8 @@ Monitors::Monitors() : laptopLidClosed(calculateLaptopLidClosed(LAPTOP_LID_ROOT_
 
 Monitors::Monitors(const bool laptopLidClosed) : laptopLidClosed(laptopLidClosed) {}
 
-const bool Monitors::shouldDisableDisplay(const std::string name) const {
-    return laptopLidClosed && strncasecmp(LAPTOP_DISPLAY_PREFIX, name.c_str(), strlen(LAPTOP_DISPLAY_PREFIX)) == 0;
+const bool Monitors::shouldDisableOutput(const std::string name) const {
+    return laptopLidClosed && strncasecmp(LAPTOP_OUTPUT_PREFIX, name.c_str(), strlen(LAPTOP_OUTPUT_PREFIX)) == 0;
 }
 
 const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {

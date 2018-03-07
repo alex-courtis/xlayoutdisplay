@@ -6,103 +6,104 @@
 
 using namespace std;
 
-void orderDispls(list<shared_ptr<Displ>> &displs, const list<string> &order) {
+void orderOutputs(list<shared_ptr<Output>> &outputs, const list<string> &order) {
 
-    // stack all the preferred, available displays
-    list<shared_ptr<Displ>> preferredDispls;
+    // stack all the preferred, available outputs
+    list<shared_ptr<Output>> preferredOutputs;
     for (const auto &name : order) {
-        for (const auto &displ : displs) {
-            if (strcasecmp(name.c_str(), displ->name.c_str()) == 0) {
-                preferredDispls.push_front(displ);
+        for (const auto &output : outputs) {
+            if (strcasecmp(name.c_str(), output->name.c_str()) == 0) {
+                preferredOutputs.push_front(output);
             }
         }
     }
 
     // move preferred to the front
-    for (const auto &preferredDispl : preferredDispls) {
-        displs.remove(preferredDispl);
-        displs.push_front(preferredDispl);
+    for (const auto &preferredOutput : preferredOutputs) {
+        outputs.remove(preferredOutput);
+        outputs.push_front(preferredOutput);
     }
 }
 
-const shared_ptr<Displ> activateDispls(const list<shared_ptr<Displ>> &displs, const string &desiredPrimary, const Monitors &monitors) {
-    if (displs.empty()) throw invalid_argument("activateDispls received empty displs");
+const shared_ptr<Output> activateOutputs(const list<shared_ptr<Output>> &outputs, const string &desiredPrimary,
+                                         const Monitors &monitors) {
+    if (outputs.empty()) throw invalid_argument("activateOutputs received empty outputs");
 
-    shared_ptr<Displ> primary;
+    shared_ptr<Output> primary;
 
-    for (const auto &displ : displs) {
+    for (const auto &output : outputs) {
 
-        // don't display any monitors that shouldn't
-        if (monitors.shouldDisableDisplay(displ->name))
+        // don't activate any monitors that shouldn't
+        if (monitors.shouldDisableOutput(output->name))
             continue;
 
-        // only activate currently active or connected displays
-        if (displ->state != Displ::active && displ->state != Displ::connected)
+        // only activate currently active or connected ouputs
+        if (output->state != Output::active && output->state != Output::connected)
             continue;
 
         // mark active
-        displ->desiredActive(true);
+        output->desiredActive(true);
 
         // default first to primary
         if (!primary)
-            primary = displ;
+            primary = output;
 
         // user selected primary
-        if (!desiredPrimary.empty() && strcasecmp(desiredPrimary.c_str(), displ->name.c_str()) == 0)
-            primary = displ;
+        if (!desiredPrimary.empty() && strcasecmp(desiredPrimary.c_str(), output->name.c_str()) == 0)
+            primary = output;
     }
 
-    if (!primary) throw runtime_error("no active or connected displays found");
+    if (!primary) throw runtime_error("no active or connected outputs found");
 
     return primary;
 }
 
-void ltrDispls(list<shared_ptr<Displ>> &displs) {
+void ltrOutputs(list<shared_ptr<Output>> &outputs) {
     int xpos = 0;
     int ypos = 0;
-    for (const auto &displ : displs) {
+    for (const auto &output : outputs) {
 
-        if (displ->desiredActive()) {
+        if (output->desiredActive()) {
 
             // set the desired mode to optimal
-            displ->desiredMode(displ->optimalMode);
+            output->desiredMode(output->optimalMode);
 
             // position the screen
-            displ->desiredPos = make_shared<Pos>(xpos, ypos);
+            output->desiredPos = make_shared<Pos>(xpos, ypos);
 
             // next position
-            xpos += displ->desiredMode()->width;
+            xpos += output->desiredMode()->width;
         }
     }
 }
 
-void mirrorDispls(list<shared_ptr<Displ>> &displs) {
+void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
 
-    // find the first active display
-    shared_ptr<Displ> firstDispl;
-    for (const auto &displ : displs) {
-        if (displ->desiredActive()) {
-            firstDispl = displ;
+    // find the first active output
+    shared_ptr<Output> firstOutput;
+    for (const auto &output : outputs) {
+        if (output->desiredActive()) {
+            firstOutput = output;
             break;
         }
     }
-    if (!firstDispl)
+    if (!firstOutput)
         return;
 
-    // iterate through first active display's modes
-    for (const auto &possibleMode : reverseSort(firstDispl->modes)) {
+    // iterate through first active output's modes
+    for (const auto &possibleMode : reverseSort(firstOutput->modes)) {
         bool matched = true;
 
-        // attempt to match mode to each active displ
-        for (const auto &displ : displs) {
-            if (!displ->desiredActive())
+        // attempt to match mode to each active output
+        for (const auto &output : outputs) {
+            if (!output->desiredActive())
                 continue;
 
             // reset failed matches
             shared_ptr<Mode> desiredMode;
 
             // match height and width
-            for (const auto &mode : reverseSort(displ->modes)) {
+            for (const auto &mode : reverseSort(output->modes)) {
                 if (mode->width == possibleMode->width && mode->height == possibleMode->height) {
 
                     // select best refresh
@@ -111,16 +112,16 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
                 }
             }
 
-            // match a mode for every display; root it at 0, 0
+            // match a mode for every output; root it at 0, 0
             matched = matched && desiredMode;
             if (matched) {
-                displ->desiredMode(desiredMode);
-                displ->desiredPos = make_shared<Pos>(0, 0);
+                output->desiredMode(desiredMode);
+                output->desiredPos = make_shared<Pos>(0, 0);
                 continue;
             }
         }
 
-        // we've set desiredMode and desiredPos (zero) for all displays, all done
+        // we've set desiredMode and desiredPos (zero) for all outputs, all done
         if (matched)
             return;
     }
@@ -129,34 +130,34 @@ void mirrorDispls(list<shared_ptr<Displ>> &displs) {
     throw runtime_error("unable to find common width/height for mirror");
 }
 
-const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
+const string renderUserInfo(const list<shared_ptr<Output>> &outputs) {
     stringstream ss;
-    for (const auto &displ : displs) {
-        ss << displ->name;
-        switch (displ->state) {
-            case Displ::active:
+    for (const auto &output : outputs) {
+        ss << output->name;
+        switch (output->state) {
+            case Output::active:
                 ss << " active";
                 break;
-            case Displ::connected:
+            case Output::connected:
                 ss << " connected";
                 break;
-            case Displ::disconnected:
+            case Output::disconnected:
                 ss << " disconnected";
                 break;
         }
-        if (displ->edid) {
-            ss << ' ' << displ->edid->maxCmHoriz() << "cm/" << displ->edid->maxCmVert() << "cm";
+        if (output->edid) {
+            ss << ' ' << output->edid->maxCmHoriz() << "cm/" << output->edid->maxCmVert() << "cm";
         }
-        if (displ->currentMode && displ->currentPos) {
-            ss << ' ' << displ->currentMode->width << 'x' << displ->currentMode->height;
-            ss << '+' << displ->currentPos->x << '+' << displ->currentPos->y;
-            ss << ' ' << displ->currentMode->refresh << "Hz";
+        if (output->currentMode && output->currentPos) {
+            ss << ' ' << output->currentMode->width << 'x' << output->currentMode->height;
+            ss << '+' << output->currentPos->x << '+' << output->currentPos->y;
+            ss << ' ' << output->currentMode->refresh << "Hz";
         }
         ss << endl;
-        for (const auto &mode : displ->modes) {
-            ss << (mode == displ->currentMode ? '*' : ' ');
-            ss << (mode == displ->preferredMode ? '+' : ' ');
-            ss << (mode == displ->optimalMode ? '!' : ' ');
+        for (const auto &mode : output->modes) {
+            ss << (mode == output->currentMode ? '*' : ' ');
+            ss << (mode == output->preferredMode ? '+' : ' ');
+            ss << (mode == output->optimalMode ? '!' : ' ');
             ss << mode->width << 'x' << mode->height << ' ' << mode->refresh << "Hz";
             ss << endl;
         }
@@ -165,35 +166,35 @@ const string renderUserInfo(const list<shared_ptr<Displ>> &displs) {
     return ss.str();
 }
 
-const long calculateDpi(const shared_ptr<Displ> &displ, string &explaination) {
-    if (!displ) throw invalid_argument("calculateDpi received empty displ");
+const long calculateDpi(const shared_ptr<Output> &output, string &explaination) {
+    if (!output) throw invalid_argument("calculateDpi received empty output");
 
     long dpi = DEFAULT_DPI;
     stringstream verbose;
-    if (!displ->edid) {
+    if (!output->edid) {
         verbose << "DPI defaulting to "
                 << dpi
-                << "; EDID information not available for display "
-                << displ->name;
-    } else if (!displ->desiredMode()) {
-        // TODO is this a realistic case? no, we need an "ActiveDisplay" subclass of Display
+                << "; EDID information not available for output "
+                << output->name;
+    } else if (!output->desiredMode()) {
+        // TODO is this a realistic case? no, we need an "ActiveOutput" subclass of Output
         verbose << "DPI defaulting to "
                 << dpi
-                << "; desiredMode not available for display "
-                << displ->name;
+                << "; desiredMode not available for output "
+                << output->name;
     } else {
-        const long caldulatedDpi = displ->edid->dpiForMode(displ->desiredMode());
+        const long caldulatedDpi = output->edid->dpiForMode(output->desiredMode());
         if (caldulatedDpi == 0) {
             verbose << "DPI defaulting to "
                     << dpi
-                    << "; no display size EDID information available for "
-                    << displ->name;
+                    << "; no EDID size information available for "
+                    << output->name;
         } else {
             dpi = caldulatedDpi;
             verbose << "calculated DPI "
                     << dpi
-                    << " for display "
-                    << displ->name;
+                    << " for output "
+                    << output->name;
         }
     }
 

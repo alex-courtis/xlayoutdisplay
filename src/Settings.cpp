@@ -19,45 +19,45 @@ using namespace std;
 
 Settings::Settings(int argc, char **argv) {
 
-    // load persistent settings from ~/.xLayoutDisplays
-    loadUserSettings(resolveTildePath(".xLayoutDisplays"));
+    // load persistent settings from ~/.xLayoutDisplay
+    loadUserSettings(resolveTildePath(".xLayoutDisplay"));
 
     // override with CLI settings
     loadCliSettings(argc, argv);
 }
 
-// display help and exit with success
+// print help and exit with success
 void printHelp(char *progPath) {
     char *progName = basename(progPath);
     printf(""
-                   "Detects and arranges displays in a left to right manner.\n"
+                   "Detects and arranges outputs in a left to right manner.\n"
                    "Invokes xrandr to perform arrangement.\n"
-                   "Highest resolution and refresh are used for each display.\n"
-                   "Displays starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
-                   "Displays are ordered via Xrandr default.\n"
-                   "The first display will be primary unless -p specified.\n"
-                   "\n", LAPTOP_DISPLAY_PREFIX
+                   "Highest resolution and refresh are used for each output.\n"
+                   "Outputs starting with \"%s\" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state\n"
+                   "Outputs are ordered via Xrandr default.\n"
+                   "The first output will be primary unless -p specified.\n"
+                   "\n", LAPTOP_OUTPUT_PREFIX
     );
     printf(USAGE, progName);
     printf(""
-                   "  -h  display this help text and exit\n"
-                   "  -i  display information about current displays and exit\n"
-                   "  -m  mirror displays using the lowest common resolution\n"
+                   "  -h  print this help text and exit\n"
+                   "  -i  print information about current outputs and exit\n"
+                   "  -m  mirror outputs using the lowest common resolution\n"
                    "  -n  perform a trial run and exit\n"
-                   "  -o  order of displays, space/comma delimited\n"
-                   "  -p  primary display\n"
-                   "  -q  suppress output\n"
+                   "  -o  order of outputs, space/comma delimited\n"
+                   "  -p  primary output\n"
+                   "  -q  suppress feedback\n"
     );
     printf("\n"
                    "e.g.: %s -o DP-0,HDMI-0 -p HDMI-0\n"
-                   "  arranges DP-0 left, HDMI-0 right, with any remaining displays further right\n"
+                   "  arranges DP-0 left, HDMI-0 right, with any remaining outputs further right\n"
                    "  HDMI-0 set as primary\n"
                    "", progName
     );
     exit(EXIT_SUCCESS);
 }
 
-// display usage and help hint then exit with failure
+// print usage and help hint then exit with failure
 void usage(char *progPath) {
     char *progName = basename(progPath);
     fprintf(stderr, USAGE, progName);

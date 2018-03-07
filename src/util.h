@@ -1,5 +1,5 @@
-#ifndef XLAYOUTDISPLAYS_STDUTIL_H
-#define XLAYOUTDISPLAYS_STDUTIL_H
+#ifndef XLAYOUTDISPLAY_STDUTIL_H
+#define XLAYOUTDISPLAY_STDUTIL_H
 
 #include <memory>
 #include <climits>
@@ -26,4 +26,4 @@ inline const std::string resolveTildePath(const char *homeRelativePath) {
     return std::string(settingsFilePath);
 }
 
-#endif //XLAYOUTDISPLAYS_STDUTIL_H
+#endif //XLAYOUTDISPLAY_STDUTIL_H
