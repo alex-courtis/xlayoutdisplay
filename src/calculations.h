@@ -26,6 +26,9 @@ void mirrorOutputs(std::list<std::shared_ptr<Output>> &outputs);
 const std::string renderUserInfo(const std::list<std::shared_ptr<Output>> &outputs);
 
 // TODO: document and test this; refactor needed, assume we have desiredActive following refactor
+// calculate the DPI for the output given
+// use only the horiz/vert cm values from EDID - they are intentionally zero for projectors and some tvs
+// if horiz/vert values are unavailable or zero, return DEFAULT_DPI
 // throws invalid_argument:
 //   when outputs is empty
 const long calculateDpi(const std::shared_ptr<Output> &output, std::string &explaination);

@@ -130,7 +130,7 @@ const list<shared_ptr<Output>> discoverOutputs() {
                 unsigned char *prop;
                 XRRGetOutputProperty(dpy, rrOutput, atom,
                                      0, // offset
-                                     100, //length - NFI, copied from xrandr.c
+                                     32, // length in CARD32 - EDID basic header is 128 bytes; the screen size info is that basic header
                                      false, // delete
                                      false, // pending
                                      AnyPropertyType, &actualType, &actualFormat, &nitems, &bytesAfter, &prop

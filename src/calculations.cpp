@@ -187,8 +187,9 @@ const long calculateDpi(const shared_ptr<Output> &output, string &explaination) 
         if (caldulatedDpi == 0) {
             verbose << "DPI defaulting to "
                     << dpi
-                    << "; no EDID size information available for "
-                    << output->name;
+                    << "as no EDID horiz/vert cm information available for "
+                    << output->name
+                    << "; this is normal for projectors and some TVs";
         } else {
             dpi = caldulatedDpi;
             verbose << "calculated DPI "
