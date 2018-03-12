@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// stolen from xrandr.c; assuming this mostly works
+// stolen from xrandr.c; assuming this works, as we're reliant on xrandr anyway
 const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     double rate;
     double vTotal = modeInfo.vTotal;

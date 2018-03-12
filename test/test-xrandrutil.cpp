@@ -6,6 +6,7 @@
 #include "test-MockEdid.h"
 
 using namespace std;
+using ::testing::Eq;
 using ::testing::Return;
 
 TEST(xrandrutil_renderXrandrCmd, renderAll) {
@@ -64,18 +65,27 @@ class xrandrutil_modeFromXRR : public ::testing::Test {
 protected:
     virtual void SetUp() {
         resources.nmode = 3;
+        resources.modes = &modeInfos[0];
+
         modeInfos[0].id = 10;
         modeInfos[1].id = 11;
+        modeInfos[1].width = 111;
+        modeInfos[1].height = 112;
         modeInfos[2].id = 12;
-        resources.modes = &modeInfos[0];
     }
 
-    XRRScreenResources resources;
-    XRRModeInfo modeInfos[3];
+    XRRScreenResources resources {};
+    XRRModeInfo modeInfos[3] {};
 };
 
 TEST_F(xrandrutil_modeFromXRR, valid) {
-    modeFromXRR(11, &resources);
+    Mode *mode = modeFromXRR(11, &resources);
+
+    ASSERT_THAT(mode->rrMode, Eq(11));
+    ASSERT_THAT(mode->width, Eq(111));
+    ASSERT_THAT(mode->height, Eq(112));
+
+    delete(mode);
 }
 
 TEST_F(xrandrutil_modeFromXRR, modeNotPresent) {
