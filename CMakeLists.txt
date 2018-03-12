@@ -41,6 +41,7 @@ set(FILES_TST
         test/test-Output.cpp
         test/test-Edid.cpp
         test/test-MockEdid.h
+        test/test-MockMonitors.h
         test/test-Mode.cpp
         test/test-Monitors.cpp
         test/test-Settings.cpp

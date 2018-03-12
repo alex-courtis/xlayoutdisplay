@@ -36,16 +36,3 @@ TEST_F(Monitors_calculateLaptopLidClosed, closed) {
     createStateFile("something ClOsEd something something\n");
     EXPECT_TRUE(calculateLaptopLidClosed("./lid"));
 }
-
-
-TEST(Laptop_shouldDisableOutput, matchLidClosed) {
-    EXPECT_TRUE(Monitors(true).shouldDisableOutput(string(LAPTOP_OUTPUT_PREFIX) + "blargh"));
-}
-
-TEST(Laptop_shouldDisableOutput, noMatchLidClosed) {
-    EXPECT_FALSE(Monitors(true).shouldDisableOutput("blargh"));
-}
-
-TEST(Laptop_shouldDisableOutput, matchLidOpen) {
-    EXPECT_FALSE(Monitors(false).shouldDisableOutput(string(LAPTOP_OUTPUT_PREFIX) + "blargh"));
-}

@@ -86,4 +86,3 @@ TEST_F(xrandrutil_modeFromXRR, resourcesNotPresent) {
     EXPECT_THROW(modeFromXRR(11, nullptr), invalid_argument);
 }
 
-// TODO: fully test discoverOutputs - probably not going to happen

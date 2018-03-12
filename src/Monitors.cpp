@@ -3,14 +3,6 @@
 #include <cstring>
 #include <dirent.h>
 
-Monitors::Monitors() : laptopLidClosed(calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)) {}
-
-Monitors::Monitors(const bool laptopLidClosed) : laptopLidClosed(laptopLidClosed) {}
-
-const bool Monitors::shouldDisableOutput(const std::string name) const {
-    return laptopLidClosed && strncasecmp(LAPTOP_OUTPUT_PREFIX, name.c_str(), strlen(LAPTOP_OUTPUT_PREFIX)) == 0;
-}
-
 const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     static char lidFileName[PATH_MAX];
     static char line[512];
@@ -41,3 +33,6 @@ const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     return false;
 }
 
+const bool Monitors::shouldDisableOutput(const std::string name) const {
+    return laptopLidClosed && strncasecmp(LAPTOP_OUTPUT_PREFIX, name.c_str(), strlen(LAPTOP_OUTPUT_PREFIX)) == 0;
+}

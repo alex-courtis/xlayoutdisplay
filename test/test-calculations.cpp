@@ -4,9 +4,12 @@
 #include "../src/calculations.h"
 
 #include "test-MockEdid.h"
+#include "test-MockMonitors.h"
 
 using namespace std;
+using ::testing::_;
 using ::testing::Return;
+using ::testing::NiceMock;
 
 TEST(calculations_orderOutputs, reposition) {
 
@@ -51,6 +54,7 @@ protected:
     shared_ptr<Mode> mode = make_shared<Mode>(0, 0, 0, 0);
     shared_ptr<Pos> pos = make_shared<Pos>(0, 0);
     list<shared_ptr<Mode>> modes = {mode};
+    NiceMock<MockMonitors> mockMonitors;
 };
 
 TEST_F(calculations_activateOutputs, primarySpecifiedAndLaptop) {
@@ -71,7 +75,10 @@ TEST_F(calculations_activateOutputs, primarySpecifiedAndLaptop) {
                                                      mode, pos, shared_ptr<Edid>());
     outputs.push_back(output4);
 
-    const shared_ptr<Output> primary = activateOutputs(outputs, "three", Monitors(true));
+    EXPECT_CALL(mockMonitors, shouldDisableOutput(_)).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockMonitors, shouldDisableOutput(output4->name)).WillOnce(Return(true));
+
+    const shared_ptr<Output> primary = activateOutputs(outputs, "three", mockMonitors);
 
     EXPECT_TRUE(output1->desiredActive);
     EXPECT_FALSE(output2->desiredActive);
@@ -97,7 +104,7 @@ TEST_F(calculations_activateOutputs, defaultPrimary) {
                                                      shared_ptr<Edid>());
     outputs.push_back(output3);
 
-    const shared_ptr<Output> primary = activateOutputs(outputs, "nouserprimary", Monitors(true));
+    const shared_ptr<Output> primary = activateOutputs(outputs, "nouserprimary", mockMonitors);
 
     EXPECT_FALSE(output1->desiredActive);
     EXPECT_TRUE(output2->desiredActive);
@@ -107,14 +114,14 @@ TEST_F(calculations_activateOutputs, defaultPrimary) {
 }
 
 TEST_F(calculations_activateOutputs, noOutputs) {
-    EXPECT_THROW(activateOutputs({}, "ouch", Monitors(true)), invalid_argument);
+    EXPECT_THROW(activateOutputs({}, "ouch", mockMonitors), invalid_argument);
 }
 
 TEST_F(calculations_activateOutputs, noActiveOrConnected) {
     EXPECT_THROW(
             activateOutputs(
                     {make_shared<Output>("Two", Output::disconnected, modes, mode, mode, pos, shared_ptr<Edid>())},
-                    "ouch", Monitors(true)),
+                    "ouch", mockMonitors),
             runtime_error);
 }
 

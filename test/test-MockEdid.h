@@ -1,9 +1,9 @@
+#ifndef XLAYOUTDISPLAY_TEST_MOCKEDID_H
+#define XLAYOUTDISPLAY_TEST_MOCKEDID_H
+
 #include <gmock/gmock.h>
 
 #include "../src/Edid.h"
-
-#ifndef XLAYOUTDISPLAY_TEST_MOCKEDID_H
-#define XLAYOUTDISPLAY_TEST_MOCKEDID_H
 
 class MockEdid : public Edid {
 public:
