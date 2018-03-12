@@ -22,7 +22,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<std::shared_ptr<Mode>>({mode2}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), edid2);
-    output2->desiredActive(true);
+    output2->desiredActive = true;
     output2->desiredMode(mode2);
     output2->desiredPos = make_shared<Pos>(5, 6);
     outputs.push_back(output2);
@@ -30,7 +30,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected, modes, std::shared_ptr<Mode>(),
                                                   std::shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                   shared_ptr<Edid>());
-    output3->desiredActive(true);
+    output3->desiredActive = true;
     output3->desiredPos = make_shared<Pos>(13, 14);
     outputs.push_back(output3);
 
@@ -38,7 +38,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<std::shared_ptr<Mode>>({mode4}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), shared_ptr<Edid>());
-    output4->desiredActive(true);
+    output4->desiredActive = true;
     output4->desiredMode(mode4);
     outputs.push_back(output4);
 
@@ -46,7 +46,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<std::shared_ptr<Mode>>({mode5}),
                                                   std::shared_ptr<Mode>(), std::shared_ptr<Mode>(),
                                                   shared_ptr<Pos>(), shared_ptr<Edid>());
-    output5->desiredActive(true);
+    output5->desiredActive = true;
     output5->desiredMode(mode5);
     output5->desiredPos = make_shared<Pos>(11, 12);
     outputs.push_back(output5);

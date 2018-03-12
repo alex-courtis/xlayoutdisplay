@@ -40,16 +40,6 @@ Output::Output(const string &name,
     }
 }
 
-bool Output::desiredActive() const {
-    return _desiredActive;
-}
-
-void Output::desiredActive(const bool desiredActive) {
-    if (desiredActive && !optimalMode)
-        throw invalid_argument("Output '" + name + "' cannot set desiredActive without optimalMode");
-    _desiredActive = desiredActive;
-}
-
 const shared_ptr<Mode> &Output::desiredMode() const {
     return _desiredMode;
 }

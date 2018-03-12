@@ -42,7 +42,7 @@ const shared_ptr<Output> activateOutputs(const list<shared_ptr<Output>> &outputs
             continue;
 
         // mark active
-        output->desiredActive(true);
+        output->desiredActive = true;
 
         // default first to primary
         if (!primary)
@@ -63,7 +63,7 @@ void ltrOutputs(list<shared_ptr<Output>> &outputs) {
     int ypos = 0;
     for (const auto &output : outputs) {
 
-        if (output->desiredActive()) {
+        if (output->desiredActive) {
 
             // set the desired mode to optimal
             output->desiredMode(output->optimalMode);
@@ -82,7 +82,7 @@ void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
     // find the first active output
     shared_ptr<Output> firstOutput;
     for (const auto &output : outputs) {
-        if (output->desiredActive()) {
+        if (output->desiredActive) {
             firstOutput = output;
             break;
         }
@@ -96,7 +96,7 @@ void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
 
         // attempt to match mode to each active output
         for (const auto &output : outputs) {
-            if (!output->desiredActive())
+            if (!output->desiredActive)
                 continue;
 
             // reset failed matches

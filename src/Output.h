@@ -39,6 +39,7 @@ public:
     const std::shared_ptr<Pos> currentPos;
     const std::shared_ptr<Edid> edid;
 
+    bool desiredActive = false;
     std::shared_ptr<Pos> desiredPos;
 
     // set desiredMode
@@ -49,19 +50,9 @@ public:
     // get desiredMode
     const std::shared_ptr<Mode> &desiredMode() const;
 
-    // TODO this should be a list returned by activateOutputs, of subclass "ActiveOutput"
-    // set desiredActive
-    // throws invalid_argument:
-    //   optimalMode not present
-    void desiredActive(bool desiredActive);
-
-    // get desiredActive
-    bool desiredActive() const;
-
 private:
     // TODO this should be represented by subclass "ActiveOutput"
     std::shared_ptr<Mode> _desiredMode;
-    bool _desiredActive = false;
 };
 
 

@@ -62,14 +62,3 @@ TEST_F(Output_test, connectedPreferredNotInModes) {
 TEST_F(Output_test, disconnectedPreferredNotInModes) {
     Output("disconnectedPreferredNotInModes", Output::disconnected, modes, nullptr, modeInexistent, nullptr, edid);
 }
-
-TEST_F(Output_test, optimalPresent) {
-    Output output = Output("optimalPresent", Output::disconnected, {modeInexistent}, nullptr, nullptr, nullptr, nullptr);
-    output.desiredActive(true);
-}
-
-TEST_F(Output_test, missingOptimal) {
-    Output output = Output("missingOptimal", Output::disconnected, list<std::shared_ptr<Mode>>(), nullptr, nullptr, nullptr,
-                        nullptr);
-    EXPECT_THROW(output.desiredActive(true), invalid_argument);
-}

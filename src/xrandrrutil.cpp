@@ -34,7 +34,7 @@ const string renderXrandrCmd(const list<shared_ptr<Output>> &outputs, const shar
     ss << "xrandr \\\n --dpi " << dpi;
     for (const auto &output : outputs) {
         ss << " \\\n --output " << output->name;
-        if (output->desiredActive() && output->desiredMode() && output->desiredPos) {
+        if (output->desiredActive && output->desiredMode() && output->desiredPos) {
             ss << " --mode " << output->desiredMode()->width << "x" << output->desiredMode()->height;
             ss << " --rate " << output->desiredMode()->refresh;
             ss << " --pos ";
