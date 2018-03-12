@@ -66,13 +66,13 @@ void ltrOutputs(list<shared_ptr<Output>> &outputs) {
         if (output->desiredActive) {
 
             // set the desired mode to optimal
-            output->desiredMode(output->optimalMode);
+            output->desiredMode = output->optimalMode;
 
             // position the screen
             output->desiredPos = make_shared<Pos>(xpos, ypos);
 
             // next position
-            xpos += output->desiredMode()->width;
+            xpos += output->desiredMode->width;
         }
     }
 }
@@ -115,7 +115,7 @@ void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
             // match a mode for every output; root it at 0, 0
             matched = matched && desiredMode;
             if (matched) {
-                output->desiredMode(desiredMode);
+                output->desiredMode = desiredMode;
                 output->desiredPos = make_shared<Pos>(0, 0);
                 continue;
             }
@@ -176,14 +176,14 @@ const long calculateDpi(const shared_ptr<Output> &output, string &explaination) 
                 << dpi
                 << "; EDID information not available for output "
                 << output->name;
-    } else if (!output->desiredMode()) {
+    } else if (!output->desiredMode) {
         // TODO is this a realistic case? no, we need an "ActiveOutput" subclass of Output
         verbose << "DPI defaulting to "
                 << dpi
                 << "; desiredMode not available for output "
                 << output->name;
     } else {
-        const long caldulatedDpi = output->edid->dpiForMode(output->desiredMode());
+        const long caldulatedDpi = output->edid->dpiForMode(output->desiredMode);
         if (caldulatedDpi == 0) {
             verbose << "DPI defaulting to "
                     << dpi

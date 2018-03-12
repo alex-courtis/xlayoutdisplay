@@ -39,13 +39,3 @@ Output::Output(const string &name,
             throw invalid_argument("Output '" + name + "' has preferredMode not present in modes");
     }
 }
-
-const shared_ptr<Mode> &Output::desiredMode() const {
-    return _desiredMode;
-}
-
-void Output::desiredMode(const shared_ptr<Mode> &desiredMode) {
-    if (find(modes.begin(), modes.end(), desiredMode) == this->modes.end())
-        throw invalid_argument("Output '" + name + "' cannot set desiredMode which is not present in modes");
-    this->_desiredMode = desiredMode;
-}

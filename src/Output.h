@@ -40,19 +40,8 @@ public:
     const std::shared_ptr<Edid> edid;
 
     bool desiredActive = false;
+    std::shared_ptr<Mode> desiredMode;
     std::shared_ptr<Pos> desiredPos;
-
-    // set desiredMode
-    // throws invalid_argument:
-    //   desiredMode not in modes
-    void desiredMode(const std::shared_ptr<Mode> &desiredMode);
-
-    // get desiredMode
-    const std::shared_ptr<Mode> &desiredMode() const;
-
-private:
-    // TODO this should be represented by subclass "ActiveOutput"
-    std::shared_ptr<Mode> _desiredMode;
 };
 
 
