@@ -10,8 +10,6 @@
 
 class Edid {
 public:
-    Edid() = default;
-
     // we only need the first 128 bytes of EDID - the basic structure
     // throws invalid_argument:
     //   when length < EDID_MIN_LENGTH

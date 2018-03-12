@@ -177,10 +177,9 @@ const long calculateDpi(const shared_ptr<Output> &output, string &explaination) 
                 << "; EDID information not available for output "
                 << output->name;
     } else if (!output->desiredMode) {
-        // TODO is this a realistic case? no, we need an "ActiveOutput" subclass of Output
         verbose << "DPI defaulting to "
                 << dpi
-                << "; desiredMode not available for output "
+                << "; no desired mode for output "
                 << output->name;
     } else {
         const long caldulatedDpi = output->edid->dpiForMode(output->desiredMode);
