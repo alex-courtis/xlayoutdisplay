@@ -35,6 +35,8 @@ set(FILES_SRC
         src/xrandrrutil.h
         src/xrdbutil.cpp
         src/xrdbutil.h
+        src/xutil.cpp
+        src/xutil.h
         )
 
 set(FILES_TST
