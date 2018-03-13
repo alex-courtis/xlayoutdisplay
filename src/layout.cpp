@@ -1,3 +1,4 @@
+#include <X11/Xcursor/Xcursor.h>
 #include "layout.h"
 #include "xrandrrutil.h"
 #include "xrdbutil.h"
@@ -57,18 +58,20 @@ const int layout(int argc, char **argv) {
         if (rc != 0)
             return rc;
 
-        // TODO: extract function as below or do something different :shrug:
-        // clear root pointer to refresh
-        Display *dpy = XOpenDisplay(nullptr);
-        int screen = DefaultScreen(dpy);
-        Window root = RootWindow(dpy, screen);
-        XUndefineCursor(dpy, root);
-        XCloseDisplay(dpy);
-
         // xrdb
         rc = system(xrdbCmd.c_str());
         if (rc != 0)
             return rc;
+
+        // TODO: refactor
+        // load the appropriate "left_ptr" cursor with the updated size and set it to the root window
+        Display *dpy = XOpenDisplay(nullptr);
+        int screen = DefaultScreen(dpy);
+        Window root = RootWindow(dpy, screen);
+        Cursor cursor = XcursorLibraryLoadCursor(dpy, "left_ptr");
+        XDefineCursor(dpy, root, cursor);
+        XFreeCursor(dpy, cursor);
+        XCloseDisplay(dpy);
     }
     return EXIT_SUCCESS;
 }

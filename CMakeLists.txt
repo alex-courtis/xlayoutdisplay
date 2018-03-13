@@ -8,6 +8,7 @@ find_package(X11 REQUIRED)
 
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
+link_libraries(${X11_Xcursor_LIB})
 
 set(FILES_EXE
         main.cpp
