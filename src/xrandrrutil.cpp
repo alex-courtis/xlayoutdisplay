@@ -82,7 +82,7 @@ const list<shared_ptr<Output>> discoverOutputs() {
     // iterate outputs
     for (int i = 0; i < screenResources->noutput - 1; i++) {
         Output::State state;
-        list<std::shared_ptr<Mode>> modes;
+        list<std::shared_ptr<const Mode>> modes;
         std::shared_ptr<Mode> currentMode, preferredMode;
         shared_ptr<Pos> currentPos;
         shared_ptr<Edid> edid;

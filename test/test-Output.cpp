@@ -12,7 +12,7 @@ protected:
 
     shared_ptr<Pos> pos = make_shared<Pos>(0, 0);
     shared_ptr<Edid> edid;
-    list<shared_ptr<Mode>> modes = {mode1, mode2};
+    list<shared_ptr<const Mode>> modes = {mode1, mode2};
 };
 
 TEST_F(Output_test, validActive) {
@@ -24,7 +24,7 @@ TEST_F(Output_test, validConnected) {
 }
 
 TEST_F(Output_test, validDisconnected) {
-    Output("validDisconnected", Output::disconnected, list<shared_ptr<Mode>>(), nullptr, nullptr, nullptr, edid);
+    Output("validDisconnected", Output::disconnected, list<shared_ptr<const Mode>>(), nullptr, nullptr, nullptr, edid);
 }
 
 TEST_F(Output_test, activeMissingCurrentMode) {
@@ -36,11 +36,11 @@ TEST_F(Output_test, activeMissingCurrentPos) {
 }
 
 TEST_F(Output_test, activeEmptyModes) {
-    EXPECT_THROW(Output("activeEmptyModes", Output::active, list<shared_ptr<Mode>>(), mode1, nullptr, pos, edid), invalid_argument);
+    EXPECT_THROW(Output("activeEmptyModes", Output::active, list<shared_ptr<const Mode>>(), mode1, nullptr, pos, edid), invalid_argument);
 }
 
 TEST_F(Output_test, connectedEmptyModes) {
-    EXPECT_THROW(Output("connectedEmptyModes", Output::connected, list<shared_ptr<Mode>>(), nullptr, nullptr, nullptr, edid), invalid_argument);
+    EXPECT_THROW(Output("connectedEmptyModes", Output::connected, list<shared_ptr<const Mode>>(), nullptr, nullptr, nullptr, edid), invalid_argument);
 }
 
 TEST_F(Output_test, activePreferredNotInModes) {

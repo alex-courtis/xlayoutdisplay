@@ -11,7 +11,7 @@ using ::testing::Return;
 
 TEST(xrandrutil_renderXrandrCmd, renderAll) {
     list<shared_ptr<Output>> outputs;
-    list<shared_ptr<Mode>> modes = {make_shared<Mode>(0, 0, 0, 0)};
+    list<shared_ptr<const Mode>> modes = {make_shared<Mode>(0, 0, 0, 0)};
 
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, modes, shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
@@ -19,7 +19,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
 
     shared_ptr<MockEdid> edid2 = make_shared<MockEdid>();
     shared_ptr<Mode> mode2 = make_shared<Mode>(0, 1, 2, 3);
-    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<Mode>>({mode2}),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<const Mode>>({mode2}),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(), edid2);
     output2->desiredActive = true;
     output2->desiredMode = mode2;
@@ -33,7 +33,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     outputs.push_back(output3);
 
     shared_ptr<Mode> mode4 = make_shared<Mode>(15, 16, 17, 18);
-    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<shared_ptr<Mode>>({mode4}),
+    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<shared_ptr<const Mode>>({mode4}),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     output4->desiredActive = true;
@@ -41,7 +41,7 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     outputs.push_back(output4);
 
     shared_ptr<Mode> mode5 = make_shared<Mode>(7, 8, 9, 10);
-    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<shared_ptr<Mode>>({mode5}),
+    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<shared_ptr<const Mode>>({mode5}),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     output5->desiredActive = true;

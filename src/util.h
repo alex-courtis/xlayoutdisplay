@@ -12,9 +12,9 @@ inline bool sortSharedPtr(const std::shared_ptr<T> &l, const std::shared_ptr<T> 
 
 // copy list of shared_ptr, reverse sort it, return it as const
 template<typename T>
-inline const std::list<std::shared_ptr<T>> reverseSort(const std::list<std::shared_ptr<T>> &list) {
-    std::list<std::shared_ptr<T>> sorted = list;
-    sorted.sort(sortSharedPtr<T>);
+inline const std::list<std::shared_ptr<const T>> reverseSort(const std::list<std::shared_ptr<const T>> &list) {
+    std::list<std::shared_ptr<const T>> sorted = list;
+    sorted.sort(sortSharedPtr<const T>);
     sorted.reverse();
     return sorted;
 }

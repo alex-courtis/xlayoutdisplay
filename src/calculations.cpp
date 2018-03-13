@@ -100,7 +100,7 @@ void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
                 continue;
 
             // reset failed matches
-            shared_ptr<Mode> desiredMode;
+            shared_ptr<const Mode> desiredMode;
 
             // match height and width
             for (const auto &mode : reverseSort(output->modes)) {
@@ -202,14 +202,14 @@ const long calculateDpi(const shared_ptr<Output> &output, string &explaination) 
     return dpi;
 }
 
-const shared_ptr<Mode> calculateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<const Mode> &preferredMode) {
-    shared_ptr<Mode> optimalMode;
+const shared_ptr<const Mode> calculateOptimalMode(const list<shared_ptr<const Mode>> &modes, const shared_ptr<const Mode> &preferredMode) {
+    shared_ptr<const Mode> optimalMode;
 
     // default optimal mode is empty
     if (!modes.empty()) {
 
         // use highest resolution/refresh for optimal
-        const list<shared_ptr<Mode>> reverseOrderedModes = reverseSort(modes);
+        const list<shared_ptr<const Mode>> reverseOrderedModes = reverseSort(modes);
         optimalMode = reverseOrderedModes.front();
 
         // override with highest refresh of preferred resolution, if available

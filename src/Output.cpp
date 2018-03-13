@@ -7,7 +7,7 @@ using namespace std;
 
 Output::Output(const string &name,
              const State &state,
-             const list<shared_ptr<Mode>> &modes,
+             const list<shared_ptr<const Mode>> &modes,
              const shared_ptr<const Mode> &currentMode,
              const shared_ptr<const Mode> &preferredMode,
              const shared_ptr<const Pos> &currentPos,

@@ -33,7 +33,7 @@ const std::string renderUserInfo(const std::list<std::shared_ptr<Output>> &outpu
 const long calculateDpi(const std::shared_ptr<Output> &output, std::string &explaination);
 
 // retrieve the highest resolution/refresh mode from a list of modes, using the highest refresh rate of preferredMode, if available
-const std::shared_ptr<Mode> calculateOptimalMode(const std::list<std::shared_ptr<Mode>> &modes,
-                                                 const std::shared_ptr<const Mode> &preferredMode);
+const std::shared_ptr<const Mode> calculateOptimalMode(const std::list<std::shared_ptr<const Mode>> &modes,
+                                                       const std::shared_ptr<const Mode> &preferredMode);
 
 #endif //XLAYOUTDISPLAY_CALCULATIONS_H

@@ -14,23 +14,23 @@ using ::testing::NiceMock;
 TEST(calculations_orderOutputs, reposition) {
 
     list<shared_ptr<Output>> outputs;
-    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output1);
-    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output2);
-    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output3);
-    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output4 = make_shared<Output>("Four", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output4);
-    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output5 = make_shared<Output>("Five", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output5);
@@ -53,7 +53,7 @@ class calculations_activateOutputs : public ::testing::Test {
 protected:
     shared_ptr<Mode> mode = make_shared<Mode>(0, 0, 0, 0);
     shared_ptr<Pos> pos = make_shared<Pos>(0, 0);
-    list<shared_ptr<Mode>> modes = {mode};
+    list<shared_ptr<const Mode>> modes = {mode};
     NiceMock<MockMonitors> mockMonitors;
 };
 
@@ -129,7 +129,7 @@ TEST_F(calculations_activateOutputs, noActiveOrConnected) {
 TEST(calculations_ltrOutputs, arrange) {
 
     list<shared_ptr<Output>> outputs;
-    list<shared_ptr<Mode>> modes;
+    list<shared_ptr<const Mode>> modes;
 
     modes = {make_shared<Mode>(0, 10, 20, 30)};
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::connected, modes, shared_ptr<Mode>(), modes.front(),
@@ -178,12 +178,12 @@ TEST(calculations_mirrorOutputs, noneActive) {
 
     list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output1);
 
-    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output2);
@@ -205,12 +205,12 @@ TEST(calculations_mirrorOutputs, oneActive) {
     const shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode1, mode2}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode1, mode2}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output1->desiredActive = true;
     outputs.push_back(output1);
 
-    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                      shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                      shared_ptr<Edid>());
     outputs.push_back(output2);
@@ -236,18 +236,18 @@ TEST(calculations_mirrorOutputs, someActive) {
     shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode1, mode2}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode1, mode2}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     outputs.push_back(output1);
 
     shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode3, mode5, mode4}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode3, mode5, mode4}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output2->desiredActive = true;
     outputs.push_back(output2);
 
     shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode2, mode5, mode4}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode2, mode5, mode4}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output3->desiredActive = true;
     outputs.push_back(output3);
@@ -276,19 +276,19 @@ TEST(calculations_mirrorOutputs, manyActive) {
     shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode1, mode2, mode3}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode1, mode2, mode3}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output1->desiredActive = true;
     outputs.push_back(output1);
 
     shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode3, mode4}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode3, mode4}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output2->desiredActive = true;
     outputs.push_back(output2);
 
     shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode2, mode3}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode2, mode3}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output3->desiredActive = true;
     outputs.push_back(output3);
@@ -318,19 +318,19 @@ TEST(calculations_mirrorOutputs, noCommon) {
     shared_ptr<Mode> mode1 = make_shared<Mode>(0, 7, 8, 0);
 
     shared_ptr<Output> output1 = make_shared<Output>("One", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode1, mode2}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode1, mode2}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output1->desiredActive = true;
     outputs.push_back(output1);
 
     shared_ptr<Output> output2 = make_shared<Output>("Two", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode3, mode4}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode3, mode4}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output2->desiredActive = true;
     outputs.push_back(output2);
 
     shared_ptr<Output> output3 = make_shared<Output>("Three", Output::disconnected,
-                                                     list<shared_ptr<Mode>>({mode1, mode4}), shared_ptr<Mode>(),
+                                                     list<shared_ptr<const Mode>>({mode1, mode4}), shared_ptr<Mode>(),
                                                      shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
     output3->desiredActive = true;
     outputs.push_back(output3);
@@ -353,16 +353,16 @@ TEST(calculations_renderUserInfo, renderAll) {
 
     list<shared_ptr<Output>> outputs;
 
-    shared_ptr<Output> dis = make_shared<Output>("dis", Output::disconnected, list<shared_ptr<Mode>>(),
+    shared_ptr<Output> dis = make_shared<Output>("dis", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                  shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(), edid1);
     outputs.push_back(dis);
 
-    shared_ptr<Output> con = make_shared<Output>("con", Output::connected, list<shared_ptr<Mode>>({mode1, mode2}),
+    shared_ptr<Output> con = make_shared<Output>("con", Output::connected, list<shared_ptr<const Mode>>({mode1, mode2}),
                                                  shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                  shared_ptr<Edid>());
     outputs.push_back(con);
 
-    shared_ptr<Output> act = make_shared<Output>("act", Output::active, list<shared_ptr<Mode>>({mode3, mode2, mode1}),
+    shared_ptr<Output> act = make_shared<Output>("act", Output::active, list<shared_ptr<const Mode>>({mode3, mode2, mode1}),
                                                  mode2, mode3, pos, edid3);
     outputs.push_back(act);
 
@@ -387,7 +387,7 @@ protected:
     shared_ptr<Mode> mode21 = make_shared<Mode>(5, 6, 7, 8);
     shared_ptr<Mode> mode22 = make_shared<Mode>(5, 6, 7, 9);
     shared_ptr<Mode> mode3 = make_shared<Mode>(9, 10, 11, 12);
-    list<shared_ptr<Mode>> modes = {mode1, mode21, mode22, mode3};
+    list<shared_ptr<const Mode>> modes = {mode1, mode21, mode22, mode3};
 };
 
 TEST_F(calculations_calculateOptimalMode, highestRes) {
@@ -406,7 +406,7 @@ TEST_F(calculations_calculateOptimalMode, noModes) {
 class calculations_calculateDpi : public ::testing::Test {
 protected:
     const shared_ptr<MockEdid> mockEdid = make_shared<MockEdid>();
-    const shared_ptr<Output> output = make_shared<Output>("someoutput", Output::disconnected, list<shared_ptr<Mode>>(),
+    const shared_ptr<Output> output = make_shared<Output>("someoutput", Output::disconnected, list<shared_ptr<const Mode>>(),
                                                           shared_ptr<Mode>(), shared_ptr<Mode>(), shared_ptr<Pos>(),
                                                           mockEdid);
 };
@@ -418,7 +418,7 @@ TEST_F(calculations_calculateDpi, noOutput) {
 
 TEST_F(calculations_calculateDpi, noEdid) {
     const shared_ptr<Output> output = make_shared<Output>("noedidoutput", Output::disconnected,
-                                                          list<shared_ptr<Mode>>(), shared_ptr<Mode>(),
+                                                          list<shared_ptr<const Mode>>(), shared_ptr<Mode>(),
                                                           shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
 
     string explaination;

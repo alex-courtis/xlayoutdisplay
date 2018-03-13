@@ -24,7 +24,7 @@ public:
     // optimalMode will be set to highest refresh preferredMode, then highest mode, then empty
     Output(const std::string &name,
            const State &state,
-           const std::list<std::shared_ptr<Mode>> &modes,
+           const std::list<std::shared_ptr<const Mode>> &modes,
            const std::shared_ptr<const Mode> &currentMode,
            const std::shared_ptr<const Mode> &preferredMode,
            const std::shared_ptr<const Pos> &currentPos,
@@ -32,10 +32,10 @@ public:
 
     const std::string name;
     const State state;
-    const std::list<std::shared_ptr<Mode>> modes;
+    const std::list<std::shared_ptr<const Mode>> modes;
     const std::shared_ptr<const Mode> currentMode;
     const std::shared_ptr<const Mode> preferredMode;
-    const std::shared_ptr<Mode> optimalMode;
+    const std::shared_ptr<const Mode> optimalMode;
     const std::shared_ptr<const Pos> currentPos;
     const std::shared_ptr<const Edid> edid;
 
