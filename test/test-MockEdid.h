@@ -15,7 +15,7 @@ public:
 
     MOCK_CONST_METHOD0(maxCmVert, const unsigned int());
 
-    MOCK_CONST_METHOD1(dpiForMode, const long(const std::shared_ptr<Mode> &mode));
+    MOCK_CONST_METHOD1(dpiForMode, const long(const std::shared_ptr<const Mode> &mode));
 };
 
 #endif //XLAYOUTDISPLAY_TEST_MOCKEDID_H

@@ -40,8 +40,8 @@ public:
     const std::shared_ptr<const Edid> edid;
 
     bool desiredActive = false;
-    std::shared_ptr<Mode> desiredMode;
-    std::shared_ptr<Pos> desiredPos;
+    std::shared_ptr<const Mode> desiredMode;
+    std::shared_ptr<const Pos> desiredPos;
 };
 
 

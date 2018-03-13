@@ -450,7 +450,7 @@ TEST_F(calculations_calculateDpi, noDesiredMode) {
 }
 
 TEST_F(calculations_calculateDpi, zeroEdid) {
-    output->desiredMode = make_shared<Mode>(1, 2, 3, 4);
+    output->desiredMode = make_shared<const Mode>(1, 2, 3, 4);
     EXPECT_CALL(*mockEdid, dpiForMode(output->desiredMode)).WillOnce(Return(0));
 
     string explaination;
@@ -468,7 +468,7 @@ TEST_F(calculations_calculateDpi, zeroEdid) {
 }
 
 TEST_F(calculations_calculateDpi, valid) {
-    output->desiredMode = make_shared<Mode>(1, 2, 3, 4);
+    output->desiredMode = make_shared<const Mode>(1, 2, 3, 4);
     EXPECT_CALL(*mockEdid, dpiForMode(output->desiredMode)).WillOnce(Return(1));
 
     string explaination;
