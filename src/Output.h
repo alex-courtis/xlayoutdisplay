@@ -25,19 +25,19 @@ public:
     Output(const std::string &name,
            const State &state,
            const std::list<std::shared_ptr<Mode>> &modes,
-           const std::shared_ptr<Mode> &currentMode,
-           const std::shared_ptr<Mode> &preferredMode,
-           const std::shared_ptr<Pos> &currentPos,
-           const std::shared_ptr<Edid> &edid);
+           const std::shared_ptr<const Mode> &currentMode,
+           const std::shared_ptr<const Mode> &preferredMode,
+           const std::shared_ptr<const Pos> &currentPos,
+           const std::shared_ptr<const Edid> &edid);
 
     const std::string name;
     const State state;
     const std::list<std::shared_ptr<Mode>> modes;
-    const std::shared_ptr<Mode> currentMode;
-    const std::shared_ptr<Mode> preferredMode;
+    const std::shared_ptr<const Mode> currentMode;
+    const std::shared_ptr<const Mode> preferredMode;
     const std::shared_ptr<Mode> optimalMode;
-    const std::shared_ptr<Pos> currentPos;
-    const std::shared_ptr<Edid> edid;
+    const std::shared_ptr<const Pos> currentPos;
+    const std::shared_ptr<const Edid> edid;
 
     bool desiredActive = false;
     std::shared_ptr<Mode> desiredMode;

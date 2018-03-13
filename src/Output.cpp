@@ -8,10 +8,10 @@ using namespace std;
 Output::Output(const string &name,
              const State &state,
              const list<shared_ptr<Mode>> &modes,
-             const shared_ptr<Mode> &currentMode,
-             const shared_ptr<Mode> &preferredMode,
-             const shared_ptr<Pos> &currentPos,
-             const shared_ptr<Edid> &edid) :
+             const shared_ptr<const Mode> &currentMode,
+             const shared_ptr<const Mode> &preferredMode,
+             const shared_ptr<const Pos> &currentPos,
+             const shared_ptr<const Edid> &edid) :
         name(name),
         state(state),
         modes(modes),

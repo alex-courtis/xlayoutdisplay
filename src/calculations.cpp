@@ -202,7 +202,7 @@ const long calculateDpi(const shared_ptr<Output> &output, string &explaination) 
     return dpi;
 }
 
-const shared_ptr<Mode> calculateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<Mode> &preferredMode) {
+const shared_ptr<Mode> calculateOptimalMode(const list<shared_ptr<Mode>> &modes, const shared_ptr<const Mode> &preferredMode) {
     shared_ptr<Mode> optimalMode;
 
     // default optimal mode is empty
