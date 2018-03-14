@@ -3,26 +3,31 @@
 
 #include <sstream>
 #include <cstring>
+#include <stack>
 
 using namespace std;
 
-void orderOutputs(list<shared_ptr<Output>> &outputs, const list<string> &order) {
+const std::list<std::shared_ptr<Output>> orderOutputs(const list<shared_ptr<Output>> &outputs, const list<string> &order) {
+    list<shared_ptr<Output>> orderedOutputs(outputs);
 
     // stack all the preferred, available outputs
-    list<shared_ptr<Output>> preferredOutputs;
+    stack<shared_ptr<Output>> preferredOutputs;
     for (const auto &name : order) {
         for (const auto &output : outputs) {
             if (strcasecmp(name.c_str(), output->name.c_str()) == 0) {
-                preferredOutputs.push_front(output);
+                preferredOutputs.push(output);
             }
         }
     }
 
     // move preferred to the front
-    for (const auto &preferredOutput : preferredOutputs) {
-        outputs.remove(preferredOutput);
-        outputs.push_front(preferredOutput);
+    while (!preferredOutputs.empty()) {
+        orderedOutputs.remove(preferredOutputs.top());
+        orderedOutputs.push_front(preferredOutputs.top());
+        preferredOutputs.pop();
     }
+
+    return orderedOutputs;
 }
 
 const shared_ptr<Output> activateOutputs(const list<shared_ptr<Output>> &outputs, const string &desiredPrimary,
@@ -58,7 +63,7 @@ const shared_ptr<Output> activateOutputs(const list<shared_ptr<Output>> &outputs
     return primary;
 }
 
-void ltrOutputs(list<shared_ptr<Output>> &outputs) {
+void ltrOutputs(const list<shared_ptr<Output>> &outputs) {
     int xpos = 0;
     int ypos = 0;
     for (const auto &output : outputs) {
@@ -77,7 +82,7 @@ void ltrOutputs(list<shared_ptr<Output>> &outputs) {
     }
 }
 
-void mirrorOutputs(list<shared_ptr<Output>> &outputs) {
+void mirrorOutputs(const list<shared_ptr<Output>> &outputs) {
 
     // find the first active output
     shared_ptr<Output> firstOutput;

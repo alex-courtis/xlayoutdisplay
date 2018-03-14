@@ -35,17 +35,17 @@ TEST(calculations_orderOutputs, reposition) {
                                                      shared_ptr<Edid>());
     outputs.push_back(output5);
 
-    orderOutputs(outputs, {"FOUR", "THREE", "TWO"});
+    list<shared_ptr<Output>> orderedOutputs = orderOutputs(outputs, {"FOUR", "THREE", "TWO"});
 
-    EXPECT_EQ(output4, outputs.front());
-    outputs.pop_front();
-    EXPECT_EQ(output3, outputs.front());
-    outputs.pop_front();
-    EXPECT_EQ(output2, outputs.front());
-    outputs.pop_front();
-    EXPECT_EQ(output1, outputs.front());
-    outputs.pop_front();
-    EXPECT_EQ(output5, outputs.front());
+    EXPECT_EQ(output4, orderedOutputs.front());
+    orderedOutputs.pop_front();
+    EXPECT_EQ(output3, orderedOutputs.front());
+    orderedOutputs.pop_front();
+    EXPECT_EQ(output2, orderedOutputs.front());
+    orderedOutputs.pop_front();
+    EXPECT_EQ(output1, orderedOutputs.front());
+    orderedOutputs.pop_front();
+    EXPECT_EQ(output5, orderedOutputs.front());
 }
 
 

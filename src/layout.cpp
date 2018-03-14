@@ -15,21 +15,23 @@ const int layout(int argc, char **argv) {
     const Monitors monitors = Monitors();
 
     // discover outputs
-    list<shared_ptr<Output>> outputs = discoverOutputs();
-    if (outputs.empty())
+    const list<shared_ptr<Output>> currentOutputs = discoverOutputs();
+    if (currentOutputs.empty())
         throw runtime_error("no outputs found");
 
     // output verbose information
     if (settings.verbose || settings.info)
-        printf("%s\n\nlaptop lid %s\n", renderUserInfo(outputs).c_str(),
+        printf("%s\n\nlaptop lid %s\n", renderUserInfo(currentOutputs).c_str(),
                monitors.laptopLidClosed ? "closed" : "open or not present");
 
     // current info is all output, we're done
     if (settings.info)
         return EXIT_SUCCESS;
 
-    // determine desired state
-    orderOutputs(outputs, settings.order);
+    // order the outputs if the user wishes
+    const list<shared_ptr<Output>> outputs = orderOutputs(currentOutputs, settings.order);
+
+    // activate ouputs and determine primary
     const shared_ptr<Output> primary = activateOutputs(outputs, settings.primary, monitors);
 
     // arrange mirrored or left to right
@@ -40,7 +42,7 @@ const int layout(int argc, char **argv) {
 
     // determine DPI from the primary
     string dpiExplaination;
-    long dpi = calculateDpi(primary, dpiExplaination);
+    const long dpi = calculateDpi(primary, dpiExplaination);
     if (settings.verbose)
         printf("\n\n%s\n", dpiExplaination.c_str());
 

@@ -6,7 +6,7 @@
 #define DEFAULT_DPI 96
 
 // reorder outputs putting those whose names match order at the front, case insensitive
-void orderOutputs(std::list<std::shared_ptr<Output>> &outputs, const std::list<std::string> &order);
+const std::list<std::shared_ptr<Output>> orderOutputs(const std::list<std::shared_ptr<Output>> &outputs, const std::list<std::string> &order);
 
 // mark outputs that should be activated and return the nonempty primary
 // throws invalid_argument:
@@ -15,12 +15,12 @@ const std::shared_ptr<Output> activateOutputs(const std::list<std::shared_ptr<Ou
                                               const std::string &desiredPrimary, const Monitors &monitors);
 
 // arrange outputs left to right at optimal mode; will mutate contents
-void ltrOutputs(std::list<std::shared_ptr<Output>> &outputs);
+void ltrOutputs(const std::list<std::shared_ptr<Output>> &outputs);
 
 // arrange outputs so that they all mirror at highest common mode; will mutate contents
 // throws runtime_error:
 //   no common mode found
-void mirrorOutputs(std::list<std::shared_ptr<Output>> &outputs);
+void mirrorOutputs(const std::list<std::shared_ptr<Output>> &outputs);
 
 // render a user readable string explaining the current state of outputs
 const std::string renderUserInfo(const std::list<std::shared_ptr<Output>> &outputs);
