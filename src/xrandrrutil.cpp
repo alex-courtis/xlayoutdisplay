@@ -145,7 +145,7 @@ const list<shared_ptr<Output>> discoverOutputs() {
         for (int j = 0; j < outputInfo->nmode; j++) {
 
             // add to modes
-            const auto mode = shared_ptr<Mode>(modeFromXRR(outputInfo->modes[j], screenResources));
+            const auto &mode = shared_ptr<Mode>(modeFromXRR(outputInfo->modes[j], screenResources));
             modes.push_back(mode);
 
             // (optional) preferred mode based on outputInfo->modes indexed by 1

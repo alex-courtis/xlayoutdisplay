@@ -219,7 +219,7 @@ const shared_ptr<const Mode> calculateOptimalMode(const list<shared_ptr<const Mo
 
         // override with highest refresh of preferred resolution, if available
         if (preferredMode)
-            for (auto &mode : reverseOrderedModes)
+            for (const auto &mode : reverseOrderedModes)
                 if (mode->width == preferredMode->width && mode->height == preferredMode->height) {
                     optimalMode = mode;
                     break;
