@@ -42,7 +42,7 @@ const int layout(int argc, char **argv) {
 
     // determine DPI from the primary
     string dpiExplaination;
-    const long dpi = calculateDpi(primary, dpiExplaination);
+    const long dpi = calculateDpi(primary, &dpiExplaination);
     if (settings.verbose)
         printf("\n\n%s\n", dpiExplaination.c_str());
 

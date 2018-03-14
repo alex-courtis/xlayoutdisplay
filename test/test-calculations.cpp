@@ -413,7 +413,7 @@ protected:
 
 TEST_F(calculations_calculateDpi, noOutput) {
     string explaination;
-    EXPECT_THROW(calculateDpi(shared_ptr<Output>(), explaination), invalid_argument);
+    EXPECT_THROW(calculateDpi(shared_ptr<Output>(), &explaination), invalid_argument);
 }
 
 TEST_F(calculations_calculateDpi, noEdid) {
@@ -422,7 +422,7 @@ TEST_F(calculations_calculateDpi, noEdid) {
                                                           shared_ptr<Mode>(), shared_ptr<Pos>(), shared_ptr<Edid>());
 
     string explaination;
-    const long calculated = calculateDpi(output, explaination);
+    const long calculated = calculateDpi(output, &explaination);
 
     stringstream expectedExplaination;
     expectedExplaination << "DPI defaulting to "
@@ -437,7 +437,7 @@ TEST_F(calculations_calculateDpi, noEdid) {
 TEST_F(calculations_calculateDpi, noDesiredMode) {
 
     string explaination;
-    const long calculated = calculateDpi(output, explaination);
+    const long calculated = calculateDpi(output, &explaination);
 
     stringstream expectedExplaination;
     expectedExplaination << "DPI defaulting to "
@@ -454,7 +454,7 @@ TEST_F(calculations_calculateDpi, zeroEdid) {
     EXPECT_CALL(*mockEdid, dpiForMode(output->desiredMode)).WillOnce(Return(0));
 
     string explaination;
-    const long calculated = calculateDpi(output, explaination);
+    const long calculated = calculateDpi(output, &explaination);
 
     stringstream expectedExplaination;
     expectedExplaination << "DPI defaulting to "
@@ -472,7 +472,7 @@ TEST_F(calculations_calculateDpi, valid) {
     EXPECT_CALL(*mockEdid, dpiForMode(output->desiredMode)).WillOnce(Return(1));
 
     string explaination;
-    const long calculated = calculateDpi(output, explaination);
+    const long calculated = calculateDpi(output, &explaination);
 
     stringstream expectedExplaination;
     expectedExplaination << "calculated DPI "
