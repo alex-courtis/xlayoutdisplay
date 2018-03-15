@@ -65,8 +65,12 @@ DP-4 active 60cm/34cm 2560x1440+0+0 165Hz
    800x600 60Hz
    640x480 60Hz
 *current +preferred !optimal
+
 laptop lid open or not present
+
+
 calculated DPI 108 for output DP-4
+
 xrandr \
  --dpi 108 \
  --output HDMI-0 --mode 1920x1080 --rate 60 --pos 0x0 \
@@ -76,6 +80,7 @@ xrandr \
  --output DP-1 --off \
  --output DP-2 --off \
  --output DP-3 --off
+ 
 echo "Xft.dpi: 108" | xrdb -merge
 ```
 
