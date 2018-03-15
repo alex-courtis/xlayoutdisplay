@@ -65,10 +65,10 @@ int main(int argc, const char **argv) {
         // execute
         return WEXITSTATUS(layout(settings));
     } catch (const exception &e) {
-        fprintf(stderr, "FAIL: %s, exiting\n", e.what());
+        cerr << "FAIL: " << e.what() << ", exiting\n";
         return EXIT_FAILURE;
     } catch (...) {
-        fprintf(stderr, "EPIC FAIL: unknown exception, exiting\n");
+        cerr << "EPIC FAIL: unknown exception, exiting\n";
         return EXIT_FAILURE;
     }
 }

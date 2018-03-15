@@ -68,7 +68,6 @@ DP-4 active 60cm/34cm 2560x1440+0+0 165Hz
 
 laptop lid open or not present
 
-
 calculated DPI 108 for output DP-4
 
 xrandr \
