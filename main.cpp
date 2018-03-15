@@ -55,7 +55,6 @@ int main(int argc, const char **argv) {
                     "e.g.  xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4\n"
                     "\n";
             cout << cliOptions;
-            cout << "\n";
             return EXIT_SUCCESS;
         }
 
