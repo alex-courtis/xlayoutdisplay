@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
         po::options_description options("CLI and ~/.xLayoutDisplay");
         options.add_options()
                 ("mirror,m", "mirror outputs using the lowest common resolution")
-                ("order,o", po::value<vector<string>>(), "order of outputs, repeatable")
+                ("order,o", po::value<vector<string>>(), "order of outputs, repeat as needed")
                 ("primary,p", po::value<string>(), "primary output")
                 ("quiet,q", "suppress feedback");
 
@@ -52,7 +52,7 @@ int main(int argc, const char **argv) {
             cout << "DPI is calculated exactly based on the first or primary output's EDID information." << endl;
             cout << "Laptop outputs are turned off when the lid is closed." << endl;
             cout << endl;
-            cout << "e.g.  xLayoutDisplay -p HDMI-0 -o DP-1 -o HDMI-0" << endl;
+            cout << "e.g.  xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4" << endl;
             cout << endl;
             cout << cliOptions << endl;
             return EXIT_SUCCESS;

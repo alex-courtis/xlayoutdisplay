@@ -1,6 +1,6 @@
 # xLayoutDisplay
 
-Detects and arranges linux outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) (for now...) for arrangement.
+Detects and arranges linux outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) for arrangement.
 
 ## Usage
 
@@ -22,59 +22,61 @@ CLI and ~/.xLayoutDisplay:
 
 ## Sample Output
 
-DP-0 was the only active (primary) ouput. HDMI-0 is plugged in.
+DP-4 is the only ouput, then HDMI-0 is plugged in.
 
-`xLayoutDisplay -o "DP-0 HDMI-0" -p HDMI-0`
+`xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4`
 
-After invocation, HDMI-0 is enabled, to the right of DP-0, and HDMI-0 is the new primary.
+HDMI-0 is enabled to the left of DP-4, however DP-4 is still the primary output that determines DPI.
 
 ```
 DVI-D-0 disconnected
-HDMI-0 connected
-  !1920x1080 60Hz
+HDMI-0 connected 0cm/0cm
+ + 1920x1080 50Hz
+   2880x576 50Hz
+   2880x576 50Hz
+   2880x480 60Hz
+   2880x480 60Hz
    1920x1080 60Hz
    1920x1080 60Hz
-   1920x1080 50Hz
-   1920x1080 50Hz
-   1920x1080 30Hz
-   1920x1080 25Hz
    1920x1080 24Hz
- + 1280x720 60Hz
+   1920x1080 60Hz
+  !1920x1080 60Hz
+   1920x1080 50Hz
+   1440x576 50Hz
+   1440x480 60Hz
    1280x720 60Hz
    1280x720 50Hz
-   1024x768 60Hz
-   800x600 60Hz
-   720x480 60Hz
-   720x480 60Hz
    720x576 50Hz
-DP-0 active 2560x1440+0+0 165Hz
+   720x480 60Hz
+   640x480 60Hz
+DP-0 disconnected
+DP-1 disconnected
+DP-2 disconnected
+DP-3 disconnected
+DP-4 active 60cm/34cm 2560x1440+0+0 165Hz
+ + 2560x1440 60Hz
 * !2560x1440 165Hz
    2560x1440 144Hz
    2560x1440 120Hz
    2560x1440 100Hz
    2560x1440 85Hz
- + 2560x1440 60Hz
    2560x1440 24Hz
    1024x768 60Hz
    800x600 60Hz
    640x480 60Hz
-DP-1 disconnected
-DP-2 disconnected
-DP-3 disconnected
-DP-4 disconnected
 *current +preferred !optimal
-
-lid open or not present
-
+laptop lid open or not present
+calculated DPI 108 for output DP-4
 xrandr \
- --output DP-0 --mode 2560x1440 --rate 165 --pos 0x0 \
- --output HDMI-0 --mode 1920x1080 --rate 60 --pos 2560x0 --primary \
+ --dpi 108 \
+ --output HDMI-0 --mode 1920x1080 --rate 60 --pos 0x0 \
+ --output DP-4 --mode 2560x1440 --rate 165 --pos 1920x0 --primary \
  --output DVI-D-0 --off \
+ --output DP-0 --off \
  --output DP-1 --off \
  --output DP-2 --off \
- --output DP-3 --off \
- --output DP-4 --off
-
+ --output DP-3 --off
+echo "Xft.dpi: 108" | xrdb -merge
 ```
 
 ## Building
@@ -84,3 +86,5 @@ Clone and cmake
 ## TODO
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
+
+Mirror: Use the highest available resolution across all ouputs, scaling the others below their maximum.
