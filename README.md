@@ -87,7 +87,9 @@ echo "Xft.dpi: 108" | xrdb -merge
 ```
 
 Note:
+
 The highest refresh rate of the preferred resolution of DP-4 is used.
+
 The preferred resolution of HDMI-0 is used, rather than the highest resolution.
 
 ## Building
