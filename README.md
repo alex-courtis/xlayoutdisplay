@@ -90,6 +90,4 @@ Clone and cmake
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
 
-Really sort out consts
-
 Use a proper library for CLI

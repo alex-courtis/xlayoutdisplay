@@ -17,7 +17,7 @@ public:
     Monitors() : laptopLidClosed(calculateLaptopLidClosed(LAPTOP_LID_ROOT_PATH)) {}
 
     // return true if the output should be disabled i.e. lid closed and name begins with LAPTOP_OUPUT_PREFIX
-    virtual const bool shouldDisableOutput(std::string name) const;
+    virtual const bool shouldDisableOutput(const std::string &name) const;
 
     // true if the laptop lid is closed
     const bool laptopLidClosed;
