@@ -1,12 +1,13 @@
 #ifndef XLAYOUTDISPLAY_CALCULATIONS_H
 #define XLAYOUTDISPLAY_CALCULATIONS_H
 
+#include <vector>
 #include "Output.h"
 
 #define DEFAULT_DPI 96
 
 // reorder outputs putting those whose names match order at the front, case insensitive
-const std::list<std::shared_ptr<Output>> orderOutputs(const std::list<std::shared_ptr<Output>> &outputs, const std::list<std::string> &order);
+const std::list<std::shared_ptr<Output>> orderOutputs(const std::list<std::shared_ptr<Output>> &outputs, const std::vector<std::string> &order);
 
 // mark outputs that should be activated and return the nonempty primary
 // throws invalid_argument:

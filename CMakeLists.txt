@@ -5,10 +5,12 @@ project(xLayoutDisplay)
 set(CMAKE_CXX_STANDARD 14)
 
 find_package(X11 REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 link_libraries(${X11_LIBRARIES})
 link_libraries(${X11_Xrandr_LIB})
 link_libraries(${X11_Xcursor_LIB})
+link_libraries(${Boost_LIBRARIES})
 
 set(FILES_EXE
         main.cpp
@@ -28,7 +30,6 @@ set(FILES_SRC
         src/Monitors.cpp
         src/Monitors.h
         src/Pos.h
-        src/Settings.cpp
         src/Settings.h
         src/util.h
         src/xrandrrutil.cpp
@@ -47,7 +48,6 @@ set(FILES_TST
         test/test-MockMonitors.h
         test/test-Mode.cpp
         test/test-Monitors.cpp
-        test/test-Settings.cpp
         test/test-xrandrutil.cpp
         test/test-xrdbutil.cpp
         )

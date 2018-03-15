@@ -1,16 +1,15 @@
-# copy this file to your home directory and modify
-
 # all options here will be overridden by command line options
-
 
 # mirror outputs using the lowest common resolution
 #mirror=true
 
+# order of outputs
+#order=DP-1
+#order=HDMI-0
+
+# primary output
+#primary=eDP-0
+
 # suppress output
 #quiet=true
 
-# order of outputs, space/comma delimited
-#order=DP-0,HDMI-0
-
-# primary output
-#primary=HDMI-0

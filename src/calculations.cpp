@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const std::list<std::shared_ptr<Output>> orderOutputs(const list<shared_ptr<Output>> &outputs, const list<string> &order) {
+const std::list<std::shared_ptr<Output>> orderOutputs(const list<shared_ptr<Output>> &outputs, const vector<string> &order) {
     list<shared_ptr<Output>> orderedOutputs(outputs);
 
     // stack all the preferred, available outputs
