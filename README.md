@@ -8,14 +8,17 @@ Detects and arranges linux outputs for an X display, using [XRandR](https://www.
 Arranges outputs in a left to right manner, using highest resolution and refresh.
 DPI is calculated exactly based on the first or primary output's EDID information.
 Laptop outputs are turned off when the lid is closed.
-e.g.  xLayoutDisplay -p HDMI-0 -o DP-1 -o HDMI-0
+
+e.g.  xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4
+
 CLI:
   -h [ --help ]          print this help text and exit
   -i [ --info ]          print information about current outputs and exit
   -n [ --noop ]          perform a trial run and exit
+
 CLI and ~/.xLayoutDisplay:
   -m [ --mirror ]        mirror outputs using the lowest common resolution
-  -o [ --order ] arg     order of outputs, repeatable
+  -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output
   -q [ --quiet ]         suppress feedback
 ```
