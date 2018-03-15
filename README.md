@@ -5,24 +5,19 @@ Detects and arranges linux outputs for an X display, using [XRandR](https://www.
 ## Usage
 
 ```
-Detects and arranges outputs in a left to right manner.
-Invokes xrandr to perform arrangement.
-Highest resolution and refresh are used for each output.
-Outputs starting with "eDP" are disabled if the laptop lid is closed as per /proc/acpi/button/lid/.*/state
-Outputs are ordered via Xrandr default.
-The first output will be primary unless -p specified.
-
-Usage: xLayoutDisplay [-h] [-i] [-m] [-n] [-o order] [-p primary] [-q]
-  -h  print this help text and exit
-  -i  print information about current outputs and exit
-  -m  mirror outputs using the lowest common resolution
-  -n  perform a trial run and exit
-  -o  order of outputs, space/comma delimited
-  -p  primary output
-  -q  suppress feedback
-
-e.g.: xLayoutDisplay -o DP-0,HDMI-0 -p HDMI-0
-  arranges DP-0 left, HDMI-0 right, with any remaining outputs further right, with HDMI-0 as primary
+Arranges outputs in a left to right manner, using highest resolution and refresh.
+DPI is calculated exactly based on the first or primary output's EDID information.
+Laptop outputs are turned off when the lid is closed.
+e.g.  xLayoutDisplay -p HDMI-0 -o DP-1 -o HDMI-0
+CLI:
+  -h [ --help ]          print this help text and exit
+  -i [ --info ]          print information about current outputs and exit
+  -n [ --noop ]          perform a trial run and exit
+CLI and ~/.xLayoutDisplay:
+  -m [ --mirror ]        mirror outputs using the lowest common resolution
+  -o [ --order ] arg     order of outputs, repeatable
+  -p [ --primary ] arg   primary output
+  -q [ --quiet ]         suppress feedback
 ```
 
 ## Sample Output
@@ -89,5 +84,3 @@ Clone and cmake
 ## TODO
 
 Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
-
-Use a proper library for CLI

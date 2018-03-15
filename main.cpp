@@ -16,19 +16,19 @@ int main(int argc, const char **argv) {
         po::variables_map vm;
 
         // common options
-        po::options_description options("options");
+        po::options_description options("CLI and ~/.xLayoutDisplay");
         options.add_options()
                 ("mirror,m", "mirror outputs using the lowest common resolution")
-                ("order,o", po::value<vector<string>>(), "order of outputs")
+                ("order,o", po::value<vector<string>>(), "order of outputs, repeatable")
                 ("primary,p", po::value<string>(), "primary output")
                 ("quiet,q", "suppress feedback");
 
         // file options
-        po::options_description fileOptions("file options");
+        po::options_description fileOptions("~/.xLayoutDisplay");
         fileOptions.add(options);
 
-        // command line only options
-        po::options_description cliOptions("command line options");
+        // command line options
+        po::options_description cliOptions("CLI");
         cliOptions.add_options()
                 ("help,h", "print this help text and exit")
                 ("info,i", "print information about current outputs and exit")
@@ -48,7 +48,13 @@ int main(int argc, const char **argv) {
 
         // usage
         if (vm.count("help")) {
-            cout << cliOptions << "\n";
+            cout << "Arranges outputs in a left to right manner, using highest resolution and refresh." << endl;
+            cout << "DPI is calculated exactly based on the first or primary output's EDID information." << endl;
+            cout << "Laptop outputs are turned off when the lid is closed." << endl;
+            cout << endl;
+            cout << "e.g.  xLayoutDisplay -p HDMI-0 -o DP-1 -o HDMI-0" << endl;
+            cout << endl;
+            cout << cliOptions << endl;
             return EXIT_SUCCESS;
         }
 
