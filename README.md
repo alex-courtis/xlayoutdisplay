@@ -1,6 +1,12 @@
 # xLayoutDisplay
 
-Detects and arranges linux outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) for arrangement.
+Detects and arranges outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) for arrangement.
+
+Highest refresh rate of the output's preferred resolution are used.
+
+Left-to-right ordering is used, unless the user specifies mirrorred outputs.
+
+Laptop displays (eDP*) are disabled when the lid is closed.
 
 ## Usage
 
@@ -85,12 +91,6 @@ xrandr \
  
 echo "Xft.dpi: 108" | xrdb -merge
 ```
-
-Note:
-
-The highest refresh rate of the preferred resolution of DP-4 is used.
-
-The preferred resolution of HDMI-0 is used, rather than the highest resolution.
 
 ## Building
 
