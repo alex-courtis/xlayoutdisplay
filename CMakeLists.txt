@@ -56,6 +56,9 @@ add_executable(xlayoutdisplay
         ${FILES_EXE} ${FILES_SRC}
         )
 
+install(TARGETS xlayoutdisplay
+        RUNTIME DESTINATION bin)
+
 
 find_package(GTest)
 
