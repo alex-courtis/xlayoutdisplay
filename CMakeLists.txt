@@ -52,8 +52,23 @@ set(FILES_TST
         test/test-xrdbutil.cpp
         )
 
-add_executable(xLayoutDisplay ${FILES_EXE} ${FILES_SRC})
+add_executable(xLayoutDisplay
+        ${FILES_EXE} ${FILES_SRC}
+        )
 
-add_executable(Tests ${FILES_SRC} ${FILES_TST})
 
-target_link_libraries(Tests gtest gmock gmock_main pthread)
+find_package(GTest)
+
+if (GTEST_FOUND)
+    enable_testing()
+
+    add_executable(unitTests
+            ${FILES_SRC} ${FILES_TST}
+            )
+
+    target_link_libraries(unitTests
+            gtest gmock gmock_main pthread
+            )
+
+    gtest_discover_tests(unitTests)
+endif()
