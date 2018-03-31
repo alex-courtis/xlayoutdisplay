@@ -31,9 +31,11 @@ CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay:
   -q [ --quiet ]         suppress feedback
 ```
 
-## Configuration
+## Configuration File
 
 `~/.xlayoutdisplay` then `/etc/xlayoutdisplay` may be used to provide defaults, which will be overwritten by CLI options.
+
+See [xlayoutdisplay](.xlayoutdisplay)
 
 ## Sample Output
 
@@ -98,7 +100,7 @@ xrandr \
 echo "Xft.dpi: 108" | xrdb -merge
 ```
 
-To illustrate:
+End state:
 ```
 /--------------\/----------------------\
 |              ||                      |
@@ -141,3 +143,9 @@ make
 ## Contributing
 
 PRs very welcome: fork this repo and submit a PR.
+
+## Bugs / Features
+
+Please raise an issue.
+
+Note again that PRs are very welcome ;)
