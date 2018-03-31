@@ -98,6 +98,20 @@ xrandr \
 echo "Xft.dpi: 108" | xrdb -merge
 ```
 
+To illustrate:
+```
+/--------------\/----------------------\
+|              ||                      |
+|    HDMI-0    ||                      |
+|              ||        DP-4          |
+|  1920x1080   ||                      |
+|              ||     2560x1440        |
+\--------------/|                      |
+                |                      |
+                |                      |
+                \----------------------/
+```
+
 ## Developing
 
 [JetBrains CLion](https://www.jetbrains.com/clion/) highly recommended.
