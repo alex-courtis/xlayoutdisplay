@@ -98,17 +98,40 @@ xrandr \
 echo "Xft.dpi: 108" | xrdb -merge
 ```
 
-## Building
+## Developing
 
-Clone and cmake
+[JetBrains CLion](https://www.jetbrains.com/clion/) highly recommended.
+
+### Build
+
+```
+git clone https://github.com/alex-courtis/xlayoutdisplay.git
+cd xlayoutdisplay
+mkdir build
+cd build
+cmake ..
+make
+```
+
+### Test
+
+Install [Google Test](https://github.com/google/googletest) and [Google Mock](https://github.com/google/googlemock).
+
+```
+cd build
+cmake ..
+make
+./unitTests
+```
+
+## Contributing
+
+PRs very welcome: fork this repo and submit a PR.
 
 ## TODO
-
-Hotplug event detection... my udev event hacks are too unreliable and shameworthy right now. Maybe a systemd user service?
-
-Mirror: Use the highest available resolution across all ouputs, scaling the others below their maximum.
-
 
 Don't shell out to xrdb
 
 man page
+
+license
