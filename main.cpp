@@ -8,7 +8,6 @@
 #include "src/layout.h"
 #include "src/util.h"
 
-#define PROGRAM_NAME "xlayoutdisplay"
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
 #define VERSION_POINT 0
@@ -66,7 +65,7 @@ int main(int argc, const char **argv) {
 
         // version
         if (vm.count("version")) {
-            cout << PROGRAM_NAME << " " << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_POINT << endl;
+            cout << argv[0] << " " << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_POINT << endl;
             return EXIT_SUCCESS;
         }
 
@@ -76,10 +75,10 @@ int main(int argc, const char **argv) {
         // execute
         return WEXITSTATUS(layout(settings));
     } catch (const exception &e) {
-        cerr << "FAIL: " << e.what() << ", exiting\n";
+        cerr << argv[0] << ": " << e.what() << ", exiting\n";
         return EXIT_FAILURE;
     } catch (...) {
-        cerr << "EPIC FAIL: unknown exception, exiting\n";
+        cerr << argv[0] << ": unknown exception, exiting\n";
         return EXIT_FAILURE;
     }
 }

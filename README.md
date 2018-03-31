@@ -102,6 +102,9 @@ Hotplug event detection... my udev event hacks are too unreliable and shameworth
 
 Mirror: Use the highest available resolution across all ouputs, scaling the others below their maximum.
 
-Core dump when DISPLAY is not ":0"; see xsetroot for proper failure detection
 
 Don't shell out to xrdb
+
+man page
+
+/etc/xlayoutdisplay then ~/.xlayoutdisplay

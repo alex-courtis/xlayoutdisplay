@@ -71,8 +71,12 @@ Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
 const list<shared_ptr<Output>> discoverOutputs() {
     list<shared_ptr<Output>> outputs;
 
-    // get the display and root window
+    // get the display
     Display *dpy = XOpenDisplay(nullptr);
+    if (!dpy)
+        throw domain_error(string("unable to open display '") + XDisplayName(nullptr) + "'");
+
+    // get the root window
     int screen = DefaultScreen(dpy);
     Window rootWindow = RootWindow(dpy, screen);
 
