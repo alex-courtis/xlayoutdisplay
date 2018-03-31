@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(xLayoutDisplay)
+project(xlayoutdisplay)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -52,7 +52,7 @@ set(FILES_TST
         test/test-xrdbutil.cpp
         )
 
-add_executable(xLayoutDisplay
+add_executable(xlayoutdisplay
         ${FILES_EXE} ${FILES_SRC}
         )
 

@@ -1,4 +1,4 @@
-# xLayoutDisplay
+# xlayoutdisplay
 
 Detects and arranges outputs for an X display, using [XRandR](https://www.x.org/wiki/Projects/XRandR/) for detection and [xrandr](https://wiki.archlinux.org/index.php/xrandr) for arrangement.
 
@@ -15,14 +15,14 @@ Arranges outputs in a left to right manner, using highest resolution and refresh
 DPI is calculated exactly based on the first or primary output's EDID information.
 Laptop outputs are turned off when the lid is closed.
 
-e.g.  xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4
+e.g.  xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4
 
 CLI:
   -h [ --help ]          print this help text and exit
   -i [ --info ]          print information about current outputs and exit
   -n [ --noop ]          perform a trial run and exit
 
-CLI and ~/.xLayoutDisplay:
+CLI and ~/.xlayoutdisplay:
   -m [ --mirror ]        mirror outputs using the lowest common resolution
   -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output
@@ -33,7 +33,7 @@ CLI and ~/.xLayoutDisplay:
 
 DP-4 is the only ouput, then HDMI-0 is plugged in.
 
-`xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4`
+`xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4`
 
 HDMI-0 is enabled to the left of DP-4, however DP-4 is still the primary output that determines DPI.
 

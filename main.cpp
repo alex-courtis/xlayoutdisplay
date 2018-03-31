@@ -8,6 +8,11 @@
 #include "src/layout.h"
 #include "src/util.h"
 
+#define PROGRAM_NAME "xlayoutdisplay"
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
+#define VERSION_POINT 0
+
 using namespace std;
 namespace po = boost::program_options;
 
@@ -16,7 +21,7 @@ int main(int argc, const char **argv) {
         po::variables_map vm;
 
         // common options
-        po::options_description options("CLI and ~/.xLayoutDisplay");
+        po::options_description options("CLI and ~/.xlayoutdisplay");
         options.add_options()
                 ("mirror,m", "mirror outputs using the lowest common resolution")
                 ("order,o", po::value<vector<string>>(), "order of outputs, repeat as needed")
@@ -24,7 +29,7 @@ int main(int argc, const char **argv) {
                 ("quiet,q", "suppress feedback");
 
         // file options
-        po::options_description fileOptions("~/.xLayoutDisplay");
+        po::options_description fileOptions("~/.xlayoutdisplay");
         fileOptions.add(options);
 
         // command line options
@@ -32,7 +37,8 @@ int main(int argc, const char **argv) {
         cliOptions.add_options()
                 ("help,h", "print this help text and exit")
                 ("info,i", "print information about current outputs and exit")
-                ("noop,n", "perform a trial run and exit");
+                ("noop,n", "perform a trial run and exit")
+                ("version,v", "print version string");
         cliOptions.add(options);
 
         // command line options take precedence
@@ -40,7 +46,7 @@ int main(int argc, const char **argv) {
         po::notify(vm);
 
         // file options afterwards
-        ifstream ifs(resolveTildePath(".xLayoutDisplay"));
+        ifstream ifs(resolveTildePath(".xlayoutdisplay"));
         if (ifs) {
             po::store(parse_config_file(ifs, fileOptions), vm);
             po::notify(vm);
@@ -52,9 +58,15 @@ int main(int argc, const char **argv) {
                     "DPI is calculated exactly based on the first or primary output's EDID information.\n"
                     "Laptop outputs are turned off when the lid is closed.\n"
                     "\n"
-                    "e.g.  xLayoutDisplay -p DP-4 -o HDMI-0 -o DP-4\n"
+                    "e.g.  xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4\n"
                     "\n";
             cout << cliOptions;
+            return EXIT_SUCCESS;
+        }
+
+        // version
+        if (vm.count("version")) {
+            cout << PROGRAM_NAME << " " << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_POINT << endl;
             return EXIT_SUCCESS;
         }
 
