@@ -51,9 +51,15 @@ const int layout(const Settings &settings) {
 
     // determine DPI from the primary
     string dpiExplaination;
-    const long dpi = calculateDpi(primary, &dpiExplaination);
+    long dpi = calculateDpi(primary, &dpiExplaination);
     if (!settings.quiet) {
         cout << "\n" << dpiExplaination << "\n";
+    }
+
+    // user overrides DPI
+    if (settings.dpi) {
+        dpi = settings.dpi;
+        cout << "overriding with provided DPI " << to_string(dpi) << "\n";
     }
 
     // render desired commands

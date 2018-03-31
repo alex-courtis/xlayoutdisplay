@@ -21,8 +21,10 @@ CLI:
   -h [ --help ]          print this help text and exit
   -i [ --info ]          print information about current outputs and exit
   -n [ --noop ]          perform a trial run and exit
+  -v [ --version ]       print version string
 
 CLI and ~/.xlayoutdisplay:
+  -d [ --dpi ] arg       DPI override
   -m [ --mirror ]        mirror outputs using the lowest common resolution
   -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output

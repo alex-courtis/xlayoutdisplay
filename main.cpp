@@ -22,6 +22,7 @@ int main(int argc, const char **argv) {
         // common options
         po::options_description options("CLI and ~/.xlayoutdisplay");
         options.add_options()
+                ("dpi,d", po::value<long>(), "DPI override")
                 ("mirror,m", "mirror outputs using the lowest common resolution")
                 ("order,o", po::value<vector<string>>(), "order of outputs, repeat as needed")
                 ("primary,p", po::value<string>(), "primary output")
