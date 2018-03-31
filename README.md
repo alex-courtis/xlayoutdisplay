@@ -141,11 +141,3 @@ make
 ## Contributing
 
 PRs very welcome: fork this repo and submit a PR.
-
-## TODO
-
-Don't shell out to xrdb
-
-man page
-
-license
