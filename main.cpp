@@ -20,7 +20,7 @@ int main(int argc, const char **argv) {
         po::variables_map vm;
 
         // common options
-        po::options_description options("CLI and ~/.xlayoutdisplay");
+        po::options_description options("CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay");
         options.add_options()
                 ("dpi,d", po::value<long>(), "DPI override")
                 ("mirror,m", "mirror outputs using the lowest common resolution")
@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
                 ("quiet,q", "suppress feedback");
 
         // file options
-        po::options_description fileOptions("~/.xlayoutdisplay");
+        po::options_description fileOptions("/etc/xlayoutdisplay and ~/.xlayoutdisplay");
         fileOptions.add(options);
 
         // command line options
@@ -47,6 +47,8 @@ int main(int argc, const char **argv) {
 
         // file options afterwards
         ifstream ifs(resolveTildePath(".xlayoutdisplay"));
+        if (!ifs)
+            ifs = ifstream("/etc/xlayoutdisplay");
         if (ifs) {
             po::store(parse_config_file(ifs, fileOptions), vm);
             po::notify(vm);

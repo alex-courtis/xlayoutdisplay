@@ -22,14 +22,17 @@ CLI:
   -i [ --info ]          print information about current outputs and exit
   -n [ --noop ]          perform a trial run and exit
   -v [ --version ]       print version string
-
-CLI and ~/.xlayoutdisplay:
+CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay:
   -d [ --dpi ] arg       DPI override
   -m [ --mirror ]        mirror outputs using the lowest common resolution
   -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output
   -q [ --quiet ]         suppress feedback
 ```
+
+## Configuration
+
+`~/.xlayoutdisplay` then `/etc/xlayoutdisplay` may be used to provide defaults, which will be overwritten by CLI options.
 
 ## Sample Output
 
@@ -108,5 +111,3 @@ Mirror: Use the highest available resolution across all ouputs, scaling the othe
 Don't shell out to xrdb
 
 man page
-
-/etc/xlayoutdisplay then ~/.xlayoutdisplay
