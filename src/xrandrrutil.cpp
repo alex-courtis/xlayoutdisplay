@@ -99,7 +99,7 @@ const list<shared_ptr<Output>> discoverOutputs() {
     XRRScreenResources *screenResources = XRRGetScreenResources(dpy, rootWindow);
 
     // iterate outputs
-    for (int i = 0; i < screenResources->noutput - 1; i++) {
+    for (int i = 0; i < screenResources->noutput; i++) {
         Output::State state;
         list<std::shared_ptr<const Mode>> modes;
         std::shared_ptr<Mode> currentMode, preferredMode;
