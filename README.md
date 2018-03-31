@@ -22,6 +22,7 @@ CLI:
   -i [ --info ]          print information about current outputs and exit
   -n [ --noop ]          perform a trial run and exit
   -v [ --version ]       print version string
+
 CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay:
   -d [ --dpi ] arg       DPI override
   -m [ --mirror ]        mirror outputs using the lowest common resolution
