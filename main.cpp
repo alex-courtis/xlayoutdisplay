@@ -25,7 +25,7 @@
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
-#define VERSION_POINT 0
+#define VERSION_POINT 2
 
 using namespace std;
 namespace po = boost::program_options;
