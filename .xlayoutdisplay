@@ -13,3 +13,6 @@
 # suppress output
 #quiet=true
 
+# override calculated DPI
+#dpi=192
+
