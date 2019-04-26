@@ -36,6 +36,7 @@ public:
 
     virtual const unsigned int maxCmVert() const;
 
+    // nearest 12
     virtual const long dpiForMode(const std::shared_ptr<const Mode> &mode) const;
 
 private:

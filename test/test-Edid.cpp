@@ -51,7 +51,7 @@ TEST_F(Edid_measurements, valid) {
 
     EXPECT_EQ(2, edid.maxCmHoriz());
     EXPECT_EQ(3, edid.maxCmVert());
-    EXPECT_EQ(177, edid.dpiForMode(make_shared<Mode>(0, 123, 234, 0)));
+    EXPECT_EQ(180, edid.dpiForMode(make_shared<Mode>(0, 123, 234, 0)));
 }
 
 TEST_F(Edid_measurements, zeroHoriz) {

@@ -49,5 +49,7 @@ const long Edid::dpiForMode(const std::shared_ptr<const Mode> &mode) const {
     }
     double dpiHoriz = mode->width * INCHES_PER_CM / maxCmHoriz();
     double dpiVert = mode->height * INCHES_PER_CM / maxCmVert();
-    return lround((dpiHoriz + dpiVert) / 2);
+
+    // nearest 12 dpi
+    return lround((dpiHoriz + dpiVert) / 24) * 12;
 }
