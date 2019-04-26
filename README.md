@@ -12,7 +12,7 @@ Laptop displays (eDP*) are disabled when the lid is closed.
 
 ```
 Arranges outputs in a left to right manner, using highest resolution and refresh.
-DPI is calculated exactly based on the first or primary output's EDID information.
+DPI is calculated based on the first or primary output's EDID information and rounded to the nearest 12.
 Laptop outputs are turned off when the lid is closed.
 
 e.g.  xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4

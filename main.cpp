@@ -72,7 +72,7 @@ int main(int argc, const char **argv) {
         // usage
         if (vm.count("help")) {
             cout << "Arranges outputs in a left to right manner, using highest resolution and refresh.\n"
-                    "DPI is calculated exactly based on the first or primary output's EDID information.\n"
+                    "DPI is calculated based on the first or primary output's EDID information and rounded to the nearest 12.\n"
                     "Laptop outputs are turned off when the lid is closed.\n"
                     "\n"
                     "e.g.  xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4\n"
