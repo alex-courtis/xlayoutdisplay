@@ -4,6 +4,9 @@ project(xlayoutdisplay)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(Boost_USE_DEBUG_LIBS OFF)
+set(Boost_USE_STATIC_LIBS ON)
+
 find_package(X11 REQUIRED)
 find_package(Boost COMPONENTS program_options REQUIRED)
 
