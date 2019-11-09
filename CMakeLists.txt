@@ -65,7 +65,9 @@ install(TARGETS xlayoutdisplay
 
 find_package(GTest)
 
-if (GTEST_FOUND)
+find_library(GMOCK_FOUND gmock)
+
+if (GTEST_FOUND AND GMOCK_FOUND)
     enable_testing()
 
     add_executable(unitTests
