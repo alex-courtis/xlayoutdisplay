@@ -17,6 +17,7 @@
 
 #include <cstring>
 #include <cmath>
+#include <system_error>
 
 using namespace std;
 
@@ -53,3 +54,4 @@ const long Edid::dpiForMode(const std::shared_ptr<const Mode> &mode) const {
     // nearest 12 dpi
     return lround((dpiHoriz + dpiVert) / 24) * 12;
 }
+

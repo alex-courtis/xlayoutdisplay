@@ -17,6 +17,7 @@
 #include "calculations.h"
 
 #include <algorithm>
+#include <system_error>
 
 using namespace std;
 
@@ -54,3 +55,4 @@ Output::Output(const string &name,
             throw invalid_argument("Output '" + name + "' has preferredMode not present in modes");
     }
 }
+
