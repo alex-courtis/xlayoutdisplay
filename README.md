@@ -128,11 +128,7 @@ make
 Install [Google Test](https://github.com/google/googletest) and [Google Mock](https://github.com/google/googlemock).
 
 ```
-#todo
-cd build
-cmake ..
-make
-./unitTests
+make gtest
 ```
 
 ## Contributing

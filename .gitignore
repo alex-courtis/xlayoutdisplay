@@ -1,2 +1,3 @@
 xlayoutdisplay
-*o
+gtest
+**/*.o

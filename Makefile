@@ -1,19 +1,27 @@
 include config.mk
 
 HDR = $(wildcard src/*.h)
-SRC = main.cpp $(wildcard src/*.cpp)
+SRC = $(wildcard src/*.cpp)
+SRC_TEST = $(wildcard test/*.cpp)
 
 OBJ = $(SRC:.cpp=.o)
+OBJ_TEST = $(SRC_TEST:.cpp=.o)
 
 all: xlayoutdisplay
 
 $(OBJ): config.mk $(HDR)
+$(OBJ_TEST): config.mk $(HDR)
+main.o: config.mk $(HDR)
 
-xlayoutdisplay: $(OBJ)
-	$(CXX) -o $@ $(OBJ) $(LDFLAGS)
+xlayoutdisplay: $(OBJ) main.o
+	$(CXX) -o $@ main.o $(OBJ) $(LDFLAGS)
+
+gtest: $(OBJ) $(OBJ_TEST)
+	$(CXX) -o $@ $(OBJ) $(OBJ_TEST) $(LDFLAGS) $(LDFLAGS_TEST)
+	./gtest
 
 clean:
-	rm -f xlayoutdisplay $(OBJ)
+	rm -f xlayoutdisplay main.o $(OBJ) $(OBJ_TEST)
 
 install:
 	mkdir -p $(PREFIX)/bin
@@ -25,7 +33,7 @@ uninstall:
 
 # https://github.com/alex-courtis/arch/blob/b530f331dacaaba27484593a87ca20a9f53ab73f/home/bin/ctags-something
 ctags:
-	ctags-c++ $(CPPFLAGS) $(HDR) $(SRC)
+	ctags-c++ $(CPPFLAGS) $(HDR) $(SRC) $(SRC_TEST) main.cpp
 
-.PHONY: all clean install uninstall ctags
+.PHONY: all clean test install uninstall ctags
 
