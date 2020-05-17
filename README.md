@@ -116,16 +116,10 @@ End state:
 
 ## Developing
 
-[JetBrains CLion](https://www.jetbrains.com/clion/) highly recommended.
-
 ### Build
 
 ```
 git clone https://github.com/alex-courtis/xlayoutdisplay.git
-cd xlayoutdisplay
-mkdir build
-cd build
-cmake ..
 make
 ```
 
@@ -134,6 +128,7 @@ make
 Install [Google Test](https://github.com/google/googletest) and [Google Mock](https://github.com/google/googlemock).
 
 ```
+#todo
 cd build
 cmake ..
 make
