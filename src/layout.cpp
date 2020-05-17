@@ -23,7 +23,7 @@
 
 using namespace std;
 
-const int layout(const Settings &settings) {
+int layout(const Settings &settings) {
 
     // discover monitors
     const Monitors monitors = Monitors();

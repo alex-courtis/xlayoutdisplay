@@ -18,6 +18,6 @@
 
 #include "Settings.h"
 
-const int layout(const Settings &settings);
+int layout(const Settings &settings);
 
 #endif //XLAYOUTDISPLAY_LAYOUT_H

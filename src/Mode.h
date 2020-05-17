@@ -32,7 +32,7 @@ public:
     }
 
     // order by width, height, refresh
-    const bool operator<(const Mode &o) const;
+    bool operator<(const Mode &o) const;
 
     const RRMode rrMode;
     const unsigned int width;

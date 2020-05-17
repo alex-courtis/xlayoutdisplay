@@ -36,15 +36,15 @@ Edid::~Edid() {
     free(edid);
 }
 
-const unsigned int Edid::maxCmHoriz() const {
+unsigned int Edid::maxCmHoriz() const {
     return edid[EDID_BYTE_MAX_CM_HORIZ];
 }
 
-const unsigned int Edid::maxCmVert() const {
+unsigned int Edid::maxCmVert() const {
     return edid[EDID_BYTE_MAX_CM_VERT];
 }
 
-const long Edid::dpiForMode(const std::shared_ptr<const Mode> &mode) const {
+long Edid::dpiForMode(const std::shared_ptr<const Mode> &mode) const {
     if (maxCmVert() == 0 || maxCmHoriz() == 0) {
         return 0;
     }

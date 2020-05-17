@@ -46,7 +46,7 @@ const std::string renderUserInfo(const std::list<std::shared_ptr<Output>> &outpu
 // if horiz/vert values are unavailable or zero, return DEFAULT_DPI
 // throws invalid_argument:
 //   when output is empty
-const long calculateDpi(const std::shared_ptr<Output> &output, std::string *explaination);
+long calculateDpi(const std::shared_ptr<Output> &output, std::string *explaination);
 
 // retrieve the highest resolution/refresh mode from a list of modes, using the highest refresh rate of preferredMode, if available
 const std::shared_ptr<const Mode> calculateOptimalMode(const std::list<std::shared_ptr<const Mode>> &modes,

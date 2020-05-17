@@ -23,7 +23,7 @@
 using namespace std;
 
 // stolen from xrandr.c; assuming this works, as we're reliant on xrandr anyway
-const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
+unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     double rate;
     double vTotal = modeInfo.vTotal;
 
@@ -42,7 +42,7 @@ const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
         rate = 0;
 
     // round up
-    return static_cast<const unsigned int>(round(rate));
+    return static_cast<unsigned int>(round(rate));
 }
 
 const string renderXrandrCmd(const list<shared_ptr<Output>> &outputs, const shared_ptr<Output> &primary, const long &dpi) {

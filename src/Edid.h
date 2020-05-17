@@ -32,12 +32,12 @@ public:
 
     virtual ~Edid();
 
-    virtual const unsigned int maxCmHoriz() const;
+    virtual unsigned int maxCmHoriz() const;
 
-    virtual const unsigned int maxCmVert() const;
+    virtual unsigned int maxCmVert() const;
 
     // nearest 12
-    virtual const long dpiForMode(const std::shared_ptr<const Mode> &mode) const;
+    virtual long dpiForMode(const std::shared_ptr<const Mode> &mode) const;
 
 private:
     unsigned char *edid = nullptr;

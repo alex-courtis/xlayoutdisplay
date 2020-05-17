@@ -19,7 +19,7 @@
 #include "Output.h"
 
 // v refresh frequency in even Hz, zero if modeInfo is NULL
-const unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
+unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
 
 // render xrandr cmd to layout outputs
 // will activate only if desiredActive, desiredMode, desiredPos are set

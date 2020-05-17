@@ -187,7 +187,7 @@ const string renderUserInfo(const list<shared_ptr<Output>> &outputs) {
     return ss.str();
 }
 
-const long calculateDpi(const shared_ptr<Output> &output, string *explaination) {
+long calculateDpi(const shared_ptr<Output> &output, string *explaination) {
     if (!output) throw invalid_argument("calculateDpi received empty output");
 
     long dpi = DEFAULT_DPI;

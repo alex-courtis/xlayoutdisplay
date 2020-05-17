@@ -18,7 +18,7 @@
 #include <cstring>
 #include <dirent.h>
 
-const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
+bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     static char lidFileName[PATH_MAX];
     static char line[512];
 
@@ -48,6 +48,6 @@ const bool calculateLaptopLidClosed(const char *laptopLidRootPath) {
     return false;
 }
 
-const bool Monitors::shouldDisableOutput(const std::string &name) const {
+bool Monitors::shouldDisableOutput(const std::string &name) const {
     return laptopLidClosed && strncasecmp(LAPTOP_OUTPUT_PREFIX, name.c_str(), strlen(LAPTOP_OUTPUT_PREFIX)) == 0;
 }
