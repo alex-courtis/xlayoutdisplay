@@ -25,7 +25,7 @@ uninstall:
 
 # https://github.com/alex-courtis/arch/blob/b530f331dacaaba27484593a87ca20a9f53ab73f/home/bin/ctags-something
 ctags:
-	ctags-c $(CPPFLAGS) $(HDR) $(SRC)
+	ctags-c++ $(CPPFLAGS) $(HDR) $(SRC)
 
 .PHONY: all clean install uninstall ctags
 

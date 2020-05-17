@@ -23,10 +23,6 @@
 #include "src/layout.h"
 #include "src/util.h"
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 1
-#define VERSION_POINT 0
-
 using namespace std;
 namespace po = boost::program_options;
 
@@ -83,7 +79,7 @@ int main(int argc, const char **argv) {
 
         // version
         if (vm.count("version")) {
-            cout << argv[0] << " " << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_POINT << endl;
+            cout << argv[0] << " " << VERSION << endl;
             return EXIT_SUCCESS;
         }
 
