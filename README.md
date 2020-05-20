@@ -120,18 +120,19 @@ End state:
 
 `xlayoutdisplay` may sometimes freeze the display, when applying a (full) composition pipeline to the whole X server.
 
-This may be avoided by running `xlayoutdisplay` first. You'll need to remmove this bit of configuration from your Xorg conf and explicitly invoke via `nvidia-settings`. e.g.
+This may be avoided by running `xlayoutdisplay` first. You'll need to remove this bit of configuration from your Xorg conf and explicitly invoke via `nvidia-settings`. e.g.
 
 From `/etc/X11/xorg.conf.d/20-nvidia.conf`:
 ```
 Section "Screen"
     Identifier     "nvidiaSpecific"
-    Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+    # Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 EndSection
 ```
 
 To `.xinitrc`:
 ```
+xlayoutdisplay
 nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 ```
 
