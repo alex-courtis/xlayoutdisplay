@@ -136,12 +136,21 @@ xlayoutdisplay
 nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 ```
 
+### Make fails with "fatal error: boost/program_options/variables_map.hpp: No such file or directory"
+
+Boost development libraries are needed. Install them, using for example `sudo apt install libboost-all-dev` for Debian.
+
+### Make fails with "/usr/bin/ld: cannot find -lboost_program_options, collect2: error: ld returned 1 exit status"
+
+The full boost development libraries are needed. E.g. for Debian, installing libboost-dev is not sufficient. Install libboost-all-dev instead.
+
 ## Developing
 
 ### Build
 
 ```
 git clone https://github.com/alex-courtis/xlayoutdisplay.git
+cd xlayoutdisplay
 make
 ```
 
