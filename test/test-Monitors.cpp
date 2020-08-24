@@ -33,7 +33,7 @@ protected:
         ASSERT_EQ(0, mkdir("./lid/LIDX", 0755));
         FILE *lidStateFile = fopen("./lid/LIDX/state", "w");
         ASSERT_TRUE(lidStateFile != nullptr);
-        fprintf(lidStateFile, contents);
+        fputs(contents, lidStateFile);
         ASSERT_EQ(0, fclose(lidStateFile));
     };
 };
