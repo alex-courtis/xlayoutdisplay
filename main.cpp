@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
         po::variables_map vm;
 
         // common options
-        po::options_description options("CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay");
+        po::options_description options("CLI, $XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdisplay");
         options.add_options()
                 ("dpi,d", po::value<long>(), "DPI override")
                 ("mirror,m", "mirror outputs using the lowest common resolution")
@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
                 ("quiet,q", "suppress feedback");
 
         // file options
-        po::options_description fileOptions("/etc/xlayoutdisplay and ~/.xlayoutdisplay");
+        po::options_description fileOptions("$XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdisplay");
         fileOptions.add(options);
 
         // command line options
@@ -57,7 +57,9 @@ int main(int argc, const char **argv) {
         po::notify(vm);
 
         // file options afterwards
-        ifstream ifs(resolveTildePath(".xlayoutdisplay"));
+        ifstream ifs(resolveEnvPath("XDG_CONFIG_HOME", ".xlayoutdisplay"));
+        if (!ifs)
+            ifs = ifstream(resolveEnvPath("HOME", ".xlayoutdisplay"));
         if (!ifs)
             ifs = ifstream("/etc/xlayoutdisplay");
         if (ifs) {

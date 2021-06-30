@@ -34,10 +34,10 @@ inline const std::list<std::shared_ptr<const T>> reverseSort(const std::list<std
     return sorted;
 }
 
-// return an absolute UNIX path for a relative path in the user env $HOME
-inline const std::string resolveTildePath(const char *homeRelativePath) {
+// return an absolute UNIX path for a relative path under env
+inline const std::string resolveEnvPath(const char *env, const char *homeRelativePath) {
     char settingsFilePath[PATH_MAX];
-    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv("HOME"), homeRelativePath);
+    snprintf(settingsFilePath, PATH_MAX, "%s/%s", getenv(env), homeRelativePath);
     return std::string(settingsFilePath);
 }
 
