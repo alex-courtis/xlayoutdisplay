@@ -33,7 +33,7 @@ CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay:
 
 ## Configuration File
 
-`~/.xlayoutdisplay` then `/etc/xlayoutdisplay` may be used to provide defaults, which will be overwritten by CLI options.
+`$XDG_CONFIG_HOME/.xlayoutdisplay` then `$HOME/.xlayoutdisplay` then `/etc/xlayoutdisplay` may be used to provide defaults, which will be overwritten by CLI options.
 
 See [xlayoutdisplay](.xlayoutdisplay)
 
