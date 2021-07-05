@@ -23,13 +23,13 @@ gtest: $(OBJ) $(OBJ_TEST)
 clean:
 	rm -f xlayoutdisplay main.o $(OBJ) $(OBJ_TEST)
 
-install:
-	mkdir -p $(PREFIX)/bin
-	cp -f xlayoutdisplay $(PREFIX)/bin
-	chmod 755 $(PREFIX)/bin/xlayoutdisplay
+install: xlayoutdisplay
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp -f xlayoutdisplay $(DESTDIR)$(PREFIX)/bin
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/xlayoutdisplay
 
 uninstall:
-	rm -f $(PREFIX)/bin/xlayoutdisplay
+	rm -f $(DESTDIR)$(PREFIX)/bin/xlayoutdisplay
 
 # https://github.com/alex-courtis/arch/blob/b530f331dacaaba27484593a87ca20a9f53ab73f/home/bin/ctags-something
 ctags:
