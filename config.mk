@@ -1,4 +1,3 @@
-# todo remove the version from main
 VERSION = 1.1.3
 
 PREFIX = /usr/local
