@@ -33,7 +33,7 @@ uninstall:
 
 # https://github.com/alex-courtis/arch/blob/b530f331dacaaba27484593a87ca20a9f53ab73f/home/bin/ctags-something
 ctags:
-	ctags-c++ $(CPPFLAGS) $(HDR) $(SRC) $(SRC_TEST) main.cpp
+	ctags-c++ $(CPPFLAGS) --project-src $(HDR) $(SRC) $(SRC_TEST) main.cpp
 
 .PHONY: all clean test install uninstall ctags
 
