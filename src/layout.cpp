@@ -76,9 +76,16 @@ int layout(const Settings &settings) {
         dpi = settings.dpi;
         cout << "overriding with provided DPI " << to_string(dpi) << "\n";
     }
+    
+    // user overrides refresh rate
+    long rate = 0;
+    if (settings.rate) {
+        rate = settings.rate;
+        cout << "overriding with provided refresh rate " << to_string(rate) << "\n";
+    }
 
     // render desired commands
-    const string xrandrCmd = renderXrandrCmd(outputs, primary, dpi);
+    const string xrandrCmd = renderXrandrCmd(outputs, primary, dpi, rate);
     const string xrdbCmd = renderXrdbCmd(dpi);
     if (!settings.quiet || settings.noop) {
         cout << "\n" << xrandrCmd << "\n\n" << xrdbCmd << "\n";

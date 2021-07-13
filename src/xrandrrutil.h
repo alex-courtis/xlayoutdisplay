@@ -24,7 +24,7 @@ unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo);
 // render xrandr cmd to layout outputs
 // will activate only if desiredActive, desiredMode, desiredPos are set
 // desiredPrimary is only set if activated
-const std::string renderXrandrCmd(const std::list<std::shared_ptr<Output>> &outputs, const std::shared_ptr<Output> &primary, const long &dpi);
+const std::string renderXrandrCmd(const std::list<std::shared_ptr<Output>> &outputs, const std::shared_ptr<Output> &primary, const long &dpi, const long &rate);
 
 // throws invalid_argument:
 //   null resources
