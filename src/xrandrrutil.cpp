@@ -45,14 +45,18 @@ unsigned int refreshFromModeInfo(const XRRModeInfo &modeInfo) {
     return static_cast<unsigned int>(round(rate));
 }
 
-const string renderXrandrCmd(const list<shared_ptr<Output>> &outputs, const shared_ptr<Output> &primary, const long &dpi) {
+const string renderXrandrCmd(const list<shared_ptr<Output>> &outputs, const shared_ptr<Output> &primary, const long &dpi, const long &rate) {
     stringstream ss;
     ss << "xrandr \\\n --dpi " << dpi;
     for (const auto &output : outputs) {
         ss << " \\\n --output " << output->name;
         if (output->desiredActive && output->desiredMode && output->desiredPos) {
             ss << " --mode " << output->desiredMode->width << "x" << output->desiredMode->height;
-            ss << " --rate " << output->desiredMode->refresh;
+            if (rate == 0) {
+                ss << " --rate " << output->desiredMode->refresh;
+            } else {
+                ss << " --rate " << rate;
+            }
             ss << " --pos ";
             ss << output->desiredPos->x << "x" << output->desiredPos->y;
             if (output == primary) {

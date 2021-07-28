@@ -68,12 +68,12 @@ TEST(xrandrutil_renderXrandrCmd, renderAll) {
     expected << "xrandr \\\n";
     expected << " --dpi 123 \\\n";
     expected << " --output One --off \\\n";
-    expected << " --output Two --mode 1x2 --rate 3 --pos 5x6 --primary \\\n";
+    expected << " --output Two --mode 1x2 --rate 60 --pos 5x6 --primary \\\n";
     expected << " --output Three --off \\\n";
     expected << " --output Four --off \\\n";
-    expected << " --output Five --mode 8x9 --rate 10 --pos 11x12";
+    expected << " --output Five --mode 8x9 --rate 60 --pos 11x12";
 
-    EXPECT_EQ(expected.str(), renderXrandrCmd(outputs, output2, 123));
+    EXPECT_EQ(expected.str(), renderXrandrCmd(outputs, output2, 123, 60));
 }
 
 class xrandrutil_modeFromXRR : public ::testing::Test {
