@@ -23,8 +23,9 @@ CLI:
   -n [ --noop ]          perform a trial run and exit
   -v [ --version ]       print version string
 
-CLI, /etc/xlayoutdisplay and ~/.xlayoutdisplay:
+CLI, $XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdisplay:
   -d [ --dpi ] arg       DPI override
+  -r [ --rate ] arg      Refresh rate override
   -m [ --mirror ]        mirror outputs using the lowest common resolution
   -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output
