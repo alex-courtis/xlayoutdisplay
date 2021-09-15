@@ -155,6 +155,33 @@ cd xlayoutdisplay
 make
 ```
 
+### Build using Docker
+
+Prepare build directory
+
+```bash
+mkdir -p build
+docker run --rm -it -v $(pwd)/build:/src --name ubuntu ubuntu:20.04 bash
+```
+
+Being inside the container run
+
+```bash
+apt-get update
+apt-get install -y build-essential libboost-all-dev libxrandr-dev libxcursor-dev git-core
+cd /src
+git clone --depth 1 https://github.com/alex-courtis/xlayoutdisplay .
+ln -s /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/libboost_program_options.a
+make
+exit
+```
+
+You may find compiled binary inside build directory
+
+```bash
+ls -la build/xlayoutdisplay
+```
+
 ### Test
 
 Install [Google Test](https://github.com/google/googletest) and [Google Mock](https://github.com/google/googlemock).
