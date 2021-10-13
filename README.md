@@ -8,6 +8,8 @@ Left-to-right ordering is used, unless the user specifies mirrorred outputs.
 
 Laptop displays (eDP*) are disabled when the lid is closed.
 
+Wayland equivalent: [way-displays](https://github.com/alex-courtis/way-displays).
+
 ## Usage
 
 ```
