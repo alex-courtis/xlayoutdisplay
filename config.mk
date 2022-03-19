@@ -6,11 +6,21 @@ INCS +=
 
 CPPFLAGS += $(INCS) -DVERSION=\"$(VERSION)\"
 
-CXXFLAGS += -pedantic -Wall -Wextra -Werror -O3 -std=c++14
+OFLAGS = -O3
+WFLAGS = -pedantic -Wall -Wextra -Werror
+COMPFLAGS = $(WFLAGS) $(OFLAGS)
 
-# hack to force inclusion of the static BPO instead of linking the dynamic (g++ preference)
-LDFLAGS += /usr/lib/libboost_program_options.a -lX11 -lXcursor -lXrandr
-LDFLAGS_TEST += -lgmock -lgtest -pthread
+CXXFLAGS += $(COMPFLAGS) -std=c++14
 
-CXX ?= g++
+LDFLAGS +=
+
+PKGS = x11 xcursor xrandr
+CXXFLAGS += $(foreach p,$(PKGS),$(shell pkg-config --cflags $(p)))
+LDLIBS += $(foreach p,$(PKGS),$(shell pkg-config --libs $(p)))
+
+PKGS_TEST = gmock
+CXXFLAGS_TEST += $(CXXFLAGS) $(foreach p,$(PKGS_TEST),$(shell pkg-config --cflags $(p)))
+LDLIBS_TEST += $(LDLIBS) $(foreach p,$(PKGS_TEST),$(shell pkg-config --libs $(p)))
+
+CXX = g++
 
