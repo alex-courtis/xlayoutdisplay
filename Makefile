@@ -9,15 +9,17 @@ OBJ_TEST = $(SRC_TEST:.cpp=.o)
 
 all: xlayoutdisplay
 
-$(OBJ): config.mk $(HDR)
-$(OBJ_TEST): config.mk $(HDR)
-main.o: config.mk $(HDR)
+$(OBJ): $(HDR) config.mk Makefile
+main.o: $(HDR) config.mk Makefile
 
 xlayoutdisplay: $(OBJ) main.o
-	$(CXX) -o $@ main.o $(OBJ) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(@) $(^) $(LDLIBS)
+
+$(OBJ_TEST): $(HDR) config.mk Makefile
+	$(CXX) $(CXXFLAGS_TEST) $(CPPFLAGS) -c -o $(@) $(@:.o=.cpp)
 
 gtest: $(OBJ) $(OBJ_TEST)
-	$(CXX) -o $@ $(OBJ) $(OBJ_TEST) $(LDFLAGS) $(LDFLAGS_TEST)
+	$(CXX) $(CXXFLAGS_TEST) $(CPPFLAGS) -o $(@) $(^) $(LDLIBS) $(LDLIBS_TEST)
 	./gtest
 
 clean:
