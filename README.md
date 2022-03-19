@@ -34,6 +34,16 @@ CLI, $XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdis
   -q [ --quiet ]         suppress feedback
 ```
 
+## Installation
+
+Package Manager:
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/xlayoutdisplay.svg)](https://repology.org/project/xlayoutdisplay/versions)
+
+or
+
+[Build From Source](#build)
+
 ## Configuration File
 
 `$XDG_CONFIG_HOME/.xlayoutdisplay` then `$HOME/.xlayoutdisplay` then `/etc/xlayoutdisplay` may be used to provide defaults, which will be overwritten by CLI options.
