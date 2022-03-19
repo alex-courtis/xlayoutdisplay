@@ -139,14 +139,6 @@ xlayoutdisplay
 nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 ```
 
-### Make fails with "fatal error: boost/program_options/variables_map.hpp: No such file or directory"
-
-Boost development libraries are needed. Install them, using for example `sudo apt install libboost-all-dev` for Debian.
-
-### Make fails with "/usr/bin/ld: cannot find -lboost_program_options, collect2: error: ld returned 1 exit status"
-
-The full boost development libraries are needed. E.g. for Debian, installing libboost-dev is not sufficient. Install libboost-all-dev instead.
-
 ## Developing
 
 ### Build
@@ -170,10 +162,9 @@ Being inside the container run
 
 ```bash
 apt-get update
-apt-get install -y build-essential libboost-all-dev libxrandr-dev libxcursor-dev git-core
+apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core
 cd /src
 git clone --depth 1 https://github.com/alex-courtis/xlayoutdisplay .
-ln -s /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/libboost_program_options.a
 make
 exit
 ```

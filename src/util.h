@@ -17,6 +17,7 @@
 #define XLAYOUTDISPLAY_STDUTIL_H
 
 #include <memory>
+#include <list>
 #include <climits>
 
 // sorting function for shared pointers... this must be in STL somewhere...

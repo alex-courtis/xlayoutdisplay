@@ -15,11 +15,8 @@ CXXFLAGS += $(COMPFLAGS) -std=c++14
 LDFLAGS +=
 
 PKGS = x11 xcursor xrandr
-CXXFLAGS += $(foreach p,$(PKGS),$(shell pkg-config --cflags $(p))) -DAAA=BBB
+CXXFLAGS += $(foreach p,$(PKGS),$(shell pkg-config --cflags $(p)))
 LDLIBS += $(foreach p,$(PKGS),$(shell pkg-config --libs $(p)))
-
-# hack to force inclusion of the static BPO instead of linking the dynamic (g++ preference)
-LDLIBS += /usr/lib/libboost_program_options.a
 
 PKGS_TEST = gmock
 CXXFLAGS_TEST += $(CXXFLAGS) $(foreach p,$(PKGS_TEST),$(shell pkg-config --cflags $(p)))
