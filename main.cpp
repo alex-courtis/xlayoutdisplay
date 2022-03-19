@@ -96,64 +96,70 @@ void parseCfgFile(ifstream &ifs, Settings &settings) {
 }
 
 void parseArgs(int argc, char **argv, Settings &settings) {
-	static struct option long_options[] = {
-		{ "help",          no_argument,       0, 'h' },
-		{ "info",          no_argument,       0, 'i' },
-		{ "noop",          no_argument,       0, 'n' },
-		{ "version",       no_argument,       0, 'v' },
-		{ "dpi",           required_argument, 0, 'd' },
-		{ "rate",          required_argument, 0, 'r' },
-		{ "mirror",        no_argument,       0, 'm' },
-		{ "order",         required_argument, 0, 'o' },
-		{ "primary",       required_argument, 0, 'p' },
-		{ "quiet",         no_argument,       0, 'q' },
-		{ 0,               0,                 0,  0  }
-	};
-	static const char *short_options = "hinvd:r:mo:p:q";
+    static struct option long_options[] = {
+        { "help",          no_argument,       0, 'h' },
+        { "info",          no_argument,       0, 'i' },
+        { "noop",          no_argument,       0, 'n' },
+        { "version",       no_argument,       0, 'v' },
+        { "dpi",           required_argument, 0, 'd' },
+        { "rate",          required_argument, 0, 'r' },
+        { "mirror",        no_argument,       0, 'm' },
+        { "order",         required_argument, 0, 'o' },
+        { "primary",       required_argument, 0, 'p' },
+        { "quiet",         no_argument,       0, 'q' },
+        { 0,               0,                 0,  0  }
+    };
+    static const char *short_options = "hinvd:r:mo:p:q";
 
-	int c;
-	while (1) {
-		int long_index = 0;
-		c = getopt_long(argc, argv, short_options, long_options, &long_index);
-		if (c == -1)
-			break;
-		switch (c) {
-			case 'h':
-				usage(cout);
-				exit(EXIT_SUCCESS);
-			case 'i':
+    bool orderFromFile = !settings.order.empty();
+
+    int c;
+    while (1) {
+        int long_index = 0;
+        c = getopt_long(argc, argv, short_options, long_options, &long_index);
+        if (c == -1)
+            break;
+        switch (c) {
+            case 'h':
+                usage(cout);
+                exit(EXIT_SUCCESS);
+            case 'i':
                 settings.info = true;
-				break;
-			case 'n':
+                break;
+            case 'n':
                 settings.noop = true;
-				break;
-			case 'v':
+                break;
+            case 'v':
                 cout << argv[0] << " " << VERSION << endl;
                 exit(EXIT_SUCCESS);
-			case 'd':
+            case 'd':
                 settings.dpi = parseLong("dpi", optarg);
                 break;
-			case 'r':
+            case 'r':
                 settings.rate = parseLong("rate", optarg);
                 break;
-			case 'm':
+            case 'm':
                 settings.mirror = true;
                 break;
-			case 'o':
+            case 'o':
+                if (orderFromFile) {
+                    settings.order.clear();
+                    orderFromFile = false;
+                }
                 settings.order.push_back(optarg);
                 break;
-			case 'p':
+            case 'p':
                 settings.primary = optarg;
                 break;
-			case 'q':
+            case 'q':
                 settings.quiet = true;
                 break;
-			case '?':
-			default:
-				usage(cerr);
-				exit(EXIT_FAILURE);
-		}
-	}
+            case '?':
+            default:
+                usage(cerr);
+                exit(EXIT_FAILURE);
+        }
+    }
 }
 
 int main(int argc, char **argv) {
