@@ -43,6 +43,12 @@ Package Manager:
 or
 
 [Build From Source](#build)
+```
+git clone https://github.com/alex-courtis/xlayoutdisplay.git
+cd xlayoutdisplay
+make
+sudo make install
+```
 
 ## Configuration File
 
