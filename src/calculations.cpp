@@ -99,12 +99,17 @@ void ltrOutputs(const list<shared_ptr<Output>> &outputs, const map<string, strin
     }
     for (const auto &entry : copies) {
         // find target to copy and output to put on
-        auto output = *find_if(outputs.begin(), outputs.end(), 
+        auto output_iter = find_if(outputs.begin(), outputs.end(), 
             [&](auto &output){ return output->name == entry.first;}
         );
-        auto target = *find_if(outputs.begin(), outputs.end(),
+        auto target_iter = find_if(outputs.begin(), outputs.end(),
             [&](auto &output){ return output->name == entry.second;}
         );
+        if (output_iter == outputs.end() || target_iter == outputs.end()) {
+            continue;
+        }
+        auto output = *output_iter;
+        auto target = *target_iter;
 
         if (output->desiredActive && target->desiredActive) {
 
