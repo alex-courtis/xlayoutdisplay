@@ -61,7 +61,7 @@ int layout(const Settings &settings) {
     if (settings.mirror) {
         mirrorOutputs(outputs);
     } else {
-        ltrOutputs(outputs);
+        ltrOutputs(outputs, settings.copy);
     }
 
     // determine DPI from the primary

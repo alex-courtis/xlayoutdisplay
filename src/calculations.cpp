@@ -20,6 +20,7 @@
 #include <cstring>
 #include <stack>
 #include <system_error>
+#include <algorithm>
 
 using namespace std;
 
@@ -79,12 +80,12 @@ const shared_ptr<Output> activateOutputs(const list<shared_ptr<Output>> &outputs
     return primary;
 }
 
-void ltrOutputs(const list<shared_ptr<Output>> &outputs) {
+void ltrOutputs(const list<shared_ptr<Output>> &outputs, const map<string, string> &copies) {
     int xpos = 0;
     int ypos = 0;
     for (const auto &output : outputs) {
 
-        if (output->desiredActive) {
+        if (output->desiredActive && copies.find(output->name) == copies.end()) {
 
             // set the desired mode to optimal
             output->desiredMode = output->optimalMode;
@@ -94,6 +95,39 @@ void ltrOutputs(const list<shared_ptr<Output>> &outputs) {
 
             // next position
             xpos += output->desiredMode->width;
+        }
+    }
+    for (const auto &entry : copies) {
+        // find target to copy and output to put on
+        auto output = *find_if(outputs.begin(), outputs.end(), 
+            [&](auto &output){ return output->name == entry.first;}
+        );
+        auto target = *find_if(outputs.begin(), outputs.end(),
+            [&](auto &output){ return output->name == entry.second;}
+        );
+
+        if (output->desiredActive && target->desiredActive) {
+
+            // find supported mode of output that has same size of target
+            // with highest refresh rate
+            shared_ptr<const Mode> currentMode = nullptr;
+            for (const auto &mode : output->modes){
+                if (mode->width == target->desiredMode->width && mode->height == target->desiredMode->height) {
+                    if (currentMode == nullptr || currentMode->refresh < mode->refresh) {
+                        currentMode = mode;
+                    }
+                }
+            }
+
+            if (currentMode == nullptr) {
+                throw runtime_error("no matching mode find for copying " + target->name + " on " + output->name);
+            }
+
+            // copy modes
+            output->desiredMode = currentMode;
+
+            // copy positions
+            output->desiredPos = target->desiredPos;
         }
     }
 }

@@ -17,6 +17,7 @@
 #define XLAYOUTDISPLAY_CALCULATIONS_H
 
 #include <vector>
+#include <map>
 #include "Output.h"
 
 #define DEFAULT_DPI 96
@@ -30,8 +31,8 @@ const std::list<std::shared_ptr<Output>> orderOutputs(const std::list<std::share
 const std::shared_ptr<Output> activateOutputs(const std::list<std::shared_ptr<Output>> &outputs,
                                               const std::string &desiredPrimary, const Monitors &monitors);
 
-// arrange outputs left to right at optimal mode; will mutate contents
-void ltrOutputs(const std::list<std::shared_ptr<Output>> &outputs);
+// arrange outputs left to right at optimal mode; copy all outputs that should be copied; will mutate contents
+void ltrOutputs(const std::list<std::shared_ptr<Output>> &outputs, const std::map<std::string, std::string>& copies);
 
 // arrange outputs so that they all mirror at highest common mode; will mutate contents
 // throws runtime_error:
