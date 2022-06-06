@@ -57,7 +57,7 @@ void usage(std::ostream &os) {
         "-r [ --rate ] arg      Refresh rate override\n"
         "-m [ --mirror ]        mirror outputs using the lowest common resolution\n"
         "-o [ --order ] arg     order of outputs, repeat as needed\n"
-        "-c [ --copy ] arg      copy previous output in the order to this output, repeat as needed\n"
+        "-c [ --copy ] arg      arg in format dst:src, copy from output src to output dst, repeat as needed\n"
         "-p [ --primary ] arg   primary output\n"
         "-q [ --quiet ]         suppress feedback\n";
 }
@@ -86,10 +86,12 @@ void parseCfgFile(ifstream &ifs, Settings &settings) {
         } else if (match[1] == "order") {
             settings.order.push_back(match[2]);
         } else if (match[1] == "copy") {
-            if (settings.order.empty()) {
-                throw invalid_argument("no copy target for '" + match[2].str() + "'");
+            smatch copy_match;
+            string copy_config(match[2].str());
+            if (!regex_match(copy_config, copy_match, regex("(\\S+):(\\S+)")) || copy_match.size() != 3){
+                throw invalid_argument("unrecognized copy configuration " + copy_config);
             }
-            settings.copy[match[2]] = settings.order.back();
+            settings.copy[copy_match[1]] = copy_match[2];
         } else if (match[1] == "primary") {
             settings.primary = match[2];
         } else if (match[1] == "quiet") {
@@ -156,14 +158,14 @@ void parseArgs(int argc, char **argv, Settings &settings) {
                 settings.order.push_back(optarg);
                 break;
             case 'c':
-                if (orderFromFile) {
-                    settings.order.clear();
-                    orderFromFile = false;
+                {
+                    smatch match;
+                    string output_config(optarg);
+                    if (!regex_match(output_config, match, regex("(\\S+):(\\S+)")) || match.size() != 3){
+                        throw invalid_argument("unrecognized copy configuration " + output_config);
+                    }
+                    settings.copy[match[1]] = match[2];
                 }
-                if (settings.order.empty()) {
-                    throw invalid_argument("no copy target for '" + std::string(optarg) + "'");
-                }
-                settings.copy[optarg] = settings.order.back();
                 break;
             case 'p':
                 settings.primary = optarg;
