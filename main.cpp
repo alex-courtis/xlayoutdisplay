@@ -49,6 +49,7 @@ void usage(std::ostream &os) {
         "CLI:\n"
         "-h [ --help ]          print this help text and exit\n"
         "-i [ --info ]          print information about current outputs and exit\n"
+        "-f [ --file ] arg      use file as config\n"
         "-n [ --noop ]          perform a trial run and exit\n"
         "-v [ --version ]       print version string\n"
         "\n"
@@ -99,6 +100,7 @@ void parseArgs(int argc, char **argv, Settings &settings) {
     static struct option long_options[] = {
         { "help",          no_argument,       0, 'h' },
         { "info",          no_argument,       0, 'i' },
+        { "file",          required_argument, 0, 'f' },
         { "noop",          no_argument,       0, 'n' },
         { "version",       no_argument,       0, 'v' },
         { "dpi",           required_argument, 0, 'd' },
@@ -109,7 +111,7 @@ void parseArgs(int argc, char **argv, Settings &settings) {
         { "quiet",         no_argument,       0, 'q' },
         { 0,               0,                 0,  0  }
     };
-    static const char *short_options = "hinvd:r:mo:p:q";
+    static const char *short_options = "hif:nvd:r:mo:p:q";
 
     bool orderFromFile = !settings.order.empty();
 
@@ -125,6 +127,12 @@ void parseArgs(int argc, char **argv, Settings &settings) {
                 exit(EXIT_SUCCESS);
             case 'i':
                 settings.info = true;
+                break;
+            case 'f':
+                {
+                    ifstream ifs(optarg);
+                    parseCfgFile(ifs, settings);
+                }
                 break;
             case 'n':
                 settings.noop = true;
