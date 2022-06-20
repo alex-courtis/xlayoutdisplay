@@ -56,6 +56,15 @@ sudo make install
 
 See [xlayoutdisplay](.xlayoutdisplay)
 
+## Automatically detect new display
+
+To automatically run `xlayoutdisplay` whenever a new display is plugged in or unplugged, `udev` can be used.    
+
+A sample rule can be found at [99-monitor.rules](99-monitor.rules).    
+Simply replace the path of `ENV{XAUTHORITY}` with the output of `printenv XAUTHORITY`, and copy the customized file to `/etc/udev/rules.d/`.    
+
+Additional informations can be found at the [`udev` Arch Wiki article](https://wiki.archlinux.org/title/Udev#Execute_when_HDMI_cable_is_plugged_in_or_unplugged).
+
 ## Sample Output
 
 DP-4 is the only ouput, then HDMI-0 is plugged in.
