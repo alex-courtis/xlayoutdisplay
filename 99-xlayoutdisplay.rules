@@ -1,0 +1,1 @@
+ACTION=="change", SUBSYSTEM=="drm", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/{username}/.Xauthority", RUN+="/usr/bin/xlayoutdisplay"
