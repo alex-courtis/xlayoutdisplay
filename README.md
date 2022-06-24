@@ -61,7 +61,12 @@ See [xlayoutdisplay](.xlayoutdisplay)
 To automatically run `xlayoutdisplay` whenever a new display is plugged in or unplugged, `udev` can be used.    
 
 A sample rule can be found at [99-xlayoutdisplay.rules](99-xlayoutdisplay.rules).    
-Simply replace the path of `ENV{XAUTHORITY}` with the output of `printenv XAUTHORITY`, and copy the customized file to `/etc/udev/rules.d/`.    
+
+Complete `<username>` and ensure `ENV{XAUTHORITY}` will match the output of `printenv XAUTHORITY`, and copy the customized file to `/etc/udev/rules.d/`.
+
+If your configuration file is `$XDG_CONFIG_HOME/.xlayoutdisplay`, add another environment variable e.g. `ENV{XDG_CONFIG_HOME}="$env{HOME}/.config"`
+
+Observe the updates at `/tmp/xlayoutdisplay.udev.log`.
 
 Additional informations can be found at the [`udev` Arch Wiki article](https://wiki.archlinux.org/title/Udev#Execute_when_HDMI_cable_is_plugged_in_or_unplugged).
 
