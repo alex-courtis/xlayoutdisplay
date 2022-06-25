@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 // user provided settings for this utility
 class Settings {
@@ -28,6 +29,7 @@ public:
     bool noop = false;
     bool mirror = false;
     std::vector<std::string> order;
+    std::map<std::string, std::string> copy;
     std::string primary;
     bool quiet = false;
 };

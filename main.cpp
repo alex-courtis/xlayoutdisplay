@@ -57,6 +57,7 @@ void usage(std::ostream &os) {
         "-r [ --rate ] arg      Refresh rate override\n"
         "-m [ --mirror ]        mirror outputs using the lowest common resolution\n"
         "-o [ --order ] arg     order of outputs, repeat as needed\n"
+        "-c [ --copy ] arg      arg in format dst:src, copy from output src to output dst, repeat as needed\n"
         "-p [ --primary ] arg   primary output\n"
         "-q [ --quiet ]         suppress feedback\n";
 }
@@ -84,6 +85,13 @@ void parseCfgFile(ifstream &ifs, Settings &settings) {
             settings.mirror = parseBool(match[2]);
         } else if (match[1] == "order") {
             settings.order.push_back(match[2]);
+        } else if (match[1] == "copy") {
+            smatch copy_match;
+            string copy_config(match[2].str());
+            if (!regex_match(copy_config, copy_match, regex("(\\S+):(\\S+)")) || copy_match.size() != 3){
+                throw invalid_argument("unrecognized copy configuration " + copy_config);
+            }
+            settings.copy[copy_match[1]] = copy_match[2];
         } else if (match[1] == "primary") {
             settings.primary = match[2];
         } else if (match[1] == "quiet") {
@@ -105,11 +113,12 @@ void parseArgs(int argc, char **argv, Settings &settings) {
         { "rate",          required_argument, 0, 'r' },
         { "mirror",        no_argument,       0, 'm' },
         { "order",         required_argument, 0, 'o' },
+        { "copy",          required_argument, 0, 'c' },
         { "primary",       required_argument, 0, 'p' },
         { "quiet",         no_argument,       0, 'q' },
         { 0,               0,                 0,  0  }
     };
-    static const char *short_options = "hinvd:r:mo:p:q";
+    static const char *short_options = "hinvd:r:mo:c:p:q";
 
     bool orderFromFile = !settings.order.empty();
 
@@ -147,6 +156,16 @@ void parseArgs(int argc, char **argv, Settings &settings) {
                     orderFromFile = false;
                 }
                 settings.order.push_back(optarg);
+                break;
+            case 'c':
+                {
+                    smatch match;
+                    string output_config(optarg);
+                    if (!regex_match(output_config, match, regex("(\\S+):(\\S+)")) || match.size() != 3){
+                        throw invalid_argument("unrecognized copy configuration " + output_config);
+                    }
+                    settings.copy[match[1]] = match[2];
+                }
                 break;
             case 'p':
                 settings.primary = optarg;
