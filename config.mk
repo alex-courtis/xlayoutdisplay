@@ -14,7 +14,7 @@ CXXFLAGS += $(COMPFLAGS) -std=c++14
 
 LDFLAGS +=
 
-PKGS = x11 xcursor xrandr
+PKGS = x11 xcursor xrandr libprocps
 CXXFLAGS += $(foreach p,$(PKGS),$(shell pkg-config --cflags $(p)))
 LDLIBS += $(foreach p,$(PKGS),$(shell pkg-config --libs $(p)))
 

@@ -1,0 +1,10 @@
+clang
+
+-DVERSION="DUMMY"
+
+-pedantic
+-Wall
+-Wextra
+
+%h -std=gnu++14
+%cpp -std=gnu++14
