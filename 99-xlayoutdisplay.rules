@@ -1,1 +1,9 @@
-ACTION=="change", SUBSYSTEM=="drm", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/{username}/.Xauthority", RUN+="/usr/bin/xlayoutdisplay"
+ACTION=="change", SUBSYSTEM=="drm", GOTO="xlayoutdisplay"
+
+LABEL="xlayoutdisplay"
+
+ENV{HOME}="/home/username"
+ENV{DISPLAY}=":0"
+ENV{XAUTHORITY}="$env{HOME}/.Xauthority"
+
+RUN+="/bin/sh -c 'xlayoutdisplay >> /tmp/xlayoutdisplay.udev.log 2>&1'"

@@ -20,10 +20,19 @@
 #include "xutil.h"
 #include "calculations.h"
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
 int layout(const Settings &settings) {
+
+    // optional wait
+    if (settings.wait) {
+        if (!settings.quiet) {
+            cout << "Waiting " << settings.wait << " seconds..." << endl;
+        }
+        sleep(settings.wait);
+    }
 
     // discover monitors
     const Monitors monitors = Monitors();

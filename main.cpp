@@ -47,18 +47,19 @@ void usage(std::ostream &os) {
         "e.g.  xlayoutdisplay -p DP-4 -o HDMI-0 -o DP-4\n"
         "\n"
         "CLI:\n"
-        "-h [ --help ]          print this help text and exit\n"
-        "-i [ --info ]          print information about current outputs and exit\n"
-        "-n [ --noop ]          perform a trial run and exit\n"
-        "-v [ --version ]       print version string\n"
+        "  -h [ --help ]          print this help text and exit\n"
+        "  -i [ --info ]          print information about current outputs and exit\n"
+        "  -n [ --noop ]          perform a trial run and exit\n"
+        "  -v [ --version ]       print version string\n"
         "\n"
         "CLI, $XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdisplay:\n"
-        "-d [ --dpi ] arg       DPI override\n"
-        "-r [ --rate ] arg      Refresh rate override\n"
-        "-m [ --mirror ]        mirror outputs using the lowest common resolution\n"
-        "-o [ --order ] arg     order of outputs, repeat as needed\n"
-        "-p [ --primary ] arg   primary output\n"
-        "-q [ --quiet ]         suppress feedback\n";
+        "  -d [ --dpi ] arg       DPI override\n"
+        "  -r [ --rate ] arg      Refresh rate override\n"
+        "  -m [ --mirror ]        mirror outputs using the lowest common resolution\n"
+        "  -o [ --order ] arg     order of outputs, repeat as needed\n"
+        "  -p [ --primary ] arg   primary output\n"
+        "  -q [ --quiet ]         suppress feedback\n"
+        "  -w [ --wait ] arg      wait seconds before running\n";
 }
 
 void parseCfgFile(ifstream &ifs, Settings &settings) {
@@ -88,6 +89,8 @@ void parseCfgFile(ifstream &ifs, Settings &settings) {
             settings.primary = match[2];
         } else if (match[1] == "quiet") {
             settings.quiet = parseBool(match[2]);
+        } else if (match[1] == "wait") {
+            settings.wait = parseLong(match[1], match[2]);
         } else {
             throw invalid_argument("unrecognised file option '" + match[0].str() + "'");
         }
@@ -107,9 +110,10 @@ void parseArgs(int argc, char **argv, Settings &settings) {
         { "order",         required_argument, 0, 'o' },
         { "primary",       required_argument, 0, 'p' },
         { "quiet",         no_argument,       0, 'q' },
+        { "wait",          required_argument, 0, 'w' },
         { 0,               0,                 0,  0  }
     };
-    static const char *short_options = "hinvd:r:mo:p:q";
+    static const char *short_options = "hinvd:r:mo:p:qw:";
 
     bool orderFromFile = !settings.order.empty();
 
@@ -153,6 +157,9 @@ void parseArgs(int argc, char **argv, Settings &settings) {
                 break;
             case 'q':
                 settings.quiet = true;
+                break;
+            case 'w':
+                settings.wait = parseLong("wait", optarg);;
                 break;
             case '?':
             default:
