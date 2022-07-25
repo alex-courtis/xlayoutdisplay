@@ -16,3 +16,5 @@
 # override calculated DPI
 #dpi=192
 
+# wait seconds before acting
+#wait=10
