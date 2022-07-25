@@ -26,6 +26,12 @@ using namespace std;
 
 int layout(const Settings &settings) {
 
+    // don't attempt a connection when Xorg not running, to prevent
+    // https://wiki.archlinux.org/title/Udev#X_programs_in_RUN_rules_hang_when_no_X_server_is_present
+    if (!xorgRunning()) {
+        throw runtime_error("Xorg not running");
+    }
+
     // optional wait
     if (settings.wait) {
         if (!settings.quiet) {
