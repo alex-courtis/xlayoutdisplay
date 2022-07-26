@@ -1,1 +1,1 @@
-ACTION=="change", SUBSYSTEM=="drm", ENV{HOME}="/home/username", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="$env{HOME}/.Xauthority", RUN+="/bin/sh -c 'xlayoutdisplay -w 10 >> /tmp/xlayoutdisplay.udev.log 2>&1'"
+ACTION=="change", SUBSYSTEM=="drm", ENV{HOME}="/home/username", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="$env{HOME}/.Xauthority", RUN+="/bin/sh -c 'xlayoutdisplay -w 5 >> /tmp/xlayoutdisplay.udev.log 2>&1'"
