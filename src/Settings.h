@@ -30,6 +30,7 @@ public:
     std::vector<std::string> order;
     std::string primary;
     bool quiet = false;
+    long wait = 0;
 };
 
 #endif //XLAYOUTDISPLAY_SETTINGS_H

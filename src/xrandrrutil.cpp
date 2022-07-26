@@ -14,7 +14,6 @@
    limitations under the License.
 */
 #include "xrandrrutil.h"
-#include "xutil.h"
 
 #include <sstream>
 #include <cstring>
@@ -91,12 +90,6 @@ Mode *modeFromXRR(RRMode id, const XRRScreenResources *resources) {
 // build a list of Output based on the current and possible state of the world
 const list<shared_ptr<Output>> discoverOutputs() {
     list<shared_ptr<Output>> outputs;
-
-    // don't attempt a connection when Xorg not running, to prevent
-    // https://wiki.archlinux.org/title/Udev#X_programs_in_RUN_rules_hang_when_no_X_server_is_present
-    if (!xorgRunning()) {
-        throw runtime_error("Xorg not running");
-    }
 
     // get the display
     Display *dpy = XOpenDisplay(nullptr);

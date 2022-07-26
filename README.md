@@ -6,7 +6,7 @@ Highest refresh rate of the output's preferred resolution are used.
 
 Left-to-right ordering is used, unless the user specifies mirrorred outputs.
 
-Laptop displays (eDP*) are disabled when the lid is closed.
+Laptop displays `eDP.*` are disabled when the lid is closed.
 
 Wayland equivalent: [way-displays](https://github.com/alex-courtis/way-displays).
 
@@ -32,6 +32,7 @@ CLI, $XDG_CONFIG_HOME/.xlayoutdisplay, $HOME/.xlayoutdisplay and /etc/xlayoutdis
   -o [ --order ] arg     order of outputs, repeat as needed
   -p [ --primary ] arg   primary output
   -q [ --quiet ]         suppress feedback
+  -w [ --wait ] arg      wait seconds before running
 ```
 
 ## Installation
@@ -61,7 +62,9 @@ See [xlayoutdisplay](.xlayoutdisplay)
 To automatically run `xlayoutdisplay` whenever a new display is plugged in or unplugged, `udev` can be used.    
 
 A sample rule can be found at [99-xlayoutdisplay.rules](99-xlayoutdisplay.rules).    
-Simply replace the path of `ENV{XAUTHORITY}` with the output of `printenv XAUTHORITY`, and copy the customized file to `/etc/udev/rules.d/`.    
+Simply update the value of `ENV{HOME}`, and copy the customized file to `/etc/udev/rules.d/`.    
+
+The wait time is necessary to allow Xorg time to enumerate new monitors. 5 seconds is a conservative value; experiment with smaller values for better response time.
 
 Additional informations can be found at the [`udev` Arch Wiki article](https://wiki.archlinux.org/title/Udev#Execute_when_HDMI_cable_is_plugged_in_or_unplugged).
 
