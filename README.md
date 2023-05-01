@@ -183,14 +183,26 @@ Prepare build directory
 
 ```bash
 mkdir -p build
+```
+
+Use one of:
+
+Ubuntu
+```sh
 docker run --rm -it -v $(pwd)/build:/src --name ubuntu ubuntu:20.04 bash
+apt-get update
+apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libprocps-dev libgtest-dev libgmock-dev
+```
+
+OR Arch
+```sh
+docker run --rm -it -v $(pwd)/build:/src --name archlinux archlinux:base bash
+pacman -Sy git gcc make pkgconfig libxcursor xorg-xrandr gtest gmock
 ```
 
 Being inside the container run
 
-```bash
-apt-get update
-apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libprocps-dev libgtest-dev libgmock-dev
+```sh
 cd /src
 git clone --depth 1 https://github.com/alex-courtis/xlayoutdisplay .
 make
