@@ -189,7 +189,7 @@ Use one of:
 
 Ubuntu
 ```sh
-docker run --rm -it -v $(pwd)/build:/src --name ubuntu ubuntu:20.04 bash
+docker run --rm -it -v $(pwd)/build:/src --name ubuntu ubuntu:22.04 bash
 apt-get update
 apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libprocps-dev libgtest-dev libgmock-dev
 ```
