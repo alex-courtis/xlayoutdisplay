@@ -190,7 +190,7 @@ Being inside the container run
 
 ```bash
 apt-get update
-apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core
+apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libprocps-dev libgtest-dev libgmock-dev
 cd /src
 git clone --depth 1 https://github.com/alex-courtis/xlayoutdisplay .
 make
