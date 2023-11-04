@@ -44,6 +44,7 @@ Package Manager:
 or
 
 [Build From Source](#build)
+
 ```
 git clone https://github.com/alex-courtis/xlayoutdisplay.git
 cd xlayoutdisplay
@@ -59,10 +60,10 @@ See [xlayoutdisplay](.xlayoutdisplay)
 
 ## Automatically detect new display
 
-To automatically run `xlayoutdisplay` whenever a new display is plugged in or unplugged, `udev` can be used.    
+To automatically run `xlayoutdisplay` whenever a new display is plugged in or unplugged, `udev` can be used.
 
-A sample rule can be found at [99-xlayoutdisplay.rules](99-xlayoutdisplay.rules).    
-Simply update the value of `ENV{HOME}`, and copy the customized file to `/etc/udev/rules.d/`.    
+A sample rule can be found at [99-xlayoutdisplay.rules](99-xlayoutdisplay.rules).  
+Simply update the value of `ENV{HOME}`, and copy the customized file to `/etc/udev/rules.d/`.
 
 The wait time is necessary to allow Xorg time to enumerate new monitors. 5 seconds is a conservative value; experiment with smaller values for better response time.
 
@@ -127,11 +128,12 @@ xrandr \
  --output DP-1 --off \
  --output DP-2 --off \
  --output DP-3 --off
- 
+
 echo "Xft.dpi: 108" | xrdb -merge
 ```
 
 End state:
+
 ```
 /--------------\/----------------------\
 |              ||                      |
@@ -154,6 +156,7 @@ End state:
 This may be avoided by running `xlayoutdisplay` first. You'll need to remove this bit of configuration from your Xorg conf and explicitly invoke via `nvidia-settings`. e.g.
 
 From `/etc/X11/xorg.conf.d/20-nvidia.conf`:
+
 ```
 Section "Screen"
     Identifier     "nvidiaSpecific"
@@ -162,6 +165,7 @@ EndSection
 ```
 
 To `.xinitrc`:
+
 ```
 xlayoutdisplay
 nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
@@ -188,13 +192,15 @@ mkdir -p build
 Use one of:
 
 Ubuntu
+
 ```sh
 docker run --rm -it -v $(pwd)/build:/src --name ubuntu ubuntu:22.04 bash
 apt-get update
-apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libprocps-dev libgtest-dev libgmock-dev
+apt-get install -y build-essential libxrandr-dev libxcursor-dev git-core pkg-config libgtest-dev libgmock-dev
 ```
 
 OR Arch
+
 ```sh
 docker run --rm -it -v $(pwd)/build:/src --name archlinux archlinux:base bash
 pacman -Sy git gcc make pkgconfig libxcursor xorg-xrandr gtest gmock

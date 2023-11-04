@@ -24,14 +24,7 @@
 
 using namespace std;
 
-int layout(const Settings &settings) {
-
-    // don't attempt a connection when Xorg not running, to prevent
-    // https://wiki.archlinux.org/title/Udev#X_programs_in_RUN_rules_hang_when_no_X_server_is_present
-    if (!xorgRunning()) {
-        throw runtime_error("Xorg not running");
-    }
-
+int layout(const Settings& settings) {
     // optional wait
     if (settings.wait) {
         if (!settings.quiet) {
@@ -55,7 +48,8 @@ int layout(const Settings &settings) {
         cout << "laptop lid ";
         if (monitors.laptopLidClosed) {
             cout << "closed";
-        } else {
+        }
+        else {
             cout << "open or not present";
         }
         cout << "\n";
@@ -75,7 +69,8 @@ int layout(const Settings &settings) {
     // arrange mirrored or left to right
     if (settings.mirror) {
         mirrorOutputs(outputs);
-    } else {
+    }
+    else {
         ltrOutputs(outputs);
     }
 
@@ -91,7 +86,7 @@ int layout(const Settings &settings) {
         dpi = settings.dpi;
         cout << "overriding with provided DPI " << to_string(dpi) << "\n";
     }
-    
+
     // user overrides refresh rate
     long rate = 0;
     if (settings.rate) {
