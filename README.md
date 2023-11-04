@@ -64,6 +64,7 @@ To automatically run `xlayoutdisplay` whenever a new display is plugged in or un
 
 A sample rule can be found at [99-xlayoutdisplay.rules](99-xlayoutdisplay.rules).  
 Simply update the value of `ENV{HOME}`, and copy the customized file to `/etc/udev/rules.d/`.
+`pidof` from `procps-ng` is required.
 
 The wait time is necessary to allow Xorg time to enumerate new monitors. 5 seconds is a conservative value; experiment with smaller values for better response time.
 
