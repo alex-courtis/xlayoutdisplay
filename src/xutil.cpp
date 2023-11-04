@@ -14,24 +14,10 @@
    limitations under the License.
 */
 #include <X11/Xcursor/Xcursor.h>
-#include <proc/readproc.h>
 #include <cstring>
 
-bool xorgRunning() {
-	proc_t **pptr = readproctab(PROC_FILLSTAT);
-
-    for (; *pptr; pptr++) {
-        proc_t *p = *pptr;
-        if (strcmp(p->cmd, "Xorg") == 0) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void resetRootCursor() {
-    Display *dpy = XOpenDisplay(nullptr);
+    Display* dpy = XOpenDisplay(nullptr);
     int screen = DefaultScreen(dpy);
     Window root = RootWindow(dpy, screen);
     Cursor cursor = XcursorLibraryLoadCursor(dpy, "left_ptr");

@@ -14,7 +14,7 @@ CXXFLAGS += $(COMPFLAGS) -std=c++14
 
 LDFLAGS +=
 
-PKGS = x11 xcursor xrandr libprocps
+PKGS = x11 xcursor xrandr
 CXXFLAGS += $(foreach p,$(PKGS),$(shell pkg-config --cflags $(p)))
 LDLIBS += $(foreach p,$(PKGS),$(shell pkg-config --libs $(p)))
 
@@ -23,4 +23,3 @@ CXXFLAGS_TEST += $(CXXFLAGS) $(foreach p,$(PKGS_TEST),$(shell pkg-config --cflag
 LDLIBS_TEST += $(LDLIBS) $(foreach p,$(PKGS_TEST),$(shell pkg-config --libs $(p)))
 
 CXX = g++
-
