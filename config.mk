@@ -1,4 +1,4 @@
-VERSION ?= 1.4.1-SNAPSHOT
+VERSION ?= 1.5.0
 
 PREFIX ?= /usr/local
 
