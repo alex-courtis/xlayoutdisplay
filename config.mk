@@ -10,7 +10,7 @@ OFLAGS = -O3
 WFLAGS = -pedantic -Wall -Wextra -Werror
 COMPFLAGS = $(WFLAGS) $(OFLAGS)
 
-CXXFLAGS += $(COMPFLAGS) -std=c++14
+CXXFLAGS += $(COMPFLAGS) -std=c++17
 
 LDFLAGS +=
 
